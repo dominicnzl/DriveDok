@@ -1,6 +1,8 @@
 package nl.conspect.drivedok.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import java.util.Objects;
 
@@ -9,6 +11,8 @@ public class ParkingSpot {
 
     @Id
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     private ParkingType parkingType;
 
     public ParkingSpot(){}
