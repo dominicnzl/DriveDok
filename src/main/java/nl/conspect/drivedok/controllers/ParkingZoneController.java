@@ -2,11 +2,12 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("ParkingZoneController")
+import java.util.Collection;
+
+@RestController
+@RequestMapping("/parkingzone")
 public class ParkingZoneController {
 
 
@@ -16,8 +17,14 @@ public class ParkingZoneController {
         this.parkingZoneService = parkingZoneService;
     }
 
-    @PostMapping("/createParkingZone")
+    @GetMapping("/all")
+    public Collection<ParkingZone> findAllParkingZones(){
+        return parkingZoneService.findAllParkingZones();
+    }
+
+    @PostMapping("/create")
     public ParkingZone createParkingZone(@RequestBody ParkingZone parkingZone){
         return parkingZoneService.createParkingZone(parkingZone);
     }
+
 }
