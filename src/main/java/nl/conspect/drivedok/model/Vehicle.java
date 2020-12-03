@@ -1,14 +1,20 @@
 package nl.conspect.drivedok.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class Vehicle {
 
+    @Id
     private Long id;
     private String name;
     private String licencePlate;
     private ParkingType parkingType;
+    @OneToMany
     private Set<Reservation> reservations;
 
     public Vehicle() {

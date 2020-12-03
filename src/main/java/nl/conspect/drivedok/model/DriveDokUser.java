@@ -1,14 +1,20 @@
 package nl.conspect.drivedok.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class DriveDokUser {
 
+    @Id
     private Long id;
     private String name;
     private String email;
     private String password; // TODO: 02/12/2020 should probably not be a String but a Char[]
+    @OneToMany
     private Set<Vehicle> vehicles;
 
     public DriveDokUser() {

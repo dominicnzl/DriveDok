@@ -1,9 +1,13 @@
 package nl.conspect.drivedok.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 
+@Entity
 public class ParkingSpot {
 
+    @Id
     private Long id;
     private ParkingType parkingType;
 

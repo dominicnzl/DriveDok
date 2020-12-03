@@ -1,10 +1,14 @@
 package nl.conspect.drivedok.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
 public class Reservation {
 
+    @Id
     private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
