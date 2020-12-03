@@ -8,6 +8,7 @@ public class DrivedokApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DrivedokApplication.class, args);
+
 	}
 
 }
