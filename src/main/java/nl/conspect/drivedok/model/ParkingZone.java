@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -8,8 +9,12 @@ import java.util.Set;
 public class ParkingZone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
+
+    @Version
+    private LocalDateTime version;
+
     private String name;
     @OneToMany
     private Set<ParkingSpot> parkingSpots;

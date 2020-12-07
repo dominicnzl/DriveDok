@@ -2,6 +2,7 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -23,9 +24,10 @@ public class ParkingZoneController {
     }
 
     @GetMapping("/{id}")
-    public ParkingZone findById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ParkingZone> findById(@PathVariable Long id) {
         return parkingZoneService.findById(id)
-                .orElseThrow(() -> new Exception());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/create")
