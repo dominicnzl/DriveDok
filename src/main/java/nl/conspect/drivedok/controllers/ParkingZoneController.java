@@ -5,7 +5,6 @@ import nl.conspect.drivedok.services.ParkingZoneService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/parkingzone")
@@ -24,8 +23,9 @@ public class ParkingZoneController {
     }
 
     @GetMapping("/{id}")
-    public Optional<ParkingZone> findById(@PathVariable Long id){
-        return parkingZoneService.findById(id);
+    public ParkingZone findById(@PathVariable Long id) throws Exception {
+        return parkingZoneService.findById(id)
+            .orElseThrow(() -> new Exception());
     }
 
     @PostMapping("/create")
