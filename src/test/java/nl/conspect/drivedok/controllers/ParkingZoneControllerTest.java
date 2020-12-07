@@ -51,7 +51,7 @@ class ParkingZoneControllerTest {
 
         ParkingZone parkingZone = new ParkingZone();
         parkingZone.setName("NieuweZone");
-        ParkingZone parkingZone1 = parkingZoneService.createParkingZone(parkingZone);
+        ParkingZone parkingZone1 = parkingZoneService.create(parkingZone);
         Long id = parkingZone1.getId();
 
         mockMvc.perform(get("/parkingzone/" + id))
@@ -60,7 +60,7 @@ class ParkingZoneControllerTest {
     }
 
     @Test
-    public void shouldThrowException() throws Exception {
+    public void shouldThrowException() {
         Exception exception = assertThrows(NestedServletException.class, () -> {
             mockMvc.perform(get("/parkingzone/123546"));
         });

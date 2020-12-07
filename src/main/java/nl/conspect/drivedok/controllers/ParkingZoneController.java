@@ -18,19 +18,23 @@ public class ParkingZoneController {
     }
 
     @GetMapping("/all")
-    public Collection<ParkingZone> findAllParkingZones(){
-        return parkingZoneService.findAllParkingZones();
+    public Collection<ParkingZone> findAllParkingZones() {
+        return parkingZoneService.findAll();
     }
 
     @GetMapping("/{id}")
     public ParkingZone findById(@PathVariable Long id) throws Exception {
         return parkingZoneService.findById(id)
-            .orElseThrow(() -> new Exception());
+                .orElseThrow(() -> new Exception());
     }
 
     @PostMapping("/create")
-    public ParkingZone createParkingZone(@RequestBody ParkingZone parkingZone){
-        return parkingZoneService.createParkingZone(parkingZone);
+    public ParkingZone createParkingZone(@RequestBody ParkingZone parkingZone) {
+        return parkingZoneService.create(parkingZone);
     }
 
+    @PutMapping("/update")
+    public ParkingZone updateParkingZone(@RequestBody ParkingZone parkingZone) {
+        return parkingZoneService.update(parkingZone);
+    }
 }

@@ -1,9 +1,6 @@
 package nl.conspect.drivedok.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,7 +8,7 @@ import java.util.Set;
 public class ParkingZone {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     @OneToMany

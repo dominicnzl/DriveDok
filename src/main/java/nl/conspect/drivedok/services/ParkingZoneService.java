@@ -18,7 +18,7 @@ public class ParkingZoneService {
 
     }
 
-    public List<ParkingZone> findAllParkingZones(){
+    public List<ParkingZone> findAll(){
         return parkingZoneRepository.findAll();
     }
 
@@ -26,11 +26,14 @@ public class ParkingZoneService {
         return parkingZoneRepository.findById(id);
     }
 
-    public ParkingZone createParkingZone(ParkingZone parkingZone){
-
+    public ParkingZone create(ParkingZone parkingZone){
         return parkingZoneRepository.save(parkingZone);
     }
 
-
-
+    public ParkingZone update(ParkingZone parkingZone) {
+        var id = parkingZone.getId();
+        return findById(id)
+                .map(parkingZoneRepository::save)
+                .orElseThrow(() -> new IllegalStateException(String.format("Parkingzone met id %s bestaat niet", id)));
+    }
 }
