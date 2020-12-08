@@ -2,6 +2,7 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -18,13 +19,24 @@ public class ParkingZoneController {
     }
 
     @GetMapping("/all")
-    public Collection<ParkingZone> findAllParkingZones(){
-        return parkingZoneService.findAllParkingZones();
+    public Collection<ParkingZone> findAllParkingZones() {
+        return parkingZoneService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ParkingZone> findById(@PathVariable Long id) {
+        return parkingZoneService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/create")
-    public ParkingZone createParkingZone(@RequestBody ParkingZone parkingZone){
-        return parkingZoneService.createParkingZone(parkingZone);
+    public ParkingZone createParkingZone(@RequestBody ParkingZone parkingZone) {
+        return parkingZoneService.create(parkingZone);
     }
 
+    @PutMapping("/update")
+    public ParkingZone updateParkingZone(@RequestBody ParkingZone parkingZone) {
+        return parkingZoneService.update(parkingZone);
+    }
 }
