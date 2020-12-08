@@ -16,16 +16,20 @@ public class ParkingZone {
     private LocalDateTime version;
 
     private String name;
+
     @OneToMany
     private Set<ParkingSpot> parkingSpots;
+
+    private int totalParkingSpots;
 
     public ParkingZone() {
     }
 
-    public ParkingZone(Long id, String name, Set<ParkingSpot> parkingSpots) {
+    public ParkingZone(Long id, String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
         this.id = id;
         this.name = name;
         this.parkingSpots = parkingSpots;
+        this.totalParkingSpots = totalParkingSpots;
     }
 
     public Long getId() {
@@ -52,27 +56,35 @@ public class ParkingZone {
         this.parkingSpots = parkingSpots;
     }
 
+    public int getTotalParkingSpots() {
+        return totalParkingSpots;
+    }
+
+    public void setTotalParkingSpots(int totalParkingSpots) {
+        this.totalParkingSpots = totalParkingSpots;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ParkingZone that = (ParkingZone) o;
-        return Objects.equals(id, that.id) &&
-                name.equals(that.name) &&
-                parkingSpots.equals(that.parkingSpots);
+        return totalParkingSpots == that.totalParkingSpots && id.equals(that.id) && version.equals(that.version) && name.equals(that.name) && parkingSpots.equals(that.parkingSpots);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, parkingSpots);
+        return Objects.hash(id, version, name, parkingSpots, totalParkingSpots);
     }
 
     @Override
     public String toString() {
         return "ParkingZone{" +
                 "id=" + id +
+                ", version=" + version +
                 ", name='" + name + '\'' +
                 ", parkingSpots=" + parkingSpots +
+                ", totalParkingSpots=" + totalParkingSpots +
                 '}';
     }
 }
