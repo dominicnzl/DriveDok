@@ -17,11 +17,6 @@ public class ParkingZoneThController {
         this.parkingZoneService = parkingZoneService;
     }
 
-    @GetMapping("/")
-    public String helloWorld(){
-        return "helloWorld";
-    }
-
     @GetMapping("/findall")
     public String findAllParkingZones(Model model){
         model.addAttribute("parkingzones", parkingZoneService.findAll());
