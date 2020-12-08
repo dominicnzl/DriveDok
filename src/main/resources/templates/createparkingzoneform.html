@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link th:href="@{/styles/css/main.css}" rel="stylesheet"/>
+    <title>Document</title>
+</head>
+<body>
+<div>
+    <h1>Form</h1>
+    <form action="#" th:action="@{/th/create}" th:object="${parkingZone}" method="post">
+        <p>Name: <input type="text" th:field="*{name}"/></p>
+        <p>Total parkingspots: <input type="text" th:field="*{totalParkingSpots}"/></p>
+        <p>
+            <input type="submit" value="SUBMIT"/>
+        </p>
+    </form>
+</div>
+</body>
+</html>
