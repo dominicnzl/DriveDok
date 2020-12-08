@@ -6,29 +6,20 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link th:href="@{/styles/css/main.css}" rel="stylesheet"/>
-    <title>Show all ParkingZones</title>
+    <title>Homepage</title>
 </head>
 <body>
 <header><img th:src="@{/img/quickLogo.png}" alt=""> </header>
 <div>
-    <h2>Welcome back Administrator,</h2>
+    <h2>Welcome Administrator Bert,</h2>
     <p>
         Your DriveDok Zones
     <br><br>
-        (Click on your DriveDok Zones to see the type of ParkingSpots they contain)</p>
+        <p>You have no DriveDok Zones yet</p>
     <br><br>
-    <form action="">
-        <table>
-            <tbody>
-            <tr th:each="zone : ${parkingzones}">
-                <td th:text="${zone.name}">Name</td>
-                <td th:text="${zone.totalParkingSpots}">Number of spots</td>
-            </tr>
-            </tbody>
-        </table>
-        <br><br>
+        <a href="/th/create">test</a>
         <button>Create a new DriveDok Zone</button>
-    </form>
+
 </div>
 </body>
 </html>

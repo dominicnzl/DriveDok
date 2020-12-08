@@ -18,6 +18,11 @@ public class ParkingZoneThController {
         this.parkingZoneService = parkingZoneService;
     }
 
+    @GetMapping("/")
+    public String showHomepage(){
+        return "homepage";
+    }
+
     @GetMapping("/findall")
     public String findAllParkingZones(Model model){
         model.addAttribute("parkingzones", parkingZoneService.findAll());
@@ -25,7 +30,7 @@ public class ParkingZoneThController {
     }
 
     @PostMapping("/create")
-    public String showParkingZoneById(Model model, ParkingZone parkingZone) {
+    public String saveParkingZone(Model model, ParkingZone parkingZone) {
         model.addAttribute("parkingZone", parkingZone);
         parkingZoneService.create(parkingZone);
         return "parkingzone";
