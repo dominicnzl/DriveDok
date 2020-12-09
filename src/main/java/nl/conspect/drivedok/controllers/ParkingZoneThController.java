@@ -19,14 +19,17 @@ public class ParkingZoneThController {
     }
 
     @GetMapping
-    public String showHomepage(){
-        return "homepage";
+    public String showHomePage(Model model){
+        model.addAttribute("parkingzones", parkingZoneService.findAll());
+        return parkingZoneService.findAll().isEmpty()
+                ? "homepage"
+                : "all-parkingzones";
     }
 
-    @GetMapping("/findall")
-    public String findAllParkingZones(Model model){
-        model.addAttribute("parkingzones", parkingZoneService.findAll());
-        return "all-parkingzones";
+    @GetMapping("/create")
+    public String createParkingZone(Model model, ParkingZone parkingZone) {
+        model.addAttribute("parkingZone", parkingZone);
+        return "createparkingzoneform";
     }
 
     @PostMapping("/create")
@@ -34,12 +37,6 @@ public class ParkingZoneThController {
         model.addAttribute("parkingZone", parkingZone);
         parkingZoneService.create(parkingZone);
         return "parkingzone";
-    }
-
-    @GetMapping("/create")
-    public String createParkingZone(Model model, ParkingZone parkingZone) {
-        model.addAttribute("parkingZone", parkingZone);
-        return "createparkingzoneform";
     }
 
 }
