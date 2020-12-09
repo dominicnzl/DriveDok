@@ -16,13 +16,14 @@
         <table>
             <tbody>
             <tr>
-                <td th:text="'DriveDok Zone ' + ${parkingZone.name}"></td>
-                <td th:text="' has ' + ${parkingZone.totalParkingSpots} + ' parking spots.'"></td>
+                <td><p th:text="'DriveDok Zone ' + ${parkingZone.name}"></p></td>
+                <td><p th:text="' has ' + ${parkingZone.totalParkingSpots} + ' parking spots.'"></p></td>
             </tr>
             </tbody>
         </table>
         <br><br>
-        <button onclick="location.href='/th/create'">Create a new DriveDok Zone</button>
+        <p>Assign types to your DriveDok Spots</p>
+        <button onclick="location.href='/th/home'">Save your DriveDok</button>
     </form>
 </div>
 </body>
