@@ -9,17 +9,15 @@
     <title>Homepage</title>
 </head>
 <body>
-<header><img th:src="@{/img/quickLogo.png}" alt=""> </header>
+<header><img th:src="@{/img/quickLogo.png}" alt=""></header>
 <div>
     <h2>Welcome Administrator Bert,</h2>
     <p>
         Your DriveDok Zones
+        <br><br>
+    <p>You have no DriveDok Zones yet</p>
     <br><br>
-        <p>You have no DriveDok Zones yet</p>
-    <br><br>
-        <a href="/th/create">test</a>
-        <button>Create a new DriveDok Zone</button>
-
+    <button onclick="location.href='/th/create'">Create a new DriveDok Zone</button>
 </div>
 </body>
 </html>

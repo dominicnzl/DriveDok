@@ -18,7 +18,7 @@ public class ParkingZoneThController {
         this.parkingZoneService = parkingZoneService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String showHomepage(){
         return "homepage";
     }
