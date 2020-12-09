@@ -46,6 +46,7 @@ table.body {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
 }
 
 div.form {
