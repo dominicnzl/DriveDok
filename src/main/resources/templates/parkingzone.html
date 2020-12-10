@@ -9,22 +9,14 @@
     <title>ParkingZone</title>
 </head>
 <body>
-<header><img th:src="@{/img/quickLogo.png}" alt=""></header>
+<header><img src="logo.png" th:src="@{/img/quickLogo.png}" alt="logo"></header>
 <div>
-    <form action="">
-        <h2>This is your new DriveDok Zone:</h2>
-        <table>
-            <tbody>
-            <tr>
-                <td><p th:text="'DriveDok Zone ' + ${parkingZone.name}"></p></td>
-                <td><p th:text="' has ' + ${parkingZone.totalParkingSpots} + ' parking spots.'"></p></td>
-            </tr>
-            </tbody>
-        </table>
-        <br><br>
-        <p>Assign types to your DriveDok Spots</p>
-        <button onclick="location.href='/th/home'">Save your DriveDok</button>
-    </form>
+    <h2>This is your new DriveDok Zone:</h2>
+    <div th:object="${parkingZone}">
+        <p th:text="'DriveDok Zone: ' + *{name}">filler text</p>
+        <p th:text="' has ' + *{totalParkingSpots} + ' parking spots.'">filler number</p>
+    </div>
+    <button onclick="location.href='/th/home'">Go to overview</button>
 </div>
 </body>
 </html>
