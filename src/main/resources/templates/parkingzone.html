@@ -10,12 +10,10 @@
 </head>
 <body>
 <header><img src="logo.png" th:src="@{/img/quickLogo.png}" alt="logo"></header>
-<div>
+<div th:object="${parkingZone}">
     <h2>This is your new DriveDok Zone:</h2>
-    <div th:object="${parkingZone}">
-        <p th:text="'DriveDok Zone: ' + *{name}">filler text</p>
-        <p th:text="' has ' + *{totalParkingSpots} + ' parking spots.'">filler number</p>
-    </div>
+    <p th:text="|DriveDok Zone: *{name}|">filler text</p>
+    <p th:text="|has *{totalParkingSpots} parking spots.|">filler number</p>
     <button onclick="location.href='/th/home'">Go to overview</button>
 </div>
 </body>
