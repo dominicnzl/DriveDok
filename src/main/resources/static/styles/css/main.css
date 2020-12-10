@@ -1,5 +1,6 @@
 h2 {
-    font-family: sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
+    font-style: light;
     font-size: 1.5em;
     text-transform: uppercase;
 }
@@ -22,7 +23,6 @@ body {
 }
 
 form {
-    background-color: pink;
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
@@ -33,13 +33,20 @@ input[type=text] {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    background-color: #3CBC8D;
+}
+
+input[type=number] {
+    width: 60%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
 }
 
 table.body {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
 }
 
 div.form {

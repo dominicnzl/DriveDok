@@ -6,10 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/th")
 public class ParkingZoneThController {
 
     private final ParkingZoneService parkingZoneService;
@@ -18,7 +16,7 @@ public class ParkingZoneThController {
         this.parkingZoneService = parkingZoneService;
     }
 
-    @GetMapping
+    @GetMapping("/home")
     public String showHomePage(Model model){
         model.addAttribute("parkingzones", parkingZoneService.findAll());
         return parkingZoneService.findAll().isEmpty()
