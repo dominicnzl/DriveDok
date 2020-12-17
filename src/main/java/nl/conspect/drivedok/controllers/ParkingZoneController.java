@@ -2,15 +2,13 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Collection;
-
-@RestController
-@RequestMapping("/parkingzone")
+@Controller
 public class ParkingZoneController {
-
 
     private final ParkingZoneService parkingZoneService;
 
@@ -18,25 +16,25 @@ public class ParkingZoneController {
         this.parkingZoneService = parkingZoneService;
     }
 
-    @GetMapping("/all")
-    public Collection<ParkingZone> findAllParkingZones() {
-        return parkingZoneService.findAll();
+    @GetMapping("/home")
+    public String showHomePage(Model model){
+        model.addAttribute("parkingzones", parkingZoneService.findAll());
+        return parkingZoneService.findAll().isEmpty()
+                ? "homepage"
+                : "all-parkingzones";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ParkingZone> findById(@PathVariable Long id) {
-        return parkingZoneService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/create")
+    public String createParkingZone(Model model, ParkingZone parkingZone) {
+        model.addAttribute("parkingZone", parkingZone);
+        return "createparkingzoneform";
     }
 
     @PostMapping("/create")
-    public ParkingZone createParkingZone(@RequestBody ParkingZone parkingZone) {
-        return parkingZoneService.create(parkingZone);
+    public String saveParkingZone(Model model, ParkingZone parkingZone) {
+        model.addAttribute("parkingZone", parkingZone);
+        parkingZoneService.create(parkingZone);
+        return "parkingzone";
     }
 
-    @PutMapping("/update")
-    public ParkingZone updateParkingZone(@RequestBody ParkingZone parkingZone) {
-        return parkingZoneService.update(parkingZone);
-    }
 }
