@@ -4,10 +4,10 @@ import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("parkingzone")
 public class ParkingZoneController {
 
     private final ParkingZoneService parkingZoneService;
@@ -37,4 +37,10 @@ public class ParkingZoneController {
         return "parkingzone";
     }
 
+    @GetMapping("/{id}")
+    public String showSingleParkingZone(Model model, @PathVariable long id){
+        var pz= parkingZoneService.findById(id).orElseThrow();
+        model.addAttribute("parkingZone", pz);
+        return "parkingzone";
+    }
 }
