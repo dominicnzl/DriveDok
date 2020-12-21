@@ -15,6 +15,10 @@ public class DriveDokSpot {
 
     public DriveDokSpot(){}
 
+    public DriveDokSpot(ParkingType parkingType) {
+        this.parkingType = parkingType;
+    }
+
     public DriveDokSpot(Long id, ParkingType parkingType) {
         this.id = id;
         this.parkingType = parkingType;

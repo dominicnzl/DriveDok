@@ -1,7 +1,10 @@
 package nl.conspect.drivedok.utilities;
 
 
+import nl.conspect.drivedok.model.DriveDokSpot;
+import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.ParkingZone;
+import nl.conspect.drivedok.services.DriveDokSpotService;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -14,8 +17,11 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
 
     private final ParkingZoneService parkingZoneService;
 
-    public DriveDokEventListeners(ParkingZoneService parkingZoneService) {
+    private final DriveDokSpotService driveDokSpotService;
+
+    public DriveDokEventListeners(ParkingZoneService parkingZoneService, DriveDokSpotService driveDokSpotService) {
         this.parkingZoneService = parkingZoneService;
+        this.driveDokSpotService = driveDokSpotService;
     }
 
     @Override
@@ -26,5 +32,12 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
         parkingZoneService.create(greet);
         parkingZoneService.create(piet);
         parkingZoneService.create(joop);
+
+        var plek1 = new DriveDokSpot();
+        plek1.setParkingType(ParkingType.DISABLED);
+        var plek2 = new DriveDokSpot();
+        plek2.setParkingType(ParkingType.ELECTRIC);
+        driveDokSpotService.create(plek1);
+        driveDokSpotService.create(plek2);
     }
 }
