@@ -2,6 +2,7 @@ package nl.conspect.drivedok.controllers;
 
 
 import nl.conspect.drivedok.model.ParkingZone;
+import nl.conspect.drivedok.repositories.ParkingZoneRepository;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -13,11 +14,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.persistence.EntityManager;
 import javax.xml.transform.Result;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,10 +40,32 @@ class ParkingZoneControllerTest {
     ParkingZoneService parkingZoneService;
 
     @Test
-    public void shouldFindAllParkingZones() throws Exception {
-        mockMvc.perform(get("/parkingzone/home"))
+    public void shouldShowThereAreNoPZYet() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/parkingzone/home"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        boolean hasString = contentAsString.contains("You have no DriveDok Zones yet");
+    }
+
+    @Test
+    public void shouldShowListOfParkingZones() throws Exception {
+        List<ParkingZone> listPZ = new ArrayList<>();
+        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
+        ParkingZone pz2 = new ParkingZone(2L, "Zone 2", null, 200);
+        listPZ.add(pz1);
+        listPZ.add(pz2);
+
+        when(parkingZoneService.findAll()).thenReturn(listPZ);
+
+        MvcResult mvcResult = mockMvc.perform(get("/parkingzone/home"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        boolean hasString = contentAsString.contains("Zone 1");
     }
 
     @Test
@@ -54,7 +83,7 @@ class ParkingZoneControllerTest {
     public void shouldReturnParkingZoneById() throws Exception {
         ParkingZone parkingZone = new ParkingZone();
         parkingZone.setName("NieuweZone");
-        Mockito.when(parkingZoneService.findById(1L))
+        when(parkingZoneService.findById(1L))
                 .thenReturn(Optional.of(parkingZone));
 
         MvcResult mvcResult = mockMvc.perform(get("/parkingzone/1"))
