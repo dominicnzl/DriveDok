@@ -25,6 +25,12 @@ public class ParkingZone {
     public ParkingZone() {
     }
 
+    public ParkingZone(String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
+        this.name = name;
+        this.parkingSpots = parkingSpots;
+        this.totalParkingSpots = totalParkingSpots;
+    }
+
     public ParkingZone(Long id, String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
         this.id = id;
         this.name = name;
