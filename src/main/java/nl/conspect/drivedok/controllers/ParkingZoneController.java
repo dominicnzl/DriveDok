@@ -19,9 +19,7 @@ public class ParkingZoneController {
     @GetMapping("/home")
     public String showHomePage(Model model){
         model.addAttribute("parkingzones", parkingZoneService.findAll());
-        return parkingZoneService.findAll().isEmpty()
-                ? "homepage"
-                : "all-parkingzones";
+        return "homepage";
     }
 
     @GetMapping("/create")

@@ -20,11 +20,11 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        var greet = new ParkingZone("Greet", Collections.emptySet(), 10);
+        /*var greet = new ParkingZone("Greet", Collections.emptySet(), 10);
         var piet = new ParkingZone("Piet", Collections.emptySet(), 20);
         var joop = new ParkingZone("Joop", Collections.emptySet(), 30);
         parkingZoneService.create(greet);
         parkingZoneService.create(piet);
-        parkingZoneService.create(joop);
+        parkingZoneService.create(joop);*/
     }
 }
