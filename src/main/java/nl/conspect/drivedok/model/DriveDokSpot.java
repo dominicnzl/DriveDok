@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class ParkingSpot {
+public class DriveDokSpot {
 
     @Id
     @GeneratedValue
@@ -13,9 +13,9 @@ public class ParkingSpot {
     @Enumerated(EnumType.STRING)
     private ParkingType parkingType;
 
-    public ParkingSpot(){}
+    public DriveDokSpot(){}
 
-    public ParkingSpot(Long id, ParkingType parkingType) {
+    public DriveDokSpot(Long id, ParkingType parkingType) {
         this.id = id;
         this.parkingType = parkingType;
     }
@@ -40,7 +40,7 @@ public class ParkingSpot {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ParkingSpot that = (ParkingSpot) o;
+        DriveDokSpot that = (DriveDokSpot) o;
         return id.equals(that.id) &&
                 parkingType == that.parkingType;
     }
