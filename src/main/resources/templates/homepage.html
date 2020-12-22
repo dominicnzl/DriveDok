@@ -12,12 +12,29 @@
 <header><img th:src="@{/img/quickLogo.png}" alt=""></header>
 <div>
     <h2>Welcome Administrator Bert,</h2>
-    <p>
+
+    <div><p>
         Your DriveDok Zones
         <br><br>
-    <p>You have no DriveDok Zones yet</p>
-    <br><br>
-    <button onclick="location.href='/create'">Create a new DriveDok Zone</button>
+    </div>
+    <div th:if="${parkingzones != null and !parkingzones.empty}">
+        <form action="">
+            <table>
+                <tbody>
+                <tr th:each="zone : ${parkingzones}">
+                    <td th:text="${zone.name}">Name</td>
+                    <td th:text="${zone.totalParkingSpots}">Number of spots</td>
+                </tr>
+                </tbody>
+            </table>
+            <br><br>
+        </form>
+    </div>
+    <div th:if="${parkingzones == null or parkingzones.empty}">
+        <p>You have no DriveDok Zones yet</p>
+        <br><br>
+    </div>
+    <button onclick="location.href='/parkingzone/create'">Create a new DriveDok Zone</button>
 </div>
 </body>
 </html>

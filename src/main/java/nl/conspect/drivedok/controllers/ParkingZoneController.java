@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @Controller
 @RequestMapping("parkingzone")
 public class ParkingZoneController {
@@ -19,13 +21,11 @@ public class ParkingZoneController {
     @GetMapping("/home")
     public String showHomePage(Model model){
         model.addAttribute("parkingzones", parkingZoneService.findAll());
-        return parkingZoneService.findAll().isEmpty()
-                ? "homepage"
-                : "all-parkingzones";
+        return "homepage";
     }
 
     @GetMapping("/create")
-    public String createParkingZone(Model model, ParkingZone parkingZone) {
+    public String showParkingZoneForm(Model model, ParkingZone parkingZone) {
         model.addAttribute("parkingZone", parkingZone);
         return "createparkingzoneform";
     }
@@ -38,7 +38,7 @@ public class ParkingZoneController {
     }
 
     @GetMapping("/{id}")
-    public String showSingleParkingZone(Model model, @PathVariable long id){
+    public String showSingleParkingZone(Model model, @PathVariable long id) {
         var pz= parkingZoneService.findById(id).orElseThrow();
         model.addAttribute("parkingZone", pz);
         return "parkingzone";
