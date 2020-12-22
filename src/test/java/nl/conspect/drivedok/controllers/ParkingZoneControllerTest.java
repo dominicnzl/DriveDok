@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,6 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +33,7 @@ class ParkingZoneControllerTest {
     ParkingZoneService parkingZoneService;
 
     @Test
-    public void shouldShowThereAreNoPZYet() throws Exception {
+    public void homeShouldShowThereAreNoParkingZonesYet() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/parkingzone/home"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -52,38 +51,42 @@ class ParkingZoneControllerTest {
 
         when(parkingZoneService.findAll()).thenReturn(listPZ);
 
-        MvcResult mvcResult = mockMvc.perform(get("/parkingzone/home"))
+        mockMvc.perform(get("/parkingzone/home"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Zone 1")))
-                .andExpect(content().string(containsString("Zone 2")))
-                .andReturn();
+                .andExpect(content().string(containsString("Zone 2")));
+    }
+
+    @Test
+    public void shouldShowParkingZoneForm() throws Exception {
+
+        mockMvc.perform(get("/parkingzone/create"))
+                .andDo(print())
+                .andExpect(content().string(containsString("Create ParkingZone form")));
     }
 
     @Test
     public void shouldCreateParkingZone() throws Exception {
-        mockMvc.perform(post("/parkingzone/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(" {" +
-                        "    \"name\": \"Zone52\"" +
-                        "}"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/parkingzone/create", ParkingZone.class)
+                    .param("name", "Zone 1")
+                    .param("totalParkingSpots", "100"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(content().string(containsString("Zone 1")));
     }
 
     @Test
     public void shouldReturnParkingZoneById() throws Exception {
-        ParkingZone parkingZone = new ParkingZone();
-        parkingZone.setName("NieuweZone");
-        when(parkingZoneService.findById(1L))
-                .thenReturn(Optional.of(parkingZone));
+        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
 
-        MvcResult mvcResult = mockMvc.perform(get("/parkingzone/1"))
+        when(parkingZoneService.findById(1L))
+                .thenReturn(Optional.of(pz1));
+
+        mockMvc.perform(get("/parkingzone/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(content().string(containsString("DriveDok Zone: NieuweZone<")))
-                .andReturn();
+                .andExpect(content().string(containsString("DriveDok Zone: Zone 1")));
     }
 
     @Disabled
