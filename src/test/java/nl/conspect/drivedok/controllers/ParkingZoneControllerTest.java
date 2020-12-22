@@ -34,7 +34,7 @@ class ParkingZoneControllerTest {
 
     @Test
     public void homeShouldShowThereAreNoParkingZonesYet() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/parkingzone/home"))
+        mockMvc.perform(get("/parkingzone/home"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("You have no DriveDok Zones yet")))
