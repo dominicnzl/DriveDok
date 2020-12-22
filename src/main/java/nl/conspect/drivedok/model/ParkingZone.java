@@ -18,23 +18,23 @@ public class ParkingZone {
     private String name;
 
     @OneToMany
-    private Set<DriveDokSpot> driveDokSpots;
+    private Set<ParkingSpot> parkingSpots;
 
     private int totalParkingSpots;
 
     public ParkingZone() {
     }
 
-    public ParkingZone(String name, Set<DriveDokSpot> driveDokSpots, int totalParkingSpots) {
+    public ParkingZone(String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
         this.name = name;
-        this.driveDokSpots = driveDokSpots;
+        this.parkingSpots = parkingSpots;
         this.totalParkingSpots = totalParkingSpots;
     }
 
-    public ParkingZone(Long id, String name, Set<DriveDokSpot> driveDokSpots, int totalParkingSpots) {
+    public ParkingZone(Long id, String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
         this.id = id;
         this.name = name;
-        this.driveDokSpots = driveDokSpots;
+        this.parkingSpots = parkingSpots;
         this.totalParkingSpots = totalParkingSpots;
     }
 
@@ -54,12 +54,12 @@ public class ParkingZone {
         this.name = name;
     }
 
-    public Set<DriveDokSpot> getParkingSpots() {
-        return driveDokSpots;
+    public Set<ParkingSpot> getParkingSpots() {
+        return parkingSpots;
     }
 
-    public void setParkingSpots(Set<DriveDokSpot> driveDokSpots) {
-        this.driveDokSpots = driveDokSpots;
+    public void setParkingSpots(Set<ParkingSpot> parkingSpots) {
+        this.parkingSpots = parkingSpots;
     }
 
     public int getTotalParkingSpots() {
@@ -75,12 +75,12 @@ public class ParkingZone {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ParkingZone that = (ParkingZone) o;
-        return totalParkingSpots == that.totalParkingSpots && id.equals(that.id) && version.equals(that.version) && name.equals(that.name) && driveDokSpots.equals(that.driveDokSpots);
+        return totalParkingSpots == that.totalParkingSpots && id.equals(that.id) && version.equals(that.version) && name.equals(that.name) && parkingSpots.equals(that.parkingSpots);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, version, name, driveDokSpots, totalParkingSpots);
+        return Objects.hash(id, version, name, parkingSpots, totalParkingSpots);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ParkingZone {
                 "id=" + id +
                 ", version=" + version +
                 ", name='" + name + '\'' +
-                ", parkingSpots=" + driveDokSpots +
+                ", parkingSpots=" + parkingSpots +
                 ", totalParkingSpots=" + totalParkingSpots +
                 '}';
     }

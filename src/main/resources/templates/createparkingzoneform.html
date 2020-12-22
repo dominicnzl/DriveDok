@@ -14,7 +14,7 @@
     <h1>Create a new DriveDok Zone for your Parking Spots</h1>
     <form action="#" th:action="@{/parkingzone/create}" th:object="${parkingZone}" method="post">
         <p><input type="text" th:field="*{name} " placeholder="Enter a name for your new DriveDok Zone"/></p>
-        <p>How many DriveDokSpots does the Zone have? <input type="text" th:field="*{totalParkingSpots}"/></p>
+        <p>How many Parking Spots does the Zone have? <input type="text" th:field="*{totalParkingSpots}"/></p>
         <p>
             <input type="submit" value="Create the zone"/>
         </p>
