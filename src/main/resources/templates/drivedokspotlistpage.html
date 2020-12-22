@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show all DriveDokSpots</title>
+</head>
+<body>
+<div>
+    <table>
+        <tr th:each="spot : ${driveDokSpots}">
+            <td>
+                <a th:text="${spot.getParkingType()}" th:href="@{|/drivedokspots/${spot.getId()}|}">ParkingType</a>
+            </td>
+        </tr>
+    </table>
+    <a th:href="@{drivedokspoteditpage}">Create new</a>
+</div>
+</body>
+</html>

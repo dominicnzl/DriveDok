@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="#" th:action="@{/drivedokspots}" th:object="${driveDokSpot}" th:method="post">
+    <table>
+        <tr>
+            <td>DriveDokSpot id:</td>
+            <td><input type="number" th:field="*{id}" th:placeholder="*{id}" readonly></td>
+        </tr>
+        <tr>
+            <td>DriveDokSpot ParkingType:</td>
+            <td>
+                <select name="ParkingType" id="parkingtype">
+                    <option th:each="type : ${parkingTypes}" th:value="${type}" th:text="${type.toString()}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit"/></td>
+            <td><a href="/drivedokspots">Overview</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
