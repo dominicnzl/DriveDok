@@ -71,14 +71,15 @@ class ParkingSpotServiceTest {
         ParkingSpot spot = new ParkingSpot(ParkingType.DISABLED);
         testEntityManager.persist(spot);
 
-        ParkingSpot updatedSpot = parkingSpotService.findById(spot.getId()).orElse(null);
-        assertNotNull(updatedSpot);
-        updatedSpot.setParkingType(ParkingType.ELECTRIC);
-        parkingSpotService.update(updatedSpot);
+        ParkingSpot beforeUpdateSpot = parkingSpotService.findById(spot.getId()).orElse(null);
+        assertNotNull(beforeUpdateSpot);
+        assertEquals(ParkingType.DISABLED, beforeUpdateSpot.getParkingType());
 
-        ParkingSpot checkSpot = parkingSpotService.findById(spot.getId()).orElse(null);
-        assertNotNull(checkSpot);
-        assertEquals(ParkingType.ELECTRIC, checkSpot.getParkingType());
+        beforeUpdateSpot.setParkingType(ParkingType.ELECTRIC);
+        parkingSpotService.update(beforeUpdateSpot);
+        ParkingSpot afterUpdateSpot = parkingSpotService.findById(spot.getId()).orElse(null);
+        assertNotNull(afterUpdateSpot);
+        assertEquals(ParkingType.ELECTRIC, afterUpdateSpot.getParkingType());
     }
 
 
