@@ -20,8 +20,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ParkingZoneController.class)
 class ParkingZoneControllerTest {
@@ -89,12 +88,13 @@ class ParkingZoneControllerTest {
                 .andExpect(content().string(containsString("DriveDok Zone: Zone 1")));
     }
 
-    @Disabled
+    @Test
     public void shouldReturn404() throws Exception {
         mockMvc.perform(
-                get("/parkingzone/20000"))
+                get("/parkingzone/-1"))
                 .andDo(print())
-                .andExpect(status().isNotFound())
-        ;
+                .andExpect(model().attributeExists("foutmelding"))
+                .andExpect(model().attribute("foutmelding", "ParkingZone with id -1 not found"))
+                .andExpect(view().name("error"));
     }
 }

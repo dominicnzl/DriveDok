@@ -39,8 +39,12 @@ public class ParkingZoneController {
 
     @GetMapping("/{id}")
     public String showSingleParkingZone(Model model, @PathVariable long id) {
-        var pz= parkingZoneService.findById(id).orElseThrow();
-        model.addAttribute("parkingZone", pz);
+        var pz= parkingZoneService.findById(id);
+        if (pz.isEmpty()) {
+            model.addAttribute("foutmelding", String.format("ParkingZone with id %s not found", id));
+            return "error";
+        }
+        model.addAttribute("parkingZone", pz.get());
         return "parkingzone";
     }
 }
