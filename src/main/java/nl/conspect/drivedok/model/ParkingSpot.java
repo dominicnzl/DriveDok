@@ -15,6 +15,10 @@ public class ParkingSpot {
 
     public ParkingSpot(){}
 
+    public ParkingSpot(ParkingType parkingType) {
+        this.parkingType = parkingType;
+    }
+
     public ParkingSpot(Long id, ParkingType parkingType) {
         this.id = id;
         this.parkingType = parkingType;
