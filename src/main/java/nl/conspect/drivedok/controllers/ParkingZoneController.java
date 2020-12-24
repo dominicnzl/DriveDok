@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("parkingzone")
@@ -37,9 +38,14 @@ public class ParkingZoneController {
         return "parkingzone";
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/update")
+    public String updateParkingZone(Model model, ParkingZone parkingZone){
+        parkingZoneService.update(parkingZone);
+        return "parkingzone";
+    }
+
+    @GetMapping  ("/delete/{id}")
     public String deleteParkingZone(Model model, @PathVariable Long id){
-        System.out.println("KOMT IE HIER EN ZO JA: ID= " + id);
         parkingZoneService.deleteById(id);
         model.addAttribute("parkingzones", parkingZoneService.findAll());
         return "homepage";

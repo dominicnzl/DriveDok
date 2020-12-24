@@ -28,6 +28,13 @@ form {
     margin-right: auto;
 }
 
+ol {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
 input[type=text] {
     width: 60%;
     padding: 12px 20px;

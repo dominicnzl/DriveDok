@@ -1,22 +1,26 @@
 package nl.conspect.drivedok.controllers;
 
-
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -87,6 +91,28 @@ class ParkingZoneControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(containsString("DriveDok Zone: Zone 1")));
+    }
+
+    @Test
+    public void shouldUpdateParkingZone() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/parkingzone/update", ParkingZone.class)
+                .param("name", "Zone 1")
+                .param("totalParkingSpots", "100"))
+                .andDo(print())
+                .andExpect(content().string(containsString("Zone 1")));
+    }
+
+    @Test
+    public void shouldDeleteParkingZone() throws Exception {
+
+        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
+        when(parkingZoneService.findById(1L))
+                .thenReturn(Optional.of(pz1));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/parkingzone/delete/{id}", 1))
+                .andExpect(status().isOk());
+
     }
 
     @Disabled

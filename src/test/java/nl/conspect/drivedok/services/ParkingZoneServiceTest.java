@@ -82,9 +82,7 @@ import static org.junit.jupiter.api.Assertions.*;
             assertEquals("Anna", afterUpdateSpot.getName());
         }
 
-
-
-        @Disabled // TODO: Deleting ParkingZone will be resolved with #19
+        @Test
         @DisplayName("Persist 3 ParkingZones. Delete the second. Expect findAll() to have size 2")
         void deleteById() {
             ParkingZone spot1 = new ParkingZone();
@@ -95,7 +93,7 @@ import static org.junit.jupiter.api.Assertions.*;
             testEntityManager.persist(spot3);
             assertEquals(3, ParkingZoneService.findAll().size());
 
-           // ParkingZoneService.delete(spot2.getId());
+            ParkingZoneService.deleteById(spot2.getId());
             assertEquals(2, ParkingZoneService.findAll().size());
         }
     }
