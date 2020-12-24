@@ -84,7 +84,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 
-        @Disabled //delete method doesnt exist yet
+        @Disabled // TODO: Deleting ParkingZone will be resolved with #19
         @DisplayName("Persist 3 ParkingZones. Delete the second. Expect findAll() to have size 2")
         void deleteById() {
             ParkingZone spot1 = new ParkingZone();
