@@ -2,12 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>DriveDok error</title>
 </head>
 <body>
 <div>
     <h1>Oops...</h1>
-    <h2 th:text="${foutmelding == null} ? |${status} ${error}| : ${foutmelding}"></h2>
+    <h2 th:text="|${status} ${error} ${message}|"></h2>
+    <div th:if="${exception !=null}">
+        <p th:text="${exception}">filler</p>
+    </div>
+    <div th:if="${trace !=null}">
+        <p th:text="${trace}">filler</p>
+    </div>
 </div>
 </body>
 </html>
