@@ -1,6 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
-import javassist.NotFoundException;
+
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.springframework.stereotype.Controller;
@@ -40,9 +40,9 @@ public class ParkingZoneController {
     }
 
     @GetMapping("/{id}")
-    public String showSingleParkingZone(Model model, @PathVariable long id) throws NotFoundException {
+    public String showSingleParkingZone(Model model, @PathVariable long id) {
         var parkingZone = parkingZoneService.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("ParkingZone with id %s not found", id)));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("ParkingZone with id %s not found", id)));
         model.addAttribute("parkingZone", parkingZone);
         return "parkingzone";
     }
