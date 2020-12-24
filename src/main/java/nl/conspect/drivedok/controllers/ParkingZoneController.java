@@ -37,6 +37,14 @@ public class ParkingZoneController {
         return "parkingzone";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteParkingZone(Model model, @PathVariable Long id){
+        System.out.println("KOMT IE HIER EN ZO JA: ID= " + id);
+        parkingZoneService.deleteById(id);
+        model.addAttribute("parkingzones", parkingZoneService.findAll());
+        return "homepage";
+    }
+
     @GetMapping("/{id}")
     public String showSingleParkingZone(Model model, @PathVariable long id) {
         var pz= parkingZoneService.findById(id).orElseThrow();
