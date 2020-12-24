@@ -3,6 +3,7 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -89,7 +90,8 @@ class ParkingZoneControllerTest {
     }
 
     @Test
-    public void shouldReturn404() {
+    @DisplayName("When an id is used to findById but no ParkingZone is found throw an IllegalArgumentException")
+    public void whenFailToFindByIdThrowIllegalArgument() {
         assertThatThrownBy(() -> mockMvc.perform(get("/parkingzone/-1"))
                 .andExpect(status().isOk()))
                 .hasCause(new IllegalArgumentException("ParkingZone with id -1 not found"));
