@@ -3,7 +3,6 @@ package nl.conspect.drivedok.services;
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.repositories.ParkingZoneRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

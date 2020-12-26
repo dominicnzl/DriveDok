@@ -28,7 +28,7 @@ form {
     margin-right: auto;
 }
 
-ol {
+tbody.td {
     display: inline-block;
     margin-left: auto;
     margin-right: auto;

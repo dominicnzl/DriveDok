@@ -18,22 +18,30 @@
         <br><br>
     </div>
     <div th:if="${parkingzones != null and !parkingzones.empty}">
-<!--        <form action="">-->
-            <table>
+        <table>
+            <div>
                 <tbody>
                 <div th:each="zone : ${parkingzones}">
-
                     <a th:href="@{/parkingzone/{id}(id=${zone.id})}">
                         <span th:text="${zone.name}"></span>
                     </a>
-                    <a th:href="@{/parkingzone/{id}(id=${zone.id})}">
+                    <a th:href="@{'/parkingzone/' + ${zone.id}}">
                         <span th:text="${zone.totalParkingSpots}"></span>
+                    </a>
+                    <a>
+                        <form th:action="@{/parkingzone/delete/{id}(id=${zone.id})}"
+                              th:object="${parkingZone}"
+                              method="get"
+                              value="delete zone">
+                            <input type="hidden" name="id" th:value="${zone.id}">
+                            <button type="submit">Delete zone</button>
+                        </form>
                     </a>
                 </div>
                 </tbody>
-            </table>
-            <br><br>
-<!--        </form>-->
+            </div>
+        </table>
+        <br><br>
     </div>
     <div th:if="${parkingzones == null or parkingzones.empty}">
         <p>You have no DriveDok Zones yet</p>
