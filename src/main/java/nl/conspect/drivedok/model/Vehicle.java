@@ -8,6 +8,7 @@ import java.util.Set;
 public class Vehicle {
 
     @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private String licencePlate;
@@ -17,6 +18,13 @@ public class Vehicle {
     private Set<Reservation> reservations;
 
     public Vehicle() {
+    }
+
+    public Vehicle(String name, String licencePlate, ParkingType parkingType, Set<Reservation> reservations) {
+        this.name = name;
+        this.licencePlate = licencePlate;
+        this.parkingType = parkingType;
+        this.reservations = reservations;
     }
 
     public Vehicle(Long id, String name, String licencePlate, ParkingType parkingType, Set<Reservation> reservations) {
