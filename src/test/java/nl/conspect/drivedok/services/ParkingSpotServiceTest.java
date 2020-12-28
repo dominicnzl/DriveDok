@@ -31,9 +31,9 @@ class ParkingSpotServiceTest {
     @Test
     @DisplayName("Create 3 ParkingSpots and persist. Expect findAll() to return a list with size 3")
     void findAll() {
-        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED);
-        ParkingSpot spot2 = new ParkingSpot(ParkingType.ELECTRIC);
-        ParkingSpot spot3 = new ParkingSpot(ParkingType.MOTOR);
+        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 10);
+        ParkingSpot spot2 = new ParkingSpot(ParkingType.ELECTRIC, 10);
+        ParkingSpot spot3 = new ParkingSpot(ParkingType.NORMAL, 5);
         testEntityManager.persist(spot1);
         testEntityManager.persist(spot2);
         testEntityManager.persist(spot3);
@@ -43,16 +43,16 @@ class ParkingSpotServiceTest {
     @Test
     @DisplayName("Persist two ParkingSpots. Expect findById to retrieve the correct ParkingSpot. Verify by checking the ParkingType")
     void findById() {
-        ParkingSpot spot1 = new ParkingSpot(ParkingType.ELECTRIC);
+        ParkingSpot spot1 = new ParkingSpot(ParkingType.ELECTRIC, 5);
         testEntityManager.persist(spot1);
-        ParkingSpot spot2 = new ParkingSpot(ParkingType.MOTOR);
+        ParkingSpot spot2 = new ParkingSpot(ParkingType.NORMAL, 55);
         testEntityManager.persist(spot2);
 
         ParkingType parkingType = parkingSpotService.findById(spot1.getId())
                 .map(ParkingSpot::getParkingType)
                 .orElse(null);
         assertEquals(ParkingType.ELECTRIC, parkingType);
-        assertNotEquals(ParkingType.MOTOR, parkingType);
+        assertNotEquals(ParkingType.NORMAL, parkingType);
     }
 
     @Test
@@ -60,7 +60,7 @@ class ParkingSpotServiceTest {
     void create() {
         assertTrue(parkingSpotService.findAll().isEmpty());
 
-        ParkingSpot spot = new ParkingSpot(ParkingType.DISABLED);
+        ParkingSpot spot = new ParkingSpot(ParkingType.DISABLED, 2);
         parkingSpotService.create(spot);
         assertEquals(1, parkingSpotService.findAll().size());
     }
@@ -68,7 +68,7 @@ class ParkingSpotServiceTest {
     @Test
     @DisplayName("Persist a ParkingSpot with ParkingType Disabled. Retrieve this and set the type to Electric and call update(). Expect the ParkingType to be Electric after subsequent retrieval")
     void update() {
-        ParkingSpot spot = new ParkingSpot(ParkingType.DISABLED);
+        ParkingSpot spot = new ParkingSpot(ParkingType.DISABLED,5);
         testEntityManager.persist(spot);
 
         ParkingSpot beforeUpdateSpot = parkingSpotService.findById(spot.getId()).orElse(null);
@@ -87,9 +87,9 @@ class ParkingSpotServiceTest {
     @Test
     @DisplayName("Persist 3 ParkingSpots. Delete the second. Expect findAll() to have size 2")
     void deleteById() {
-        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED);
-        ParkingSpot spot2 = new ParkingSpot(ParkingType.ELECTRIC);
-        ParkingSpot spot3 = new ParkingSpot(ParkingType.MOTOR);
+        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 5);
+        ParkingSpot spot2 = new ParkingSpot(ParkingType.ELECTRIC, 5);
+        ParkingSpot spot3 = new ParkingSpot(ParkingType.NORMAL, 55);
         testEntityManager.persist(spot1);
         testEntityManager.persist(spot2);
         testEntityManager.persist(spot3);
