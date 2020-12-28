@@ -1,22 +1,28 @@
 package nl.conspect.drivedok.services;
 
 
+import nl.conspect.drivedok.model.ParkingSpot;
+import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.repositories.ParkingZoneRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
 public class ParkingZoneService {
 
     private final ParkingZoneRepository parkingZoneRepository;
+    private  final ParkingSpotService parkingSpotService;
 
-    public ParkingZoneService(ParkingZoneRepository parkingZoneRepository) {
+    public ParkingZoneService(ParkingZoneRepository parkingZoneRepository, ParkingSpotService parkingSpotService) {
         this.parkingZoneRepository = parkingZoneRepository;
+        this.parkingSpotService = parkingSpotService;
     }
 
     public List<ParkingZone> findAll(){
@@ -39,5 +45,25 @@ public class ParkingZoneService {
 
     public void deleteById(Long id){
         parkingZoneRepository.deleteById(id);
+    }
+
+    /*
+     The initParkingZone method defines the default implementation of a ParkingZone.
+     So by default it has certain ParkingSpots.
+     */
+    public ParkingZone initParkingZone(ParkingZone parkingZone){
+        ParkingSpot ps1 = new ParkingSpot(ParkingType.DISABLED, 0);
+        ParkingSpot ps2 = new ParkingSpot(ParkingType.ELECTRIC, 0);
+        ParkingSpot ps3 = new ParkingSpot(ParkingType.NORMAL, parkingZone.getTotalParkingSpots());
+        parkingSpotService.create(ps1);
+        parkingSpotService.create(ps2);
+        parkingSpotService.create(ps3);
+        Set<ParkingSpot>initSet = new HashSet<ParkingSpot>() ;
+        initSet.add(ps1);
+        initSet.add(ps2);
+        initSet.add(ps3);
+        parkingZone.setParkingSpots(initSet);
+
+        return parkingZone;
     }
 }
