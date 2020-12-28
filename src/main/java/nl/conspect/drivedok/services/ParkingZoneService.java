@@ -36,4 +36,8 @@ public class ParkingZoneService {
         // controles
         return parkingZoneRepository.save(parkingZone);
     }
+
+    public void deleteById(Long id){
+        parkingZoneRepository.deleteById(id);
+    }
 }

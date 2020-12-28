@@ -39,6 +39,19 @@ public class ParkingZoneController {
         return "parkingzone";
     }
 
+    @PostMapping("/update")
+    public String updateParkingZone(Model model, ParkingZone parkingZone){
+        parkingZoneService.update(parkingZone);
+        return "parkingzone";
+    }
+
+    @GetMapping  ("/delete/{id}")
+    public String deleteParkingZone(Model model, @PathVariable Long id){
+        parkingZoneService.deleteById(id);
+        model.addAttribute("parkingzones", parkingZoneService.findAll());
+        return "homepage";
+    }
+
     @GetMapping("/{id}")
     public String showSingleParkingZone(Model model, @PathVariable long id) {
         var parkingZone = parkingZoneService.findById(id)

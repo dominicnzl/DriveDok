@@ -1,6 +1,5 @@
 package nl.conspect.drivedok.controllers;
 
-
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.junit.jupiter.api.DisplayName;
@@ -89,6 +88,28 @@ class ParkingZoneControllerTest {
                 .andExpect(content().string(containsString("DriveDok Zone: Zone 1")));
     }
 
+    @Test
+    public void shouldUpdateParkingZone() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/parkingzone/update", ParkingZone.class)
+                .param("name", "Zone 1")
+                .param("totalParkingSpots", "100"))
+                .andDo(print())
+                .andExpect(content().string(containsString("Zone 1")));
+    }
+
+    @Test
+    public void shouldDeleteParkingZone() throws Exception {
+
+        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
+        when(parkingZoneService.findById(1L))
+                .thenReturn(Optional.of(pz1));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/parkingzone/delete/{id}", 1))
+                .andExpect(status().isOk());
+
+    }
+  
     @Test
     @DisplayName("When an id is used to findById but no ParkingZone is found throw an IllegalArgumentException")
     public void whenFailToFindByIdThrowIllegalArgument() {
