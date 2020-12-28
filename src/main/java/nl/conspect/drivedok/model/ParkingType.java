@@ -2,6 +2,5 @@ package nl.conspect.drivedok.model;
 
 public enum ParkingType {
 
-    DISABLED, ELECTRIC, MOTOR
-
+    DISABLED, ELECTRIC, NORMAL;
 }
