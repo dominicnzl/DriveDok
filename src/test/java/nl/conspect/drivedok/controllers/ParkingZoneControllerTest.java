@@ -2,7 +2,7 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -67,8 +68,8 @@ class ParkingZoneControllerTest {
     @Test
     public void shouldCreateParkingZone() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/parkingzone/create", ParkingZone.class)
-                    .param("name", "Zone 1")
-                    .param("totalParkingSpots", "100"))
+                .param("name", "Zone 1")
+                .param("totalParkingSpots", "100"))
                 .andDo(print())
                 .andExpect(content().string(containsString("Zone 1")));
     }
@@ -108,13 +109,12 @@ class ParkingZoneControllerTest {
                 .andExpect(status().isOk());
 
     }
-
-    @Disabled
-    public void shouldReturn404() throws Exception {
-        mockMvc.perform(
-                get("/parkingzone/20000"))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-        ;
+  
+    @Test
+    @DisplayName("When an id is used to findById but no ParkingZone is found throw an IllegalArgumentException")
+    public void whenFailToFindByIdThrowIllegalArgument() {
+        assertThatThrownBy(() -> mockMvc.perform(get("/parkingzone/-1"))
+                .andExpect(status().isOk()))
+                .hasCause(new IllegalArgumentException("ParkingZone with id -1 not found"));
     }
 }

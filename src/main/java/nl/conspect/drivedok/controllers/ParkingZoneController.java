@@ -1,13 +1,14 @@
 package nl.conspect.drivedok.controllers;
 
+
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("parkingzone")
@@ -53,8 +54,9 @@ public class ParkingZoneController {
 
     @GetMapping("/{id}")
     public String showSingleParkingZone(Model model, @PathVariable long id) {
-        var pz= parkingZoneService.findById(id).orElseThrow();
-        model.addAttribute("parkingZone", pz);
+        var parkingZone = parkingZoneService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("ParkingZone with id %s not found", id)));
+        model.addAttribute("parkingZone", parkingZone);
         return "parkingzone";
     }
 }
