@@ -1,10 +1,14 @@
 package nl.conspect.drivedok.controllers;
 
+
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("parkingzone")
@@ -19,13 +23,11 @@ public class ParkingZoneController {
     @GetMapping("/home")
     public String showHomePage(Model model){
         model.addAttribute("parkingzones", parkingZoneService.findAll());
-        return parkingZoneService.findAll().isEmpty()
-                ? "homepage"
-                : "all-parkingzones";
+        return "homepage";
     }
 
     @GetMapping("/create")
-    public String createParkingZone(Model model, ParkingZone parkingZone) {
+    public String showParkingZoneForm(Model model, ParkingZone parkingZone) {
         model.addAttribute("parkingZone", parkingZone);
         return "createparkingzoneform";
     }
@@ -37,10 +39,24 @@ public class ParkingZoneController {
         return "parkingzone";
     }
 
+    @PostMapping("/update")
+    public String updateParkingZone(Model model, ParkingZone parkingZone){
+        parkingZoneService.update(parkingZone);
+        return "parkingzone";
+    }
+
+    @GetMapping  ("/delete/{id}")
+    public String deleteParkingZone(Model model, @PathVariable Long id){
+        parkingZoneService.deleteById(id);
+        model.addAttribute("parkingzones", parkingZoneService.findAll());
+        return "homepage";
+    }
+
     @GetMapping("/{id}")
-    public String showSingleParkingZone(Model model, @PathVariable long id){
-        var pz= parkingZoneService.findById(id).orElseThrow();
-        model.addAttribute("parkingZone", pz);
+    public String showSingleParkingZone(Model model, @PathVariable long id) {
+        var parkingZone = parkingZoneService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("ParkingZone with id %s not found", id)));
+        model.addAttribute("parkingZone", parkingZone);
         return "parkingzone";
     }
 }

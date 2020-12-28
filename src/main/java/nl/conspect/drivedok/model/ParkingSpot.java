@@ -13,11 +13,19 @@ public class ParkingSpot {
     @Enumerated(EnumType.STRING)
     private ParkingType parkingType;
 
+    private int quantity;
+
     public ParkingSpot(){}
 
-    public ParkingSpot(Long id, ParkingType parkingType) {
+    public ParkingSpot(ParkingType parkingType, int quantity) {
+        this.parkingType = parkingType;
+        this.quantity = quantity;
+    }
+
+    public ParkingSpot(Long id, ParkingType parkingType, int quantity) {
         this.id = id;
         this.parkingType = parkingType;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -41,8 +49,7 @@ public class ParkingSpot {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ParkingSpot that = (ParkingSpot) o;
-        return id.equals(that.id) &&
-                parkingType == that.parkingType;
+        return quantity == that.quantity && Objects.equals(id, that.id) && parkingType == that.parkingType;
     }
 
     @Override
@@ -55,6 +62,7 @@ public class ParkingSpot {
         return "ParkingSpot{" +
                 "id=" + id +
                 ", parkingType=" + parkingType +
+                ", quantity=" + quantity +
                 '}';
     }
 }

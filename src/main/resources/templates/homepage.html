@@ -12,12 +12,42 @@
 <header><img th:src="@{/img/quickLogo.png}" alt=""></header>
 <div>
     <h2>Welcome Administrator Bert,</h2>
-    <p>
+
+    <div><p>
         Your DriveDok Zones
         <br><br>
-    <p>You have no DriveDok Zones yet</p>
-    <br><br>
-    <button onclick="location.href='/create'">Create a new DriveDok Zone</button>
+    </div>
+    <div th:if="${parkingzones != null and !parkingzones.empty}">
+        <table>
+            <div>
+                <tbody>
+                <div th:each="zone : ${parkingzones}">
+                    <a th:href="@{/parkingzone/{id}(id=${zone.id})}">
+                        <span th:text="${zone.name}"></span>
+                    </a>
+                    <a th:href="@{'/parkingzone/' + ${zone.id}}">
+                        <span th:text="${zone.totalParkingSpots}"></span>
+                    </a>
+                    <a>
+                        <form th:action="@{/parkingzone/delete/{id}(id=${zone.id})}"
+                              th:object="${parkingZone}"
+                              method="get"
+                              value="delete zone">
+                            <input type="hidden" name="id" th:value="${zone.id}">
+                            <button type="submit">Delete zone</button>
+                        </form>
+                    </a>
+                </div>
+                </tbody>
+            </div>
+        </table>
+        <br><br>
+    </div>
+    <div th:if="${parkingzones == null or parkingzones.empty}">
+        <p>You have no DriveDok Zones yet</p>
+        <br><br>
+    </div>
+    <button onclick="location.href='/parkingzone/create'">Create a new DriveDok Zone</button>
 </div>
 </body>
 </html>
