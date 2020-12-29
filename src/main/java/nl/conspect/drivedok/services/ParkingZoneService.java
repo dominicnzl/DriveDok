@@ -49,9 +49,9 @@ public class ParkingZoneService {
 
     /*
      The initParkingZone method defines the default implementation of a ParkingZone.
-     So by default it has certain ParkingSpots.
+     So when the user creates one, it has by default certain ParkingSpots.
      */
-    public ParkingZone initParkingZone(ParkingZone parkingZone){
+    public void initParkingZone(ParkingZone parkingZone){
         ParkingSpot ps1 = new ParkingSpot(ParkingType.DISABLED, 0);
         ParkingSpot ps2 = new ParkingSpot(ParkingType.ELECTRIC, 0);
         ParkingSpot ps3 = new ParkingSpot(ParkingType.NORMAL, parkingZone.getTotalParkingSpots());
@@ -63,7 +63,5 @@ public class ParkingZoneService {
         initSet.add(ps2);
         initSet.add(ps3);
         parkingZone.setParkingSpots(initSet);
-
-        return parkingZone;
     }
 }

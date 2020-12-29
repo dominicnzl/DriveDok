@@ -34,7 +34,7 @@ public class ParkingZoneController {
 
     @PostMapping("/create")
     public String saveParkingZone(Model model, ParkingZone parkingZone) {
-        parkingZone = parkingZoneService.initParkingZone(parkingZone);
+        parkingZoneService.initParkingZone(parkingZone);
         model.addAttribute("parkingZone", parkingZone);
         parkingZoneService.create(parkingZone);
         return "parkingzone";
