@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class DriveDokUser {
+public class User {
 
     @Id
     private Long id;
@@ -17,10 +17,10 @@ public class DriveDokUser {
     @OneToMany
     private Set<Vehicle> vehicles;
 
-    public DriveDokUser() {
+    public User() {
     }
 
-    public DriveDokUser(Long id, String name, String email, String password, Set<Vehicle> vehicles) {
+    public User(Long id, String name, String email, String password, Set<Vehicle> vehicles) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -72,7 +72,7 @@ public class DriveDokUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DriveDokUser that = (DriveDokUser) o;
+        User that = (User) o;
         return id.equals(that.id) &&
                 name.equals(that.name) &&
                 email.equals(that.email) &&
@@ -87,7 +87,7 @@ public class DriveDokUser {
 
     @Override
     public String toString() {
-        return "DriveDokUser{" +
+        return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
