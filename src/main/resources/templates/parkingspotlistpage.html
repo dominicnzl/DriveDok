@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ParkingSpots</title>
+</head>
+<body>
+<div>
+    <div><h1>Parkingspots</h1></div>
+    <div>
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Quantity</th>
+            </tr>
+            <tr th:if="${parkingSpots.empty}">
+                <td colspan="2">No parkingspots found</td>
+            </tr>
+            <tr th:each="spot : ${parkingSpots}">
+                <td>
+                    <a th:text="${spot.getParkingType()}"
+                       th:href="@{|/parkingspots/${spot.getId()}|}">ParkingType</a>
+                </td>
+                <td th:text="${spot.quantity}"></td>
+            </tr>
+        </table>
+        <div>
+            <a href="#" th:href="@{/parkingspots/create}">Create Parkingspot</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <h1>Add parkingspot</h1>
+    </div>
+    <div>
+        <form action="#" th:action="@{/parkingspots/save}" th:object="${parkingSpot}" method="post">
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>type</th>
+                    <th>quantity</th>
+                </tr>
+                <tr>
+                    <td><input th:field="${parkingSpot.id}"></td>
+                    <td>
+                        <select th:field="*{parkingType}">
+                            <option th:each="type : ${parkingTypes}" th:value="${type}"
+                                    th:text="${type.toString()}"></option>
+                        </select>
+                    </td>
+                    <td><input th:field="${parkingSpot.quantity}"></td>
+                </tr>
+            </table>
+            <input type="submit" th:value="Save">
+            <input type="reset" th:value="Reset">
+        </form>
+    </div>
+    <div>
+        <a href="#" th:href="@{/parkingspots}">Back to parkingspots</a>
+    </div>
+</div>
+</body>
+</html>
