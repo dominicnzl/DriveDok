@@ -45,15 +45,15 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
     }
 
     private void createDummyParkingSpots() {
-        var plek1 = new ParkingSpot();
-        plek1.setParkingType(ParkingType.DISABLED);
-        var plek2 = new ParkingSpot();
-        plek2.setParkingType(ParkingType.ELECTRIC);
+        var plek1 = new ParkingSpot(ParkingType.DISABLED, 0);
+        var plek2 = new ParkingSpot(ParkingType.ELECTRIC, 0);
+        var plek3 = new ParkingSpot(ParkingType.NORMAL, 12);
         parkingSpotService.create(plek1);
         parkingSpotService.create(plek2);
+        parkingSpotService.create(plek3);
     }
 
-    void createDummyVehicles() {
+    private void createDummyVehicles() {
         var vehicles = List.of(
                 new Vehicle("Ben's iene miene mutte auto", "H-000-B", ParkingType.NORMAL, Collections.emptySet()),
                 new Vehicle("Tess's sla", "H-001-C", ParkingType.ELECTRIC, Collections.emptySet()),
