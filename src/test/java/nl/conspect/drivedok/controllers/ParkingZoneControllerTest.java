@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,11 +68,13 @@ class ParkingZoneControllerTest {
 
     @Test
     public void shouldCreateParkingZone() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/parkingzone/create", ParkingZone.class)
+
+        mockMvc.perform(post("/parkingzone/create", ParkingZone.class)
                 .param("name", "Zone 1")
                 .param("totalParkingSpots", "100"))
                 .andDo(print())
-                .andExpect(content().string(containsString("Zone 1")));
+                .andExpect(content().string(containsString("Zone 1")))
+        ;
     }
 
     @Test
@@ -91,7 +94,7 @@ class ParkingZoneControllerTest {
     @Test
     public void shouldUpdateParkingZone() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/parkingzone/update", ParkingZone.class)
+        mockMvc.perform(post("/parkingzone/update", ParkingZone.class)
                 .param("name", "Zone 1")
                 .param("totalParkingSpots", "100"))
                 .andDo(print())

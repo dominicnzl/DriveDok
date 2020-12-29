@@ -18,13 +18,15 @@ import static org.junit.jupiter.api.Assertions.*;
         TestEntityManager testEntityManager;
 
         @Autowired
-        ParkingZoneRepository ParkingZoneRepository;
+        ParkingZoneRepository parkingZoneRepository;
 
-        ParkingZoneService ParkingZoneService;
+        ParkingZoneService parkingZoneService;
+
+        ParkingSpotService parkingSpotService;
 
         @BeforeEach
         public void init() {
-            ParkingZoneService = new ParkingZoneService(ParkingZoneRepository);
+            parkingZoneService = new ParkingZoneService(parkingZoneRepository, parkingSpotService);
         }
 
         @Test
@@ -36,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
             testEntityManager.persist(spot1);
             testEntityManager.persist(spot2);
             testEntityManager.persist(spot3);
-            assertEquals(3, ParkingZoneService.findAll().size());
+            assertEquals(3, parkingZoneService.findAll().size());
         }
 
         @Test
@@ -47,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.*;
             ParkingZone zone2 = new ParkingZone(2L, "Anna", null, 300);
             testEntityManager.persist(zone2);
 
-            String  name = ParkingZoneService.findById(zone1.getId())
+            String  name = parkingZoneService.findById(zone1.getId())
                     .map(ParkingZone::getName)
                     .orElse(null);
             assertEquals("Elsa", name);
@@ -57,11 +59,11 @@ import static org.junit.jupiter.api.Assertions.*;
         @Test
         @DisplayName("Assert initial findAll() to return empty list. Expect subsequent findAll() to be > 0 after create()")
         void create() {
-            assertTrue(ParkingZoneService.findAll().isEmpty());
+            assertTrue(parkingZoneService.findAll().isEmpty());
 
             ParkingZone zone = new ParkingZone(1L, "Elsa", null, 100);
-            ParkingZoneService.create(zone);
-            assertEquals(1, ParkingZoneService.findAll().size());
+            parkingZoneService.create(zone);
+            assertEquals(1, parkingZoneService.findAll().size());
         }
 
         @Test
@@ -70,13 +72,13 @@ import static org.junit.jupiter.api.Assertions.*;
             ParkingZone zone = new ParkingZone(1L, "Elsa", null, 100);
             testEntityManager.persist(zone);
 
-            ParkingZone beforeUpdateZone = ParkingZoneService.findById(zone.getId()).orElse(null);
+            ParkingZone beforeUpdateZone = parkingZoneService.findById(zone.getId()).orElse(null);
             assertNotNull(beforeUpdateZone);
             assertEquals("Elsa", beforeUpdateZone.getName());
 
             beforeUpdateZone.setName("Anna");
-            ParkingZoneService.update(beforeUpdateZone);
-            ParkingZone afterUpdateSpot = ParkingZoneService.findById(zone.getId()).orElse(null);
+            parkingZoneService.update(beforeUpdateZone);
+            ParkingZone afterUpdateSpot = parkingZoneService.findById(zone.getId()).orElse(null);
             assertNotNull(afterUpdateSpot);
             assertEquals("Anna", afterUpdateSpot.getName());
         }
@@ -90,10 +92,10 @@ import static org.junit.jupiter.api.Assertions.*;
             testEntityManager.persist(spot1);
             testEntityManager.persist(spot2);
             testEntityManager.persist(spot3);
-            assertEquals(3, ParkingZoneService.findAll().size());
+            assertEquals(3, parkingZoneService.findAll().size());
 
-            ParkingZoneService.deleteById(spot2.getId());
-            assertEquals(2, ParkingZoneService.findAll().size());
+            parkingZoneService.deleteById(spot2.getId());
+            assertEquals(2, parkingZoneService.findAll().size());
         }
     }
 

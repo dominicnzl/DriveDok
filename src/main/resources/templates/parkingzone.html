@@ -14,7 +14,13 @@
     <h2>This is your new DriveDok Zone:</h2>
     <p th:text="|DriveDok Zone: *{name}|">filler text</p>
     <p th:text="|has *{totalParkingSpots} parking spots.|">filler number</p>
-    <button onclick="location.href='/parkingzone/home'">Go to overview</button>
+    <br><br>
+    <div th:each="spot : *{parkingSpots}">
+        <span th:text="${spot.quantity}"></span>
+        <span th:text="| ${spot.parkingType} spots |"></span>
+    </p>
+
 </div>
+    <button onclick="location.href='/parkingzone/home'">Go to overview</button>
 </body>
 </html>
