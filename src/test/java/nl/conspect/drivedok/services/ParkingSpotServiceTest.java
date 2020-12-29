@@ -82,8 +82,6 @@ class ParkingSpotServiceTest {
         assertEquals(ParkingType.ELECTRIC, afterUpdateSpot.getParkingType());
     }
 
-
-
     @Test
     @DisplayName("Persist 3 ParkingSpots. Delete the second. Expect findAll() to have size 2")
     void deleteById() {
