@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.Set;
 public class User {
 
     @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private String email;
@@ -18,6 +20,13 @@ public class User {
     private Set<Vehicle> vehicles;
 
     public User() {
+    }
+
+    public User(String name, String email, String password, Set<Vehicle> vehicles) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.vehicles = vehicles;
     }
 
     public User(Long id, String name, String email, String password, Set<Vehicle> vehicles) {
