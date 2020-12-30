@@ -1,19 +1,17 @@
 package nl.conspect.drivedok.utilities;
 
 
-import nl.conspect.drivedok.model.ParkingSpot;
-import nl.conspect.drivedok.model.ParkingType;
-import nl.conspect.drivedok.model.ParkingZone;
-import nl.conspect.drivedok.model.Vehicle;
+import nl.conspect.drivedok.model.*;
 import nl.conspect.drivedok.services.ParkingSpotService;
 import nl.conspect.drivedok.services.ParkingZoneService;
+import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.services.VehicleService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @Component
 public class DriveDokEventListeners implements ApplicationListener<ContextRefreshedEvent> {
@@ -21,11 +19,18 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
     private final ParkingZoneService parkingZoneService;
     private final ParkingSpotService parkingSpotService;
     private final VehicleService vehicleService;
+    private final UserService userService;
 
-    public DriveDokEventListeners(ParkingZoneService parkingZoneService, ParkingSpotService parkingSpotService, VehicleService vehicleService) {
+    Set<Vehicle> vehicles;
+
+    public DriveDokEventListeners(ParkingZoneService parkingZoneService,
+                                  ParkingSpotService parkingSpotService,
+                                  VehicleService vehicleService,
+                                  UserService userService) {
         this.parkingZoneService = parkingZoneService;
         this.parkingSpotService = parkingSpotService;
         this.vehicleService = vehicleService;
+        this.userService = userService;
     }
 
     @Override
@@ -33,6 +38,7 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
         createDummyParkingZones();
         createDummyParkingSpots();
         createDummyVehicles();
+        createDummyUser();
     }
 
     private void createDummyParkingZones() {
@@ -54,11 +60,16 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
     }
 
     private void createDummyVehicles() {
-        var vehicles = List.of(
+        vehicles = Set.of(
                 new Vehicle("Ben's iene miene mutte auto", "H-000-B", ParkingType.NORMAL, Collections.emptySet()),
                 new Vehicle("Tess's sla", "H-001-C", ParkingType.ELECTRIC, Collections.emptySet()),
                 new Vehicle("Zo Fiets", "H-002-D", ParkingType.NORMAL, Collections.emptySet())
         );
         vehicles.forEach(vehicleService::create);
+    }
+
+    private void createDummyUser() {
+        var user1 = new User("Joep", "joep@joepmail.com", "password123", vehicles);
+        userService.create(user1);
     }
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.name}">User</title>
+</head>
+<body>
+<div>
+    <div>
+        <h1 th:text="${user.name}">User</h1>
+    </div>
+    <div>
+        <form action="#" th:action="@{/users/save}" th:object="${user}" th:method="post">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>E-mail</th>
+                    <th>Password</th>
+                </tr>
+                <tr>
+                    <input type="hidden" th:field="${user.id}">
+                    <td><input type="text" th:field="${user.name}"></td>
+                    <td><input type="text" th:field="${user.email}"></td>
+                    <td><input type="text" th:field="${user.password}"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Save"/></td>
+                    <td><input type="reset" th:value="Reset" /></td>
+                    <td><a th:href="@{/users/delete/{id} (id=${user.id})}" th:text="delete">Delete</a></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div>
+        <a href="#" th:href="@{/users}">Back to Users</a>
+    </div>
+    <!--    vehicles-->
+</div>
+</body>
+</html>
