@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class DriveDokUserControllerTest {
+class UserControllerTest {
 
     @Autowired
     public MockMvc mockMvc;
