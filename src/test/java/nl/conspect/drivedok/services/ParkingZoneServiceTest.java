@@ -97,6 +97,15 @@ import static org.junit.jupiter.api.Assertions.*;
             parkingZoneService.deleteById(4L);
             assertEquals(1, parkingZoneService.findAll().size());
         }
+
+        @Test
+        @DisplayName("Call the initParkingZone method, expect the parkingSpots of the zone to be not null after initiation")
+        void initParkingZoneShouldReturnParkingZone() {
+            ParkingZone newParkingZone = new ParkingZone(6L, "Ali", null, 100);
+            assertNull(newParkingZone.getParkingSpots());
+            parkingZoneService.initParkingZone(newParkingZone);
+            assertNotNull(newParkingZone.getParkingSpots());
+        }
     }
 
 
