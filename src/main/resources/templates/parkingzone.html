@@ -10,17 +10,26 @@
 </head>
 <body>
 <header><img src="logo.png" th:src="@{/img/quickLogo.png}" alt="logo"></header>
+
 <div th:object="${parkingZone}">
     <h2>This is your new DriveDok Zone:</h2>
     <p th:text="|DriveDok Zone: *{name}|">filler text</p>
     <p th:text="|has *{totalParkingSpots} parking spots.|">filler number</p>
     <br><br>
-    <div th:each="spot : *{parkingSpots}">
-        <span th:text="${spot.quantity}"></span>
-        <span th:text="| ${spot.parkingType} spots |"></span>
-    </p>
 
-</div>
-    <button onclick="location.href='/parkingzone/home'">Go to overview</button>
+<form action="#" th:action="@{/parkingzone/update}" th:object="${parkingZone}" th:method="post">
+        <input type="hidden" th:field="*{id}">
+        <input type="text" th:field="*{name}" th:placeholder="*{name}">
+        <input type="number" th:field="*{totalParkingSpots}" th:placeholder="*{totalParkingSpots}">
+        <button type="submit" value="Update">Update</button>
+        <br><br>
+        <div th:each="spot : *{parkingSpots}">
+            <span th:text="${spot.quantity}"></span>
+            <span th:text="| ${spot.parkingType} spots |"></span>
+            </p>
+        </div>
+
+</form>
+<button onclick="location.href='/parkingzone/home'">Go to overview</button>
 </body>
 </html>
