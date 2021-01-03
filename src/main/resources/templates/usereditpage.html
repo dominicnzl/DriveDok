@@ -25,16 +25,39 @@
                 </tr>
                 <tr>
                     <td><input type="submit" value="Save"/></td>
-                    <td><input type="reset" th:value="Reset" /></td>
+                    <td><input type="reset" th:value="Reset"/></td>
                     <td><a th:href="@{/users/delete/{id} (id=${user.id})}" th:text="delete">Delete</a></td>
                 </tr>
             </table>
         </form>
     </div>
     <div>
+        <div>
+            <h1 th:text="|${user.name}'s Vehicles|">Vehicles</h1>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Licence plate</th>
+                <th>Parking type</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="vehicle : ${vehicles}">
+                <td th:text="${vehicle.name}"></td>
+                <td th:text="${vehicle.licencePlate}"></td>
+                <td th:text="${vehicle.parkingType}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <a href="#" th:href="@{/users/{id}/vehicles/create (id = ${user.id})}">Create and add Vehicle</a>
+        </div>
+    </div>
+    <div>
         <a href="#" th:href="@{/users}">Back to Users</a>
     </div>
-    <!--    vehicles-->
 </div>
 </body>
 </html>

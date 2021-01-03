@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Vehicle</title>
+</head>
+<body>
+<div>
+    <div>
+        <h1>Add Vehicle</h1>
+    </div>
+    <div th:if="${null == user}">
+        No user found...
+    </div>
+    <div th:unless="${null == user}">
+        <form action="#" th:action="@{/users/{id}/vehicles/save (id = ${user.id})}" th:object="${vehicle}" method="post">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Licence plate</th>
+                    <th>Parking type</th>
+                </tr>
+                <tr>
+                    <td><input th:field="*{name}"></td>
+                    <td><input th:field="*{licencePlate}"></td>
+                    <td>
+                        <select th:field="*{parkingType}">
+                            <option th:each="type : ${parkingTypes}" th:value="${type}"
+                                    th:text="${type.toString()}"></option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" th:value="Save">
+            <input type="reset" th:value="Reset">
+        </form>
+    </div>
+</div>
+</body>
+</html>

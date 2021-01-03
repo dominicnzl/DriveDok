@@ -1,6 +1,8 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.exceptions.UserNotFoundException;
 import nl.conspect.drivedok.model.User;
+import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static java.lang.String.format;
+import static nl.conspect.drivedok.model.ParkingType.possibleTypes;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Controller
@@ -33,7 +35,7 @@ public class UserController {
     @GetMapping("/{id}")
     public String editPage(Model model, @PathVariable Long id) {
         var user = userService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("User with %s not found", id)));
+                .orElseThrow(() -> new UserNotFoundException(id));
         model.addAttribute("user", user);
         model.addAttribute("vehicles", user.getVehicles());
         return "usereditpage";
@@ -59,6 +61,24 @@ public class UserController {
         return "userlistpage";
     }
 
+    @GetMapping("/{id}/vehicles/create")
+    public String vehiclesForUser(Model model, @PathVariable Long id) {
+        var user = userService.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        model.addAttribute("user", user);
+        model.addAttribute("vehicle", new Vehicle());
+        model.addAttribute("parkingTypes", possibleTypes());
+        return "vehiclecreatepage";
+    }
+
+    @PostMapping("/{id}/vehicles/save")
+    public String addVehicleToUser(Model model, @PathVariable Long id, @ModelAttribute Vehicle vehicle) {
+        var user = userService.addVehicleByUserId(id, vehicle);
+        model.addAttribute("user", user);
+        model.addAttribute("vehicles", user.getVehicles());
+        return "usereditpage";
+    }
+
     @GetMapping("/delete/{id}")
     public String delete(Model model, @PathVariable Long id) {
         userService.findById(id).ifPresent(userService::delete);
@@ -77,7 +97,7 @@ public class UserController {
     @ResponseBody
     public User findById(@PathVariable Long id) {
         return userService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("User with id %s does not exist.", id)));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @PostMapping(produces = APPLICATION_JSON_VALUE)
@@ -91,7 +111,7 @@ public class UserController {
     public User update(@PathVariable Long id, @RequestBody User user) {
         return userService.findById(id)
                 .map(u -> userService.update(user))
-                .orElseThrow(() -> new IllegalArgumentException(format("User with id %s does not exist.", id)));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)

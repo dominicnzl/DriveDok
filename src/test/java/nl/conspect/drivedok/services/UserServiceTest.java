@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.services;
 
+import nl.conspect.drivedok.exceptions.UserNotFoundException;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,8 @@ class UserServiceTest {
 
     UserService userService;
 
+    VehicleService vehicleService;
+
     @Autowired
     TestEntityManager testEntityManager;
 
@@ -30,7 +33,7 @@ class UserServiceTest {
 
     @BeforeEach
     public void init() {
-        userService = new UserService(userRepository);
+        userService = new UserService(vehicleService, userRepository);
         user1 = new User("Toos", "abc@xyz.nl", "password123", Collections.emptySet());
         user2 = new User("Miep", "bdd@zzy.nl", "zomer123", Collections.emptySet());
         testEntityManager.persist(user1);
@@ -47,7 +50,7 @@ class UserServiceTest {
     @DisplayName("Expect findById to find user1 when its id is passed")
     void findById() {
         var foundUser = userService.findById(user1.getId())
-                .orElseThrow(() -> new IllegalArgumentException("init method did not execute properly"));
+                .orElseThrow(() -> new UserNotFoundException("init method did not execute properly"));
         assertEquals(user1, foundUser);
         assertNotEquals(user2, foundUser);
     }
