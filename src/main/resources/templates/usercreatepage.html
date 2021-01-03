@@ -2,31 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <title>Add new User</title>
 </head>
 <body>
-<div>
-    <div>
-        <h1>Add User</h1>
-    </div>
-    <div>
-        <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>E-mail</th>
-                    <th>Password</th>
-                </tr>
-                <tr>
-                    <td><input th:field="${user.name}"></td>
-                    <td><input th:field="${user.email}"></td>
-                    <td><input th:field="${user.password}"></td>
-                </tr>
-            </table>
-            <input type="submit" th:value="Save">
-            <input type="reset" th:value="Reset">
-        </form>
-    </div>
+<div class="container">
+    <h1>Add User</h1>
+    <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
+        <div class="mb-3">
+            <label for="userName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="userName" th:field="${user.name}">
+        </div>
+        <div class="mb-3">
+            <label for="userEmail" class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="userEmail" th:field="${user.email}">
+        </div>
+        <div class="mb-3">
+            <label for="userPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="userPassword" th:field="${user.password}">
+        </div>
+        <input type="submit" th:value="Save" class="btn btn-primary">
+        <input type="reset" th:value="Reset" class="btn btn-warning">
+    </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
 </body>
 </html>

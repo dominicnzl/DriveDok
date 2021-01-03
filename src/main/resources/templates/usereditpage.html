@@ -2,40 +2,38 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <title th:text="${user.name}">User</title>
 </head>
 <body>
-<div>
-    <div>
+<div class="container">
+    <div class="container-sm">
         <h1 th:text="${user.name}">User</h1>
-    </div>
-    <div>
-        <form action="#" th:action="@{/users/save}" th:object="${user}" th:method="post">
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>E-mail</th>
-                    <th>Password</th>
-                </tr>
-                <tr>
-                    <input type="hidden" th:field="${user.id}">
-                    <td><input type="text" th:field="${user.name}"></td>
-                    <td><input type="text" th:field="${user.email}"></td>
-                    <td><input type="text" th:field="${user.password}"></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Save"/></td>
-                    <td><input type="reset" th:value="Reset"/></td>
-                    <td><a th:href="@{/users/delete/{id} (id=${user.id})}" th:text="delete">Delete</a></td>
-                </tr>
-            </table>
+        <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
+            <div class="mb-3">
+                <label for="userName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="userName" th:field="${user.name}">
+            </div>
+            <div class="mb-3">
+                <label for="userEmail" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="userEmail" th:field="${user.email}">
+            </div>
+            <div class="mb-3">
+                <label for="userPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="userPassword" th:field="${user.password}">
+            </div>
+            <input type="hidden" th:field="${user.id}">
+            <input type="hidden" th:field="${user.vehicles}">
+            <input type="submit" th:value="Save" class="btn btn-primary">
+            <input type="reset" th:value="Reset" class="btn btn-warning">
+            <a th:href="@{/users/delete/{id} (id=${user.id})}" th:text="Delete" class="btn btn-danger">Delete</a>
         </form>
     </div>
-    <div>
-        <div>
+    <div class="container">
             <h1 th:text="|${user.name}'s Vehicles|">Vehicles</h1>
-        </div>
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th>Name</th>
@@ -52,12 +50,15 @@
             </tbody>
         </table>
         <div>
-            <a href="#" th:href="@{/users/{id}/vehicles/create (id = ${user.id})}">Create and add Vehicle</a>
+            <a href="#" th:href="@{/users/{id}/vehicles/create (id = ${user.id})}" class="btn btn-primary">Create and add Vehicle</a>
         </div>
     </div>
-    <div>
+    <div class="container-sm">
         <a href="#" th:href="@{/users}">Back to Users</a>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
 </body>
 </html>
