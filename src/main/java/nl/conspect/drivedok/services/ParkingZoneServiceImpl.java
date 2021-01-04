@@ -15,12 +15,12 @@ import java.util.Set;
 
 @Service
 @Transactional
-public class ParkingZoneService {
+public class ParkingZoneServiceImpl implements ParkingZoneService {
 
     private final ParkingZoneRepository parkingZoneRepository;
 
 
-    public ParkingZoneService(ParkingZoneRepository parkingZoneRepository) {
+    public ParkingZoneServiceImpl(ParkingZoneRepository parkingZoneRepository) {
         this.parkingZoneRepository = parkingZoneRepository;
     }
 
@@ -51,8 +51,9 @@ public class ParkingZoneService {
      So when the user creates one, it has by default certain ParkingSpots.
      */
     private void initParkingZone(ParkingZone parkingZone){
-     parkingZone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
-     parkingZone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
-     parkingZone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, parkingZone.getTotalParkingSpots()));
+        parkingZone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
+        parkingZone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
+        parkingZone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, parkingZone.getTotalParkingSpots()));
+        
     }
 }

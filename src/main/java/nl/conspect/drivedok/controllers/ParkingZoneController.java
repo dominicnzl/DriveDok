@@ -40,9 +40,6 @@ public class ParkingZoneController {
         if (bindingResult.hasErrors()){
             return "createparkingzoneform";
         }
-        //at this point the parkingzone has a name and totalOfParkingSpots
-        parkingZoneService.initParkingZone(parkingZone);
-        //at this point the parkingzone also has the default parkingspots
         model.addAttribute("parkingZone", parkingZone);
         parkingZoneService.create(parkingZone);
         return "parkingzone";

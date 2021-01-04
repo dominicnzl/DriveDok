@@ -7,67 +7,85 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
     @DataJpaTest
-    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+    @Transactional
     class ParkingZoneServiceTest {
 
         @Autowired
         TestEntityManager testEntityManager;
 
         @Autowired
-        ParkingZoneRepository parkingZoneRepository;
-
-        @MockBean
         ParkingZoneService parkingZoneService;
 
-        @MockBean
-        ParkingSpotService parkingSpotService;
+
+        @TestConfiguration
+        static class ParkingZoneServiceImplTestContextConfiguration {
+
+            @Autowired
+            ParkingZoneRepository parkingZoneRepository;
+
+            @Bean
+            public ParkingZoneService parkingZoneService() {
+                return new ParkingZoneServiceImpl(parkingZoneRepository);
+            }
+        }
 
         @BeforeEach
         public void init() {
-            parkingZoneService = new ParkingZoneService(parkingZoneRepository, parkingSpotService);
-            ParkingSpot spot1 = new ParkingSpot();
+
+            /*ParkingSpot spot1 = new ParkingSpot();
             ParkingSpot spot2 = new ParkingSpot();
             ParkingSpot spot3 = new ParkingSpot();
-            ParkingZone zone1 = new ParkingZone(4L, "Elsa", Collections.emptySet(), 100);
-            ParkingZone zone2 = new ParkingZone(5L, "Anna", Collections.emptySet(), 300);
-            testEntityManager.merge(spot1);
-            testEntityManager.merge(spot2);
-            testEntityManager.merge(spot3);
-            testEntityManager.merge(zone1);
-            testEntityManager.merge(zone2);
+            ParkingZone zone1 = new ParkingZone("Elsa", Collections.emptySet(), 100);
+            ParkingZone zone2 = new ParkingZone("Anna", Collections.emptySet(), 300);
+            testEntityManager.persist(spot1);
+            testEntityManager.persist(spot2);
+            testEntityManager.persist(spot3);
+            testEntityManager.persist(zone1);
+            var o = testEntityManager.persistAndGetId(zone2, Long.class);
+            testEntityManager.flush();*/
         }
 
         @Test
         @DisplayName("Expect findAll() to return a list with size 2")
         void findAll() {
-            assertEquals(2, parkingZoneService.findAll().size());
+            assertEquals(0, parkingZoneService.findAll().size());
+            ParkingZone zone1 = new ParkingZone("Elsa", Collections.emptySet(), 100);
+            testEntityManager.persist(zone1);
+            assertEquals(1, parkingZoneService.findAll().size());
+
         }
 
         @Test
         @DisplayName("Expect findById to retrieve the correct ParkingZone. Verify by checking the name")
         void findById() {
-            String  name = parkingZoneService.findById(4L)
+            ParkingZone zone2 = new ParkingZone("Anna", Collections.emptySet(), 300);
+            var id = testEntityManager.persistAndGetId(zone2, Long.class);
+            String  name = parkingZoneService.findById(id)
                     .map(ParkingZone::getName)
                     .orElse(null);
-            assertEquals("Elsa", name);
-            assertNotEquals("Anna", name);
+            assertEquals("Anna", name);
         }
 
         @Test
         @DisplayName("Assert size of list is 2. Create a new parkingzone and expect list to be size 3")
         void create() {
-            assertEquals(2, parkingZoneService.findAll().size());
-            ParkingZone zone = new ParkingZone(1L, "Elsa", Collections.emptySet(), 100);
-            parkingZoneService.create(zone);
-            assertEquals(3, parkingZoneService.findAll().size());
+            assertEquals(0, parkingZoneService.findAll().size());
+            ParkingSpot spot2 = new ParkingSpot();
+            ParkingZone zone = new ParkingZone("Elsa", Collections.emptySet(), 100);
+            zone.addParkingSpot(spot2);
+            ParkingZone parkingZone = parkingZoneService.create(zone);
+            assertEquals(1, parkingZoneService.findAll().size());
+
         }
 
         @Test
@@ -90,17 +108,11 @@ import static org.junit.jupiter.api.Assertions.*;
         void deleteById() {
             assertEquals(2, parkingZoneService.findAll().size());
             parkingZoneService.deleteById(4L);
+            testEntityManager.flush();
+            testEntityManager.clear();
             assertEquals(1, parkingZoneService.findAll().size());
         }
 
-        @Test
-        @DisplayName("Call the initParkingZone method, expect the parkingSpots of the zone to be not null after initiation")
-        void initParkingZoneShouldReturnParkingZone() {
-            ParkingZone newParkingZone = new ParkingZone(6L, "Ali", Collections.emptySet(), 100);
-            assertTrue(newParkingZone.getParkingSpots().isEmpty());
-            parkingZoneService.initParkingZone(newParkingZone);
-            assertNotNull(newParkingZone.getParkingSpots());
-        }
     }
 
 

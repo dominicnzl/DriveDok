@@ -1,7 +1,7 @@
 package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.ParkingZone;
-import nl.conspect.drivedok.services.ParkingZoneService;
+import nl.conspect.drivedok.services.ParkingZoneServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ class ParkingZoneControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    ParkingZoneService parkingZoneService;
+    ParkingZoneServiceImpl parkingZoneService;
 
     @Test
     public void homeShouldShowThereAreNoParkingZonesYet() throws Exception {

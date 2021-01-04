@@ -18,7 +18,6 @@ public class ParkingZone {
     @Size(min=3, max=20)
     private String name;
 
-   // @Embedded
     @OneToMany(cascade = CascadeType.ALL)
     private Set<ParkingSpot> parkingSpots = new HashSet<>();
 
@@ -58,9 +57,7 @@ public class ParkingZone {
         this.name = name;
     }
 
-
     public Set<ParkingSpot> getParkingSpots() {
-
         return Collections.unmodifiableSet(parkingSpots);
     }
 
@@ -69,7 +66,6 @@ public class ParkingZone {
     }
 
     public int getTotalParkingSpots() {
-
         return totalParkingSpots;
     }
 
