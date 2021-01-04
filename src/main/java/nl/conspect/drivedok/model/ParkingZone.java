@@ -2,6 +2,8 @@ package nl.conspect.drivedok.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,8 +18,9 @@ public class ParkingZone {
     @Size(min=3, max=20)
     private String name;
 
-    @OneToMany
-    private Set<ParkingSpot> parkingSpots;
+   // @Embedded
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<ParkingSpot> parkingSpots = new HashSet<>();
 
     @NotNull
     @Min(1)
@@ -55,15 +58,18 @@ public class ParkingZone {
         this.name = name;
     }
 
+
     public Set<ParkingSpot> getParkingSpots() {
-        return parkingSpots;
+
+        return Collections.unmodifiableSet(parkingSpots);
     }
 
-    public void setParkingSpots(Set<ParkingSpot> parkingSpots) {
-        this.parkingSpots = parkingSpots;
+    public void addParkingSpot(ParkingSpot parkingSpot){
+        parkingSpots.add(parkingSpot);
     }
 
     public int getTotalParkingSpots() {
+
         return totalParkingSpots;
     }
 
