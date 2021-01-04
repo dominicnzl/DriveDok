@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ public class ParkingZone {
     @GeneratedValue
     private Long id;
 
-
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     @OneToMany

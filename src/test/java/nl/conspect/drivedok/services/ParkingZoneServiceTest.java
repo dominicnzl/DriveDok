@@ -9,7 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.*;
 
     @DataJpaTest
@@ -28,21 +30,14 @@ import static org.junit.jupiter.api.Assertions.*;
         @MockBean
         ParkingSpotService parkingSpotService;
 
-        ParkingSpot spot1 ;
-        ParkingSpot spot2 ;
-        ParkingSpot spot3 ;
-        ParkingZone zone1 ;
-        ParkingZone zone2 ;
-
-
         @BeforeEach
         public void init() {
             parkingZoneService = new ParkingZoneService(parkingZoneRepository, parkingSpotService);
             ParkingSpot spot1 = new ParkingSpot();
             ParkingSpot spot2 = new ParkingSpot();
             ParkingSpot spot3 = new ParkingSpot();
-            ParkingZone zone1 = new ParkingZone(4L, "Elsa", null, 100);
-            ParkingZone zone2 = new ParkingZone(5L, "Anna", null, 300);
+            ParkingZone zone1 = new ParkingZone(4L, "Elsa", Collections.emptySet(), 100);
+            ParkingZone zone2 = new ParkingZone(5L, "Anna", Collections.emptySet(), 300);
             testEntityManager.merge(spot1);
             testEntityManager.merge(spot2);
             testEntityManager.merge(spot3);
@@ -70,7 +65,7 @@ import static org.junit.jupiter.api.Assertions.*;
         @DisplayName("Assert size of list is 2. Create a new parkingzone and expect list to be size 3")
         void create() {
             assertEquals(2, parkingZoneService.findAll().size());
-            ParkingZone zone = new ParkingZone(1L, "Elsa", null, 100);
+            ParkingZone zone = new ParkingZone(1L, "Elsa", Collections.emptySet(), 100);
             parkingZoneService.create(zone);
             assertEquals(3, parkingZoneService.findAll().size());
         }
@@ -101,8 +96,8 @@ import static org.junit.jupiter.api.Assertions.*;
         @Test
         @DisplayName("Call the initParkingZone method, expect the parkingSpots of the zone to be not null after initiation")
         void initParkingZoneShouldReturnParkingZone() {
-            ParkingZone newParkingZone = new ParkingZone(6L, "Ali", null, 100);
-            assertNull(newParkingZone.getParkingSpots());
+            ParkingZone newParkingZone = new ParkingZone(6L, "Ali", Collections.emptySet(), 100);
+            assertTrue(newParkingZone.getParkingSpots().isEmpty());
             parkingZoneService.initParkingZone(newParkingZone);
             assertNotNull(newParkingZone.getParkingSpots());
         }
