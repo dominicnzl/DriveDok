@@ -1,7 +1,8 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.ParkingZone;
-import nl.conspect.drivedok.services.ParkingZoneServiceImpl;
+import nl.conspect.drivedok.services.ParkingZoneService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
@@ -30,7 +29,7 @@ class ParkingZoneControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    ParkingZoneServiceImpl parkingZoneService;
+    ParkingZoneService parkingZoneService;
 
     @Test
     public void homeShouldShowThereAreNoParkingZonesYet() throws Exception {
@@ -79,7 +78,8 @@ class ParkingZoneControllerTest {
 
     @Test
     public void shouldReturnParkingZoneById() throws Exception {
-        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
+        ParkingSpot ps = new ParkingSpot();
+        ParkingZone pz1 = new ParkingZone("Zone 1", Set.of(ps), 100);
 
         when(parkingZoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
