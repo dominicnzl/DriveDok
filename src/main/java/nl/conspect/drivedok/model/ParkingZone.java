@@ -2,10 +2,7 @@ package nl.conspect.drivedok.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class ParkingZone {
@@ -15,14 +12,15 @@ public class ParkingZone {
     private Long id;
 
     @NotNull
-    @Size(min=3, max=20)
+    @Size(min=3, message = "Your name should at least have 3 letters")
+    @Size(max = 20, message = "Your name can not have more than 20 letters")
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<ParkingSpot> parkingSpots = new HashSet<>();
+    private Set<ParkingSpot> parkingSpots = new LinkedHashSet<>();
 
     @NotNull
-    @Min(1)
+    @Min(value = 1, message = "Your zone should have at least 1 parking spot")
     private int totalParkingSpots;
 
     public ParkingZone() {
