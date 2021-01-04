@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,12 +78,13 @@ import static org.junit.jupiter.api.Assertions.*;
         }
 
         @Test
-        @DisplayName("Assert size of list is 2. Create a new parkingzone and expect list to be size 3")
+        @DisplayName("Assert size of list is 0. Create a new parkingzone and expect list to be size 3")
         void create() {
             assertEquals(0, parkingZoneService.findAll().size());
             ParkingSpot spot2 = new ParkingSpot();
-            ParkingZone zone = new ParkingZone("Elsa", Collections.emptySet(), 100);
-            zone.addParkingSpot(spot2);
+            Set<ParkingSpot> spotSet = new HashSet<>();
+            spotSet.add(spot2);
+            ParkingZone zone = new ParkingZone("Elsa", spotSet, 100);
             ParkingZone parkingZone = parkingZoneService.create(zone);
             assertEquals(1, parkingZoneService.findAll().size());
 
@@ -91,14 +93,18 @@ import static org.junit.jupiter.api.Assertions.*;
         @Test
         @DisplayName("The ParkingZone should be correctly updated")
         void update() {
+            ParkingSpot spot2 = new ParkingSpot();
+            Set<ParkingSpot> spotSet = new HashSet<>();
+            spotSet.add(spot2);
+            ParkingZone zone = new ParkingZone("Elsa", spotSet, 100);
+            ParkingZone beforeUpdateZone = parkingZoneService.create(zone);
 
-            ParkingZone beforeUpdateZone = parkingZoneService.findById(4L).orElse(null);
             assertNotNull(beforeUpdateZone);
             assertEquals("Elsa", beforeUpdateZone.getName());
 
             beforeUpdateZone.setName("Anna");
             parkingZoneService.update(beforeUpdateZone);
-            ParkingZone afterUpdateZone = parkingZoneService.findById(4L).orElse(null);
+            ParkingZone afterUpdateZone = parkingZoneService.findById(beforeUpdateZone.getId()).orElse(null);
             assertNotNull(afterUpdateZone);
             assertEquals("Anna", afterUpdateZone.getName());
         }
@@ -106,11 +112,16 @@ import static org.junit.jupiter.api.Assertions.*;
         @Test
         @DisplayName("Delete a parkingzone. Expect findAll() to have size 1")
         void deleteById() {
-            assertEquals(2, parkingZoneService.findAll().size());
-            parkingZoneService.deleteById(4L);
+            ParkingSpot spot2 = new ParkingSpot();
+            Set<ParkingSpot> spotSet = new HashSet<>();
+            spotSet.add(spot2);
+            ParkingZone zone = new ParkingZone("Elsa", spotSet, 100);
+            ParkingZone zone1 = parkingZoneService.create(zone);
+            assertEquals(1, parkingZoneService.findAll().size());
+            parkingZoneService.deleteById(zone1.getId());
             testEntityManager.flush();
             testEntityManager.clear();
-            assertEquals(1, parkingZoneService.findAll().size());
+            assertEquals(0, parkingZoneService.findAll().size());
         }
 
     }
