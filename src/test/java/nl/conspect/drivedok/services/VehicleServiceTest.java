@@ -88,4 +88,15 @@ class VehicleServiceTest {
         vehicleService.deleteById(vehicle2.getId());
         assertEquals(2, vehicleService.findAll().size());
     }
+
+    @Test
+    @DisplayName("Persist a vehicle. Delete it, then expect findAll() to be empty")
+    void delete() {
+        var vehicle = new Vehicle("d", "456-789", ParkingType.DISABLED);
+        testEntityManager.persist(vehicle);
+        assertEquals(1, vehicleService.findAll().size());
+
+        vehicleService.delete(vehicle);
+        assertTrue(vehicleService.findAll().isEmpty());
+    }
 }

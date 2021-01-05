@@ -1,5 +1,7 @@
 package nl.conspect.drivedok.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +15,11 @@ public class User {
     private String name;
     private String email;
     private String password; // TODO: 02/12/2020 should probably not be a String but a Char[]
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<Vehicle> vehicles = new HashSet<>();
 
     public User() {

@@ -1,5 +1,7 @@
 package nl.conspect.drivedok.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +20,7 @@ public class Vehicle {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
+    @JsonBackReference
     private User user;
 
     public Vehicle() {

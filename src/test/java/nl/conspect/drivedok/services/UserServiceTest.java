@@ -2,6 +2,7 @@ package nl.conspect.drivedok.services;
 
 import nl.conspect.drivedok.exceptions.UserNotFoundException;
 import nl.conspect.drivedok.model.User;
+import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class UserServiceTest {
@@ -32,8 +32,8 @@ class UserServiceTest {
     @BeforeEach
     public void init() {
         userService = new UserService(userRepository);
-        user1 = new User("Toos", "abc@xyz.nl", "password123", Collections.emptySet());
-        user2 = new User("Miep", "bdd@zzy.nl", "zomer123", Collections.emptySet());
+        user1 = new User("Toos", "abc@xyz.nl", "password123");
+        user2 = new User("Miep", "bdd@zzy.nl", "zomer123");
         testEntityManager.persist(user1);
         testEntityManager.persist(user2);
     }
@@ -76,10 +76,32 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Expect findAll() to return a list with size 2, then after deleting a user expect the list to be size 1")
+    @DisplayName("Expect findAll() to return a list with size 2, then after deleting a user by id expect the list to be size 1")
     void deleteById() {
         assertEquals(2, userService.findAll().size());
         userService.deleteById(user2.getId());
         assertEquals(1, userService.findAll().size());
+    }
+
+    @Test
+    @DisplayName("Expect findAll() to return a list with size 2, then after deleting a user expect the list to be size 1")
+    void delete() {
+        assertEquals(2, userService.findAll().size());
+        userService.delete(user2);
+        assertEquals(1, userService.findAll().size());
+    }
+
+    @Test
+    @DisplayName("Calling addVehiclesByUserId with invalid id should result in UserNotFoundException being thrown")
+    void userNotFoundException() {
+        assertThrows(UserNotFoundException.class, () -> userService.addVehicleByUserId(-1L, new Vehicle()));
+    }
+
+    @Test
+    @DisplayName("Expect initial collection of vehicles to be empty, then size 1 after adding a vehicle to user")
+    void addVehicleByUserId() {
+        assertTrue(user1.getVehicles().isEmpty());
+        var user = userService.addVehicleByUserId(user1.getId(), new Vehicle());
+        assertEquals(1, user.getVehicles().size());
     }
 }
