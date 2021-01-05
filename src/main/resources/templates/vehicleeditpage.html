@@ -12,7 +12,7 @@
     <h1>Add Vehicle</h1>
     <div th:unless="${null == user}">
         <form action="#"
-              th:action="${null == user} ? @{/vehicles/save} : @{/users/{id}/vehicles/save (id = ${user.id})}"
+              th:action="@{/users/{id}/vehicles/save (id = ${user.id})}"
               th:object="${vehicle}"
               method="post">
             <div class="mb-3">

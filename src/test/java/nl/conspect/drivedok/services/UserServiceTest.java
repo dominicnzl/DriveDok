@@ -20,8 +20,6 @@ class UserServiceTest {
 
     UserService userService;
 
-    VehicleService vehicleService;
-
     @Autowired
     TestEntityManager testEntityManager;
 
@@ -33,7 +31,7 @@ class UserServiceTest {
 
     @BeforeEach
     public void init() {
-        userService = new UserService(vehicleService, userRepository);
+        userService = new UserService(userRepository);
         user1 = new User("Toos", "abc@xyz.nl", "password123", Collections.emptySet());
         user2 = new User("Miep", "bdd@zzy.nl", "zomer123", Collections.emptySet());
         testEntityManager.persist(user1);
@@ -67,13 +65,13 @@ class UserServiceTest {
     @DisplayName("Change the name for user1 and update. Expect the subsequent found User to have the updated name")
     void update() {
         var toos = userService.findById(user1.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Toos not found, init() not executed properly"));
+                .orElseThrow(() -> new UserNotFoundException(user1.getId()));
         assertEquals("Toos", toos.getName());
         toos.setName("Tante Toos");
         userService.update(toos);
 
         var tanteToos = userService.findById(user1.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Tante Toos not found, update() not executed properly"));
+                .orElseThrow(() -> new UserNotFoundException(user1.getId()));
         assertEquals("Tante Toos", tanteToos.getName());
     }
 

@@ -10,18 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static java.lang.String.format;
-
 @Service
 @Transactional
 public class UserService {
 
-    private final VehicleService vehicleService;
-
     private final UserRepository userRepository;
 
-    public UserService(VehicleService vehicleService, UserRepository userRepository) {
-        this.vehicleService = vehicleService;
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -50,12 +45,9 @@ public class UserService {
     }
 
     public User addVehicleByUserId(Long id, Vehicle vehicle) {
-        var user = findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        var savedVehicle = vehicleService.create(vehicle);
-        if (user.getVehicles().add(savedVehicle)) {
-            return userRepository.save(user);
-        } else {
-            throw new IllegalArgumentException(format("Vehicle could not be added to %s", user.getName()));
-        }
+        var user = findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        user.addVehicle(vehicle);
+        return userRepository.save(user);
     }
 }
