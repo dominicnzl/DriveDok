@@ -10,11 +10,10 @@
 <body>
 <div class="container">
     <h1>Add Vehicle</h1>
-    <div th:if="${null == user}">
-        No user found...
-    </div>
     <div th:unless="${null == user}">
-        <form action="#" th:action="@{/users/{id}/vehicles/save (id = ${user.id})}" th:object="${vehicle}"
+        <form action="#"
+              th:action="${null == user} ? @{/vehicles/save} : @{/users/{id}/vehicles/save (id = ${user.id})}"
+              th:object="${vehicle}"
               method="post">
             <div class="mb-3">
                 <label for="vehicleName" class="form-label">Name</label>

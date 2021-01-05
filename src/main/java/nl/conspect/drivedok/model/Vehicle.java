@@ -1,8 +1,6 @@
 package nl.conspect.drivedok.model;
 
 import javax.persistence.*;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Vehicle {
@@ -10,29 +8,32 @@ public class Vehicle {
     @Id
     @GeneratedValue
     private Long id;
+
     private String name;
+
     private String licencePlate;
+
     @Enumerated(EnumType.STRING)
     private ParkingType parkingType;
-    @OneToMany
-    private Set<Reservation> reservations;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     public Vehicle() {
     }
 
-    public Vehicle(String name, String licencePlate, ParkingType parkingType, Set<Reservation> reservations) {
+    public Vehicle(String name, String licencePlate, ParkingType parkingType) {
         this.name = name;
         this.licencePlate = licencePlate;
         this.parkingType = parkingType;
-        this.reservations = reservations;
     }
 
-    public Vehicle(Long id, String name, String licencePlate, ParkingType parkingType, Set<Reservation> reservations) {
-        this.id = id;
+    public Vehicle(String name, String licencePlate, ParkingType parkingType, User user) {
         this.name = name;
         this.licencePlate = licencePlate;
         this.parkingType = parkingType;
-        this.reservations = reservations;
+        this.user = user;
     }
 
     public Long getId() {
@@ -67,39 +68,12 @@ public class Vehicle {
         this.parkingType = parkingType;
     }
 
-    public Set<Reservation> getReservations() {
-        return reservations;
+    public User getUser() {
+        return user;
     }
 
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vehicle vehicle = (Vehicle) o;
-        return Objects.equals(id, vehicle.id) &&
-                Objects.equals(name, vehicle.name) &&
-                Objects.equals(licencePlate, vehicle.licencePlate) &&
-                parkingType == vehicle.parkingType &&
-                Objects.equals(reservations, vehicle.reservations);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, licencePlate, parkingType, reservations);
-    }
-
-    @Override
-    public String toString() {
-        return "Vehicle{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", licencePlate='" + licencePlate + '\'' +
-                ", parkingType=" + parkingType +
-                ", reservations=" + reservations +
-                '}';
-    }
 }

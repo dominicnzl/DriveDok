@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import static nl.conspect.drivedok.model.ParkingType.possibleTypes;
@@ -41,10 +42,11 @@ public class UserController {
         return "usereditpage";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/save")
     public String createPage(Model model) {
         model.addAttribute("user", new User());
-        return "usercreatepage";
+        model.addAttribute("vehicles", Collections.emptySet());
+        return "usereditpage";
     }
 
     @PostMapping("/save")
@@ -61,14 +63,14 @@ public class UserController {
         return "userlistpage";
     }
 
-    @GetMapping("/{id}/vehicles/create")
+    @GetMapping("/{id}/vehicles/save")
     public String vehiclesForUser(Model model, @PathVariable Long id) {
         var user = userService.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         model.addAttribute("user", user);
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("parkingTypes", possibleTypes());
-        return "vehiclecreatepage";
+        return "vehicleeditpage";
     }
 
     @PostMapping("/{id}/vehicles/save")

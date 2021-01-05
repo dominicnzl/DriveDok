@@ -9,6 +9,11 @@
 </head>
 <body>
 <div class="container">
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
+        </a>
+    </nav>
     <div class="container-sm">
         <h1 th:text="${user.name}">User</h1>
         <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
@@ -32,13 +37,14 @@
         </form>
     </div>
     <div class="container">
-            <h1 th:text="|${user.name}'s Vehicles|">Vehicles</h1>
+            <h1 th:text="${null == user.name} ? |Vehicles| : |${user.name}'s Vehicles|">Vehicles</h1>
         <table class="table">
             <thead>
             <tr>
                 <th>Name</th>
                 <th>Licence plate</th>
                 <th>Parking type</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -46,11 +52,12 @@
                 <td th:text="${vehicle.name}"></td>
                 <td th:text="${vehicle.licencePlate}"></td>
                 <td th:text="${vehicle.parkingType}"></td>
+                <td><a th:href="@{/vehicles/delete/{vehicleId} (vehicleId = ${vehicle.id})}" class="btn btn-danger">Delete</a></td>
             </tr>
             </tbody>
         </table>
-        <div>
-            <a href="#" th:href="@{/users/{id}/vehicles/create (id = ${user.id})}" class="btn btn-primary">Create and add Vehicle</a>
+        <div th:unless="${null == user.id}">
+            <a href="#" th:href="@{/users/{id}/vehicles/save (id = ${user.id})}" class="btn btn-primary">Create and add Vehicle</a>
         </div>
     </div>
     <div class="container-sm">

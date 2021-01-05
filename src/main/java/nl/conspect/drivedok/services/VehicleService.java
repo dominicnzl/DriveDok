@@ -35,6 +35,13 @@ public class VehicleService {
     }
 
     public void deleteById(Long id) {
-        vehicleRepository.deleteById(id);
+        vehicleRepository.findById(id).ifPresent(this::delete);
+    }
+
+    public void delete(Vehicle vehicle) {
+        if (null != vehicle.getUser()) {
+            vehicle.getUser().removeVehicle(vehicle);
+        }
+        vehicleRepository.delete(vehicle);
     }
 }

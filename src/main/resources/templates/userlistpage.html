@@ -9,6 +9,11 @@
 </head>
 <body>
 <div class="container">
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
+        </a>
+    </nav>
     <h1>Users</h1>
     <table class="table">
         <tr>
@@ -23,7 +28,7 @@
         </tr>
     </table>
     <div>
-        <a href="#" th:href="@{/users/create}">Create User</a>
+        <a href="#" th:href="@{/users/save}">Create User</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
