@@ -7,7 +7,15 @@ import nl.conspect.drivedok.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,15 +36,14 @@ public class UserController {
     /* Thymeleaf controllers */
     @GetMapping
     public String listPage(Model model) {
-        List<User> users = userService.findAll();
+        final List<User> users = userService.findAll();
         model.addAttribute("users", users);
         return "userlistpage";
     }
 
     @GetMapping("/{id}")
     public String editPage(Model model, @PathVariable Long id) {
-        var user = userService.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        final var user = userService.getById(id);
         model.addAttribute("user", user);
         model.addAttribute("vehicles", user.getVehicles());
         return "usereditpage";
@@ -54,20 +61,14 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "usereditpage";
         }
-        if (null == user.getId() || userService.findById(user.getId()).isEmpty()) {
-            userService.create(user);
-        } else {
-            userService.update(user);
-        }
+        userService.createOrUpdate(user);
         model.addAttribute("users", userService.findAll());
         return "userlistpage";
     }
 
     @GetMapping("/{id}/vehicles/save")
     public String vehiclesForUser(Model model, @PathVariable Long id) {
-        var user = userService.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.getById(id));
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("parkingTypes", possibleTypes());
         return "vehicleeditpage";
@@ -75,7 +76,7 @@ public class UserController {
 
     @PostMapping("/{id}/vehicles/save")
     public String addVehicleToUser(Model model, @PathVariable Long id, @ModelAttribute Vehicle vehicle) {
-        var user = userService.addVehicleByUserId(id, vehicle);
+        final var user = userService.addVehicleByUserId(id, vehicle);
         model.addAttribute("user", user);
         model.addAttribute("vehicles", user.getVehicles());
         return "usereditpage";
@@ -105,14 +106,14 @@ public class UserController {
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public User create(@RequestBody User user) {
-        return userService.create(user);
+        return userService.createOrUpdate(user);
     }
 
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public User update(@PathVariable Long id, @RequestBody User user) {
         return userService.findById(id)
-                .map(u -> userService.update(user))
+                .map(u -> userService.createOrUpdate(user))
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 

@@ -13,7 +13,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class UserServiceTest {
@@ -57,7 +61,7 @@ class UserServiceTest {
     @DisplayName("Expect findAll() to return a list with size 3 after new User has been created")
     void create() {
         var newUser = new User("Bep", "xyz@abc.nl", "hallo123", Collections.emptySet());
-        userService.create(newUser);
+        userService.createOrUpdate(newUser);
         assertEquals(3, userService.findAll().size());
     }
 
@@ -68,7 +72,7 @@ class UserServiceTest {
                 .orElseThrow(() -> new UserNotFoundException(user1.getId()));
         assertEquals("Toos", toos.getName());
         toos.setName("Tante Toos");
-        userService.update(toos);
+        userService.createOrUpdate(toos);
 
         var tanteToos = userService.findById(user1.getId())
                 .orElseThrow(() -> new UserNotFoundException(user1.getId()));
@@ -103,5 +107,19 @@ class UserServiceTest {
         assertTrue(user1.getVehicles().isEmpty());
         var user = userService.addVehicleByUserId(user1.getId(), new Vehicle());
         assertEquals(1, user.getVehicles().size());
+    }
+
+    @Test
+    @DisplayName("Call getById with null, expect UserNotFoundException to be thrown")
+    void getByIdThrowsExceptionWhenPassedNull() {
+        assertThrows(UserNotFoundException.class, () -> userService.getById(null));
+    }
+
+    @Test
+    @DisplayName("Call getById with user1 id, expect return value not null and to equals user1")
+    void getById() {
+        var nonNullUser = userService.getById(user1.getId());
+        assertNotNull(nonNullUser);
+        assertEquals(user1, nonNullUser);
     }
 }

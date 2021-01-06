@@ -1,12 +1,17 @@
 package nl.conspect.drivedok.controllers;
 
-import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.VehicleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -30,18 +35,10 @@ public class VehicleController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteAndReturnToList(Model model, @PathVariable Long id) {
-        var userId = vehicleService.findById(id)
-                .map(Vehicle::getUser)
-                .map(User::getId);
+    public String deleteAndReturnToListPage(@PathVariable Long id) {
+        final var returnpage = vehicleService.pageAfterDelete(id);
         vehicleService.findById(id).ifPresent(vehicleService::delete);
-
-        if (userId.isEmpty()) {
-            model.addAttribute("vehicles", vehicleService.findAll());
-            return "vehiclelistpage";
-        } else {
-            return "redirect:/users/" + userId.get();
-        }
+        return returnpage;
     }
 
     /* Json controllers */

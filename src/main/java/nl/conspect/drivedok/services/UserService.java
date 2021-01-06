@@ -4,6 +4,7 @@ import nl.conspect.drivedok.exceptions.UserNotFoundException;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.repositories.UserRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +29,14 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User create(User user) {
-        return userRepository.save(user);
+    @NonNull
+    public User getById(Long id) {
+        return Optional.ofNullable(id)
+                .flatMap(userRepository::findById)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User update(User user) {
+    public User createOrUpdate(User user) {
         return userRepository.save(user);
     }
 

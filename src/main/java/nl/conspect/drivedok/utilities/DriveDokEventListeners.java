@@ -1,7 +1,11 @@
 package nl.conspect.drivedok.utilities;
 
 
-import nl.conspect.drivedok.model.*;
+import nl.conspect.drivedok.model.ParkingSpot;
+import nl.conspect.drivedok.model.ParkingType;
+import nl.conspect.drivedok.model.ParkingZone;
+import nl.conspect.drivedok.model.User;
+import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.ParkingSpotService;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import nl.conspect.drivedok.services.UserService;
@@ -64,9 +68,9 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
         );
         var sjaak = new User("Sjaak", "sjaak@email.nl", "password123");
         sjaaksVehicles.forEach(sjaak::addVehicle);
-        userService.create(sjaak);
+        userService.createOrUpdate(sjaak);
         var pien = new User("Pien", "pien@email.nl", "zomer2020");
         piensVehicles.forEach(pien::addVehicle);
-        userService.create(pien);
+        userService.createOrUpdate(pien);
     }
 }
