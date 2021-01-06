@@ -8,10 +8,8 @@ import nl.conspect.drivedok.repositories.ParkingZoneRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -33,12 +31,12 @@ public class ParkingZoneServiceImpl implements ParkingZoneService {
     }
 
     public ParkingZone create(ParkingZone parkingZone){
-        initParkingZone(parkingZone);
+        setDefaultParkingSpots(parkingZone);
         return parkingZoneRepository.save(parkingZone);
     }
 
     public ParkingZone update(ParkingZone parkingZone) {
-        // controles
+            updateNormalParkingSpots(parkingZone);
         return parkingZoneRepository.save(parkingZone);
     }
 
@@ -46,13 +44,15 @@ public class ParkingZoneServiceImpl implements ParkingZoneService {
         parkingZoneRepository.deleteById(id);
     }
 
-    /*
-     The initParkingZone method defines the default implementation of a ParkingZone.
-     So when the user creates one, it has by default certain ParkingSpots.
-     */
-    private void initParkingZone(ParkingZone parkingZone){
-        parkingZone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, parkingZone.getTotalParkingSpots()));
-        parkingZone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
-        parkingZone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
+
+    private void setDefaultParkingSpots(ParkingZone parkingZone){
+            parkingZone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, parkingZone.getTotalParkingSpots()));
+            parkingZone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
+            parkingZone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
+    }
+
+    private void updateNormalParkingSpots(ParkingZone parkingZone){
+        ParkingSpot spot = parkingZone.getParkingSpots().iterator().next();
+        spot.setQuantity(parkingZone.getTotalParkingSpots());
     }
 }
