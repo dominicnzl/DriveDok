@@ -50,16 +50,12 @@ public class VehicleService {
     /* Look for a User to which this vehicle belongs. If a User is found, go to that User editpage. Otherwise go to
     the Vehicle listpage. */
     public String pageAfterDelete(Long vehicleId) {
-        if (null == vehicleId) {
-            return "redirect:/vehicles";
-        } else {
-            return Optional.of(vehicleId)
-                    .flatMap(this::findById)
-                    .map(Vehicle::getUser)
-                    .map(User::getId)
-                    .map(Objects::toString)
-                    .map("redirect:/users/"::concat)
-                    .orElse("redirect:/vehicles");
-        }
+        return null == vehicleId ? "redirect:/vehicles" : Optional.of(vehicleId)
+                .flatMap(this::findById)
+                .map(Vehicle::getUser)
+                .map(User::getId)
+                .map(Objects::toString)
+                .map("redirect:/users/"::concat)
+                .orElse("redirect:/vehicles");
     }
 }
