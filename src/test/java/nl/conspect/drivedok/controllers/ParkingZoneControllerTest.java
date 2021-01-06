@@ -78,8 +78,8 @@ class ParkingZoneControllerTest {
 
     @Test
     public void shouldReturnParkingZoneById() throws Exception {
-        ParkingSpot ps = new ParkingSpot();
-        ParkingZone pz1 = new ParkingZone("Zone 1", Set.of(ps), 100);
+    //    ParkingSpot ps = new ParkingSpot();
+        ParkingZone pz1 = new ParkingZone("Zone 1", Collections.emptySet(), 100);
 
         when(parkingZoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));

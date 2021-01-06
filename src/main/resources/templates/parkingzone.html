@@ -17,7 +17,7 @@
     <p th:text="|has *{totalParkingSpots} parking spots.|">filler number</p>
     <br><br>
 
-<form action="#" th:action="@{/parkingzone/update}" th:object="${parkingZone}" th:method="post">
+    <form action="#" th:action="@{/parkingzone/update}" th:object="${parkingZone}" th:method="post">
         <input type="hidden" th:field="*{id}">
         <input type="text" th:field="*{name}" th:placeholder="*{name}">
         <input type="number" th:field="*{totalParkingSpots}" th:placeholder="*{totalParkingSpots}">
@@ -29,7 +29,8 @@
             </p>
         </div>
 
-</form>
-<button onclick="location.href='/parkingzone/home'">Go to overview</button>
+    </form>
+    <button onclick="location.href='/parkingzone/home'">Go to overview</button>
+</div>
 </body>
 </html>

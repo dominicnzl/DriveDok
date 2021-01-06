@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
         @Autowired
         ParkingZoneService parkingZoneService;
 
-
         @TestConfiguration
         static class ParkingZoneServiceImplTestContextConfiguration {
 
@@ -42,18 +41,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
         @BeforeEach
         public void init() {
-
-            /*ParkingSpot spot1 = new ParkingSpot();
-            ParkingSpot spot2 = new ParkingSpot();
-            ParkingSpot spot3 = new ParkingSpot();
-            ParkingZone zone1 = new ParkingZone("Elsa", Collections.emptySet(), 100);
-            ParkingZone zone2 = new ParkingZone("Anna", Collections.emptySet(), 300);
-            testEntityManager.persist(spot1);
-            testEntityManager.persist(spot2);
-            testEntityManager.persist(spot3);
-            testEntityManager.persist(zone1);
-            var o = testEntityManager.persistAndGetId(zone2, Long.class);
-            testEntityManager.flush();*/
         }
 
         @Test
@@ -63,7 +50,6 @@ import static org.junit.jupiter.api.Assertions.*;
             ParkingZone zone1 = new ParkingZone("Elsa", Collections.emptySet(), 100);
             testEntityManager.persist(zone1);
             assertEquals(1, parkingZoneService.findAll().size());
-
         }
 
         @Test
