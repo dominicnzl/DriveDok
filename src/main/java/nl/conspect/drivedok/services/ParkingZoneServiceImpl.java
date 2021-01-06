@@ -52,7 +52,9 @@ public class ParkingZoneServiceImpl implements ParkingZoneService {
     }
 
     private void updateNormalParkingSpots(ParkingZone parkingZone){
-        ParkingSpot spot = parkingZone.getParkingSpots().iterator().next();
-        spot.setQuantity(parkingZone.getTotalParkingSpots());
+        if(null != parkingZone.getParkingSpots()) {
+            ParkingSpot spot = parkingZone.getParkingSpots().iterator().next();
+            spot.setQuantity(parkingZone.getTotalParkingSpots());
+        }
     }
 }
