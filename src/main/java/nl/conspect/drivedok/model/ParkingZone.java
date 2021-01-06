@@ -59,6 +59,10 @@ public class ParkingZone {
         return Collections.unmodifiableSet(parkingSpots);
     }
 
+    public void setParkingSpots(Set<ParkingSpot> parkingSpots) {
+        this.parkingSpots = parkingSpots;
+    }
+
     public void addParkingSpot(ParkingSpot parkingSpot){
         parkingSpots.add(parkingSpot);
     }
