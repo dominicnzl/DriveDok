@@ -7,7 +7,7 @@ import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.ParkingSpotService;
-import nl.conspect.drivedok.services.ParkingZoneService;
+import nl.conspect.drivedok.services.ParkingZoneServiceImpl;
 import nl.conspect.drivedok.services.UserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -19,11 +19,12 @@ import java.util.Set;
 @Component
 public class DriveDokEventListeners implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final ParkingZoneService parkingZoneService;
+    private final ParkingZoneServiceImpl parkingZoneService;
     private final ParkingSpotService parkingSpotService;
     private final UserService userService;
 
-    public DriveDokEventListeners(ParkingZoneService parkingZoneService,
+
+    public DriveDokEventListeners(ParkingZoneServiceImpl parkingZoneService,
                                   ParkingSpotService parkingSpotService,
                                   UserService userService) {
         this.parkingZoneService = parkingZoneService;
@@ -33,8 +34,8 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        createDummyParkingZones();
-        createDummyParkingSpots();
+//      // createDummyParkingZones();
+//      // createDummyParkingSpots();
         createDummyUsersAndVehicles();
     }
 

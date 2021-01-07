@@ -1,14 +1,16 @@
 package nl.conspect.drivedok.controllers;
 
-
 import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.services.ParkingZoneService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("parkingzone")
@@ -33,16 +35,24 @@ public class ParkingZoneController {
     }
 
     @PostMapping("/create")
-    public String saveParkingZone(Model model, ParkingZone parkingZone) {
-        parkingZoneService.initParkingZone(parkingZone);
-        model.addAttribute("parkingZone", parkingZone);
+    public String saveParkingZone(Model model, @Valid ParkingZone parkingZone,
+                                  BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return "createparkingzoneform";
+        }
         parkingZoneService.create(parkingZone);
+        model.addAttribute("parkingZone", parkingZone);
         return "parkingzone";
     }
 
     @PostMapping("/update")
-    public String updateParkingZone(Model model, ParkingZone parkingZone){
+    public String updateParkingZone(Model model,@Valid ParkingZone parkingZone,
+                                    BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "parkingzone";
+        }
         parkingZoneService.update(parkingZone);
+        model.addAttribute("parkingZone", parkingZone);
         return "parkingzone";
     }
 

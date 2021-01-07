@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +64,7 @@ class ParkingZoneControllerTest {
 
         mockMvc.perform(get("/parkingzone/create"))
                 .andDo(print())
-                .andExpect(content().string(containsString("Create ParkingZone form")));
+                .andExpect(content().string(containsString("Create a new DriveDok Zone for your Parking Spots")));
     }
 
     @Test
@@ -79,7 +80,8 @@ class ParkingZoneControllerTest {
 
     @Test
     public void shouldReturnParkingZoneById() throws Exception {
-        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
+    //    ParkingSpot ps = new ParkingSpot();
+        ParkingZone pz1 = new ParkingZone("Zone 1", Collections.emptySet(), 100);
 
         when(parkingZoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
