@@ -111,10 +111,12 @@ public class UserController {
 
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public User update(@PathVariable Long id, @RequestBody User user) {
-        return userService.findById(id)
-                .map(u -> userService.createOrUpdate(user))
-                .orElseThrow(() -> new UserNotFoundException(id));
+    public User update(@PathVariable Long id, @RequestBody User newUser) {
+        var user = userService.getById(id);
+        user.setName(newUser.getName());
+        user.setEmail(newUser.getEmail());
+        user.setPassword(newUser.getPassword());
+        return userService.createOrUpdate(user);
     }
 
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)

@@ -68,14 +68,12 @@ class UserServiceTest {
     @Test
     @DisplayName("Change the name for user1 and update. Expect the subsequent found User to have the updated name")
     void update() {
-        var toos = userService.findById(user1.getId())
-                .orElseThrow(() -> new UserNotFoundException(user1.getId()));
+        var toos = userService.getById(user1.getId());
         assertEquals("Toos", toos.getName());
         toos.setName("Tante Toos");
         userService.createOrUpdate(toos);
 
-        var tanteToos = userService.findById(user1.getId())
-                .orElseThrow(() -> new UserNotFoundException(user1.getId()));
+        var tanteToos = userService.getById(user1.getId());
         assertEquals("Tante Toos", tanteToos.getName());
     }
 
