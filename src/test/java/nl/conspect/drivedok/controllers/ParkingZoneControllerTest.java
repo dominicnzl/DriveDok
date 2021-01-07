@@ -62,7 +62,7 @@ class ParkingZoneControllerTest {
 
         mockMvc.perform(get("/parkingzone/create"))
                 .andDo(print())
-                .andExpect(content().string(containsString("Create ParkingZone form")));
+                .andExpect(content().string(containsString("Create a new DriveDok Zone for your Parking Spots")));
     }
 
     @Test
