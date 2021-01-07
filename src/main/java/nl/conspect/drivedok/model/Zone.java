@@ -1,11 +1,20 @@
 package nl.conspect.drivedok.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-public class ParkingZone {
+public class Zone {
 
     @Id
     @GeneratedValue
@@ -23,16 +32,16 @@ public class ParkingZone {
     @Min(value = 1, message = "Your zone should have at least 1 parking spot")
     private int totalParkingSpots;
 
-    public ParkingZone() {
+    public Zone() {
     }
 
-    public ParkingZone(String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
+    public Zone(String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
         this.name = name;
         this.parkingSpots = parkingSpots;
         this.totalParkingSpots = totalParkingSpots;
     }
 
-    public ParkingZone(Long id, String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
+    public Zone(Long id, String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
         this.id = id;
         this.name = name;
         this.parkingSpots = parkingSpots;
@@ -79,7 +88,7 @@ public class ParkingZone {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ParkingZone that = (ParkingZone) o;
+        Zone that = (Zone) o;
         return totalParkingSpots == that.totalParkingSpots && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parkingSpots, that.parkingSpots);
     }
 
@@ -90,7 +99,7 @@ public class ParkingZone {
 
     @Override
     public String toString() {
-        return "ParkingZone{" +
+        return "Zone{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", parkingSpots=" + parkingSpots +

@@ -3,11 +3,11 @@ package nl.conspect.drivedok.utilities;
 
 import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.ParkingType;
-import nl.conspect.drivedok.model.ParkingZone;
 import nl.conspect.drivedok.model.Vehicle;
+import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.services.ParkingSpotService;
-import nl.conspect.drivedok.services.ParkingZoneServiceImpl;
 import nl.conspect.drivedok.services.VehicleService;
+import nl.conspect.drivedok.services.ZoneServiceImpl;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -18,30 +18,30 @@ import java.util.List;
 @Component
 public class DriveDokEventListeners implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final ParkingZoneServiceImpl parkingZoneService;
+    private final ZoneServiceImpl zoneService;
     private final ParkingSpotService parkingSpotService;
     private final VehicleService vehicleService;
 
-    public DriveDokEventListeners(ParkingZoneServiceImpl parkingZoneService, ParkingSpotService parkingSpotService, VehicleService vehicleService) {
-        this.parkingZoneService = parkingZoneService;
+    public DriveDokEventListeners(ZoneServiceImpl zoneService, ParkingSpotService parkingSpotService, VehicleService vehicleService) {
+        this.zoneService = zoneService;
         this.parkingSpotService = parkingSpotService;
         this.vehicleService = vehicleService;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//        createDummyParkingZones();
+//        createDummyZones();
 //        createDummyParkingSpots();
 //        createDummyVehicles();
     }
 
-    private void createDummyParkingZones() {
-        var greet = new ParkingZone("Greet", Collections.emptySet(), 10);
-        var piet = new ParkingZone("Piet", Collections.emptySet(), 20);
-        var joop = new ParkingZone("Joop", Collections.emptySet(), 30);
-        parkingZoneService.create(greet);
-        parkingZoneService.create(piet);
-        parkingZoneService.create(joop);
+    private void createDummyZones() {
+        var greet = new Zone("Greet", Collections.emptySet(), 10);
+        var piet = new Zone("Piet", Collections.emptySet(), 20);
+        var joop = new Zone("Joop", Collections.emptySet(), 30);
+        zoneService.create(greet);
+        zoneService.create(piet);
+        zoneService.create(joop);
     }
 
     private void createDummyParkingSpots() {

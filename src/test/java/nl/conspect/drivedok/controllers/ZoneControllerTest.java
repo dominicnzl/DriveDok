@@ -1,8 +1,7 @@
 package nl.conspect.drivedok.controllers;
 
-import nl.conspect.drivedok.model.ParkingSpot;
-import nl.conspect.drivedok.model.ParkingZone;
-import nl.conspect.drivedok.services.ParkingZoneService;
+import nl.conspect.drivedok.model.Zone;
+import nl.conspect.drivedok.services.ZoneService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
@@ -22,18 +24,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ParkingZoneController.class)
-class ParkingZoneControllerTest {
+@WebMvcTest(ZoneController.class)
+class ZoneControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    ParkingZoneService parkingZoneService;
+    ZoneService zoneService;
 
     @Test
-    public void homeShouldShowThereAreNoParkingZonesYet() throws Exception {
-        mockMvc.perform(get("/parkingzone/home"))
+    public void homeShouldShowThereAreNoZonesYet() throws Exception {
+        mockMvc.perform(get("/zone/home"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("You have no DriveDok Zones yet")))
@@ -41,16 +43,16 @@ class ParkingZoneControllerTest {
     }
 
     @Test
-    public void shouldShowListOfParkingZones() throws Exception {
-        List<ParkingZone> listPZ = new ArrayList<>();
-        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
-        ParkingZone pz2 = new ParkingZone(2L, "Zone 2", null, 200);
+    public void shouldShowListOfZones() throws Exception {
+        List<Zone> listPZ = new ArrayList<>();
+        Zone pz1 = new Zone(1L, "Zone 1", null, 100);
+        Zone pz2 = new Zone(2L, "Zone 2", null, 200);
         listPZ.add(pz1);
         listPZ.add(pz2);
 
-        when(parkingZoneService.findAll()).thenReturn(listPZ);
+        when(zoneService.findAll()).thenReturn(listPZ);
 
-        mockMvc.perform(get("/parkingzone/home"))
+        mockMvc.perform(get("/zone/home"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Zone 1")))
@@ -58,17 +60,17 @@ class ParkingZoneControllerTest {
     }
 
     @Test
-    public void shouldShowParkingZoneForm() throws Exception {
+    public void shouldShowZoneForm() throws Exception {
 
-        mockMvc.perform(get("/parkingzone/create"))
+        mockMvc.perform(get("/zone/create"))
                 .andDo(print())
                 .andExpect(content().string(containsString("Create a new DriveDok Zone for your Parking Spots")));
     }
 
     @Test
-    public void shouldCreateParkingZone() throws Exception {
+    public void shouldCreateZone() throws Exception {
 
-        mockMvc.perform(post("/parkingzone/create", ParkingZone.class)
+        mockMvc.perform(post("/zone/create", Zone.class)
                 .param("name", "Zone 1")
                 .param("totalParkingSpots", "100"))
                 .andDo(print())
@@ -77,14 +79,14 @@ class ParkingZoneControllerTest {
     }
 
     @Test
-    public void shouldReturnParkingZoneById() throws Exception {
+    public void shouldReturnZoneById() throws Exception {
     //    ParkingSpot ps = new ParkingSpot();
-        ParkingZone pz1 = new ParkingZone("Zone 1", Collections.emptySet(), 100);
+        Zone pz1 = new Zone("Zone 1", Collections.emptySet(), 100);
 
-        when(parkingZoneService.findById(1L))
+        when(zoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
 
-        mockMvc.perform(get("/parkingzone/1"))
+        mockMvc.perform(get("/zone/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -92,9 +94,9 @@ class ParkingZoneControllerTest {
     }
 
     @Test
-    public void shouldUpdateParkingZone() throws Exception {
+    public void shouldUpdateZone() throws Exception {
 
-        mockMvc.perform(post("/parkingzone/update", ParkingZone.class)
+        mockMvc.perform(post("/zone/update", Zone.class)
                 .param("name", "Zone 1")
                 .param("totalParkingSpots", "100"))
                 .andDo(print())
@@ -102,22 +104,22 @@ class ParkingZoneControllerTest {
     }
 
     @Test
-    public void shouldDeleteParkingZone() throws Exception {
+    public void shouldDeleteZone() throws Exception {
 
-        ParkingZone pz1 = new ParkingZone(1L, "Zone 1", null, 100);
-        when(parkingZoneService.findById(1L))
+        Zone pz1 = new Zone(1L, "Zone 1", null, 100);
+        when(zoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/parkingzone/delete/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/zone/delete/{id}", 1))
                 .andExpect(status().isOk());
 
     }
   
     @Test
-    @DisplayName("When an id is used to findById but no ParkingZone is found throw an IllegalArgumentException")
+    @DisplayName("When an id is used to findById but no Zone is found throw an IllegalArgumentException")
     public void whenFailToFindByIdThrowIllegalArgument() {
-        assertThatThrownBy(() -> mockMvc.perform(get("/parkingzone/-1"))
+        assertThatThrownBy(() -> mockMvc.perform(get("/zone/-1"))
                 .andExpect(status().isOk()))
-                .hasCause(new IllegalArgumentException("ParkingZone with id -1 not found"));
+                .hasCause(new IllegalArgumentException("Zone with id -1 not found"));
     }
 }
