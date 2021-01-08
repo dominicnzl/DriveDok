@@ -23,7 +23,7 @@
         <div class="col">
             <header><img src="logo.png" th:src="@{/img/quickLogo.png}" alt="logo"></header>
             <h1>Create a new DriveDok Zone for your Parking Spots</h1>
-            <form action="#" th:action="@{/parkingzone/create}" th:object="${parkingZone}" method="post">
+            <form action="#" th:action="@{/zone/create}" th:object="${zone}" method="post">
                 <input type="hidden" th:field="*{id}">
 
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>

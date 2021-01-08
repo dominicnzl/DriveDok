@@ -25,20 +25,20 @@
             <h2>Welcome Administrator Bert,</h2>
             <h3>Your DriveDok Zones</h3>
 
-            <div th:if="${parkingzones != null and !parkingzones.empty}">
+            <div th:if="${zones != null and !zones.empty}">
                 <table>
                     <div>
                         <tbody>
-                        <div th:each="zone : ${parkingzones}">
-                            <a th:href="@{/parkingzone/{id}(id=${zone.id})}">
+                        <div th:each="zone : ${zones}">
+                            <a th:href="@{/zone/{id}(id=${zone.id})}">
                                 <span th:text="${zone.name}"></span>
                             </a>
-                            <a th:href="@{'/parkingzone/' + ${zone.id}}">
+                            <a th:href="@{'/zone/' + ${zone.id}}">
                                 <span th:text="${zone.totalParkingSpots}"></span>
                             </a>
                             <a>
-                                <form th:action="@{/parkingzone/delete/{id}(id=${zone.id})}"
-                                      th:object="${parkingZone}"
+                                <form th:action="@{/zone/delete/{id}(id=${zone.id})}"
+                                      th:object="${zone}"
                                       method="get"
                                       value="delete zone">
                                     <input type="hidden" name="id" th:value="${zone.id}">
@@ -50,7 +50,7 @@
                     </div>
                 </table>
             </div>
-            <div th:if="${parkingzones == null or parkingzones.empty}">
+            <div th:if="${zones == null or zones.empty}">
                 <p>You have no DriveDok Zones yet</p>
             </div>
         </div>
@@ -61,7 +61,7 @@
         <div class="col">
         </div>
         <div class="col">
-            <div> <button onclick="location.href='/parkingzone/create'">Create a new DriveDok Zone</button></div>
+            <div> <button onclick="location.href='/zone/create'">Create a new DriveDok Zone</button></div>
         </div>
         <div class="col">
         </div>
