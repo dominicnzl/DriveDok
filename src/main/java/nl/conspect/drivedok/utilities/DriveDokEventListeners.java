@@ -3,36 +3,37 @@ package nl.conspect.drivedok.utilities;
 
 import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.ParkingType;
+import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.services.ParkingSpotService;
-import nl.conspect.drivedok.services.VehicleService;
+import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.services.ZoneServiceImpl;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @Component
 public class DriveDokEventListeners implements ApplicationListener<ContextRefreshedEvent> {
 
     private final ZoneServiceImpl zoneService;
     private final ParkingSpotService parkingSpotService;
-    private final VehicleService vehicleService;
+    private final UserService userService;
 
-    public DriveDokEventListeners(ZoneServiceImpl zoneService, ParkingSpotService parkingSpotService, VehicleService vehicleService) {
+    public DriveDokEventListeners(ZoneServiceImpl zoneService, ParkingSpotService parkingSpotService, UserService userService) {
         this.zoneService = zoneService;
         this.parkingSpotService = parkingSpotService;
-        this.vehicleService = vehicleService;
+        this.userService = userService;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//        createDummyZones();
-//        createDummyParkingSpots();
-//        createDummyVehicles();
+//      // createDummyParkingZones();
+//      // createDummyParkingSpots();
+        createDummyUsersAndVehicles();
     }
 
     private void createDummyZones() {
@@ -53,12 +54,21 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
         parkingSpotService.create(plek3);
     }
 
-    private void createDummyVehicles() {
-        var vehicles = List.of(
-                new Vehicle("Ben's iene miene mutte auto", "H-000-B", ParkingType.NORMAL, Collections.emptySet()),
-                new Vehicle("Tess's sla", "H-001-C", ParkingType.ELECTRIC, Collections.emptySet()),
-                new Vehicle("Zo Fiets", "H-002-D", ParkingType.NORMAL, Collections.emptySet())
+    private void createDummyUsersAndVehicles() {
+        var sjaaksVehicles = Set.of(
+                new Vehicle("Auto van de Sjaak", "H-000-B", ParkingType.NORMAL),
+                new Vehicle("Electrische auto", "H-001-C", ParkingType.ELECTRIC),
+                new Vehicle("Zonnepaneel fiets", "H-002-D", ParkingType.DISABLED)
         );
-        vehicles.forEach(vehicleService::create);
+        var piensVehicles = Set.of(
+                new Vehicle("Volkswagen Pino", "H-000-E", ParkingType.ELECTRIC),
+                new Vehicle("Motor", "H-001-F", ParkingType.NORMAL)
+        );
+        var sjaak = new User("Sjaak", "sjaak@email.nl", "password123");
+        sjaaksVehicles.forEach(sjaak::addVehicle);
+        userService.createOrUpdate(sjaak);
+        var pien = new User("Pien", "pien@email.nl", "zomer2020");
+        piensVehicles.forEach(pien::addVehicle);
+        userService.createOrUpdate(pien);
     }
 }

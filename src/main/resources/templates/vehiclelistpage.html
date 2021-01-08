@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicles</title>
+</head>
+<body>
+this page is yet to be implemented
+
+<div th:each="vehicle : ${vehicles}">
+    <p th:text="${vehicle.name}"></p>
+</div>
+</body>
+</html>

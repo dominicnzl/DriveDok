@@ -80,7 +80,7 @@ class ZoneControllerTest {
 
     @Test
     public void shouldReturnZoneById() throws Exception {
-    //    ParkingSpot ps = new ParkingSpot();
+        //    ParkingSpot ps = new ParkingSpot();
         Zone pz1 = new Zone("Zone 1", Collections.emptySet(), 100);
 
         when(zoneService.findById(1L))
@@ -114,7 +114,7 @@ class ZoneControllerTest {
                 .andExpect(status().isOk());
 
     }
-  
+
     @Test
     @DisplayName("When an id is used to findById but no Zone is found throw an IllegalArgumentException")
     public void whenFailToFindByIdThrowIllegalArgument() {
