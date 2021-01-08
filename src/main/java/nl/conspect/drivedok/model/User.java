@@ -1,11 +1,16 @@
 package nl.conspect.drivedok.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 public class User {
@@ -16,8 +21,12 @@ public class User {
     private String name;
     private String email;
     private String password; // TODO: 02/12/2020 should probably not be a String but a Char[]
-    @OneToMany
-    private Set<Vehicle> vehicles;
+    @OneToMany(mappedBy = "user",
+            cascade = ALL,
+            orphanRemoval = true,
+            fetch = LAZY)
+    @JsonManagedReference
+    private Set<Vehicle> vehicles = new HashSet<>();
 
     public User() {
     }
@@ -29,12 +38,10 @@ public class User {
         this.vehicles = vehicles;
     }
 
-    public User(Long id, String name, String email, String password, Set<Vehicle> vehicles) {
-        this.id = id;
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.vehicles = vehicles;
     }
 
     public Long getId() {
@@ -77,31 +84,17 @@ public class User {
         this.vehicles = vehicles;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User that = (User) o;
-        return id.equals(that.id) &&
-                name.equals(that.name) &&
-                email.equals(that.email) &&
-                password.equals(that.password) &&
-                vehicles.equals(that.vehicles);
+    public void addVehicle(Vehicle vehicle) {
+        if (getVehicles().contains(vehicle)) {
+            return;
+        }
+        getVehicles().add(vehicle);
+        vehicle.setUser(this);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, email, password, vehicles);
+    public void removeVehicle(Vehicle vehicle) {
+        this.getVehicles().remove(vehicle);
+        vehicle.setUser(null);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", vehicles=" + vehicles +
-                '}';
-    }
 }
