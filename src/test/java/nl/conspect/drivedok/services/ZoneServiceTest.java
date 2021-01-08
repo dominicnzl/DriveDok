@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.services;
 
 import nl.conspect.drivedok.model.ParkingSpot;
+import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.repositories.ZoneRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,7 +83,7 @@ class ZoneServiceTest {
     @Test
     @DisplayName("The Zone should be correctly updated")
     void update() {
-        ParkingSpot spot2 = new ParkingSpot();
+        ParkingSpot spot2 = new ParkingSpot(ParkingType.NORMAL, 3);
         Set<ParkingSpot> spotSet = new HashSet<>();
         spotSet.add(spot2);
         Zone zone = new Zone("Elsa", spotSet, 100);

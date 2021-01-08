@@ -6,7 +6,7 @@ import java.util.Set;
 
 public enum ParkingType {
 
-    DISABLED, ELECTRIC, NORMAL;
+    NORMAL, DISABLED, ELECTRIC;
 
     public static Set<ParkingType> possibleTypes() {
         return new HashSet<>(Arrays.asList(ParkingType.values()));
