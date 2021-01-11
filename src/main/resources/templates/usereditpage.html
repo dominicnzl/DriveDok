@@ -36,8 +36,8 @@
             <a th:href="@{/users/delete/{id} (id=${user.id})}" th:text="Delete" class="btn btn-danger">Delete</a>
         </form>
     </div>
-    <div class="container">
-            <h1 th:text="${null == user.name} ? |Vehicles| : |${user.name}'s Vehicles|">Vehicles</h1>
+    <div class="container" th:object="${user}">
+            <h1 th:text="*{null == name} ? |Vehicles| : |*{name}'s Vehicles|">Vehicles</h1>
         <table class="table">
             <thead>
             <tr>
@@ -48,7 +48,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="vehicle : ${vehicles}">
+            <tr th:each="vehicle : *{vehicles}">
                 <td th:text="${vehicle.name}"></td>
                 <td th:text="${vehicle.licencePlate}"></td>
                 <td th:text="${vehicle.parkingType}"></td>
@@ -56,7 +56,7 @@
             </tr>
             </tbody>
         </table>
-        <div th:unless="${null == user.id}">
+        <div th:unless="*{null == id}">
             <a href="#" th:href="@{/users/{id}/vehicles/save (id = ${user.id})}" class="btn btn-primary">Add Vehicle</a>
         </div>
     </div>
