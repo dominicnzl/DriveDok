@@ -40,19 +40,6 @@ public class Zone {
         this.totalParkingSpots = totalParkingSpots;
     }
 
-    public Zone(String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
-        this.name = name;
-        this.parkingSpots = parkingSpots;
-        this.totalParkingSpots = totalParkingSpots;
-    }
-
-    public Zone(Long id, String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
-        this.id = id;
-        this.name = name;
-        this.parkingSpots = parkingSpots;
-        this.totalParkingSpots = totalParkingSpots;
-    }
-
     public Long getId() {
         return id;
     }
