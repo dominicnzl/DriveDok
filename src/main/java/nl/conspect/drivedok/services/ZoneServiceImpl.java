@@ -26,10 +26,9 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     public List<Zone> findAll(){
-
-        // TODO: the parkingspots of each zone need to be properly sorted according enum (natural space)
-
-        return zoneRepository.findAll();
+        List<Zone> allZones = zoneRepository.findAll();
+        allZones.forEach( zone -> orderParkingSpots(zone));
+        return  allZones;
     }
 
     public Optional<Zone> findById(Long id){
@@ -39,8 +38,10 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     public Zone create(Zone zone){
-        setDefaultParkingSpots(zone);
-        return zoneRepository.save(zone);
+        setParkingSpotsAtInitiation(zone);
+        Zone savedZone = zoneRepository.save(zone);
+        orderParkingSpots(savedZone);
+        return savedZone;
     }
 
     public Zone update(Zone zone) {
@@ -53,27 +54,22 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
 
-    private void setDefaultParkingSpots(Zone zone){
-            zone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, zone.getTotalParkingSpots()));
-            zone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
-            zone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
+    private void setParkingSpotsAtInitiation(Zone zone){
+        zone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
+        zone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
+        zone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, zone.getTotalParkingSpots()));
     }
 
     private void orderParkingSpots(Zone zone){
         Set<ParkingSpot> parkingSpots = zone.getParkingSpots();
         Set<ParkingSpot> treeset = new TreeSet<ParkingSpot>(new ParkingTypeComparator());
-        parkingSpots.forEach(p ->
-                treeset.add(p)
-        );
+        for (ParkingSpot p : parkingSpots) treeset.add(p);
         zone.setParkingSpots(treeset);
     }
 
     private void updateNormalParkingSpots(Zone zone){
         if(null != zone.getParkingSpots()) {
-
-
             ParkingSpot spot = zone.getParkingSpots().iterator().next();
-
             spot.setQuantity(zone.getTotalParkingSpots());
         }
     }

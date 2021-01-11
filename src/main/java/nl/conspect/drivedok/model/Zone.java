@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,13 +26,18 @@ public class Zone {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<ParkingSpot> parkingSpots = new LinkedHashSet<>();
+    private Set<ParkingSpot> parkingSpots = new HashSet<>();
 
     @NotNull
     @Min(value = 1, message = "Your zone should have at least 1 parking spot")
     private int totalParkingSpots;
 
     public Zone() {
+    }
+
+    public Zone(String name, int totalParkingSpots){
+        this.name = name;
+        this.totalParkingSpots = totalParkingSpots;
     }
 
     public Zone(String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
