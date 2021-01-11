@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -34,6 +36,8 @@ class ZoneServiceTest {
         zoneService = new ZoneServiceImpl(zoneRepository);
         zone1 = new Zone("Elsa",100);
         zone2 = new Zone("Anna",200);
+        zoneService.create(zone1);
+        zoneService.create(zone2);
         testEntityManager.persist(zone1);
         testEntityManager.persist(zone2);
     }
@@ -99,7 +103,12 @@ class ZoneServiceTest {
         assertEquals(zone1.getTotalParkingSpots(), zone1.getParkingSpots().iterator().next().getQuantity());
     }
 
-
+    @Test
+    @DisplayName("FindAll zones and assert their first parkingspottype is NORMAL")
+    void findAllAndAssertFirstPSTypeIsNORMAL(){
+        List<Zone> all = zoneService.findAll();
+         all.forEach(zone -> assertEquals(ParkingType.NORMAL, zone.getParkingSpots().iterator().next().getParkingType()));
+    }
 }
 
 
