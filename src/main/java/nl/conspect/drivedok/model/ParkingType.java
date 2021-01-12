@@ -6,6 +6,7 @@ import java.util.Set;
 
 public enum ParkingType {
 
+    //KEEP ENUMS IN THIS ORDER FOR THE SAKE OF CORRECTLY ORDERING THE PARKINGSPOTS
     NORMAL, DISABLED, ELECTRIC;
 
     public static Set<ParkingType> possibleTypes() {
