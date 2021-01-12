@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.model;
 
 import nl.conspect.drivedok.utilities.ParkingTypeComparator;
+import org.hibernate.annotations.SortComparator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,6 +29,7 @@ public class Zone {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @SortComparator(ParkingTypeComparator.class)
     private Set<ParkingSpot> parkingSpots = new TreeSet<ParkingSpot>(new ParkingTypeComparator());;
 
     @NotNull
