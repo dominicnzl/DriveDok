@@ -46,6 +46,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     public Zone update(Zone zone) {
             updateNormalParkingSpots(zone);
+            orderParkingSpots(zone);
         return zoneRepository.save(zone);
     }
 
