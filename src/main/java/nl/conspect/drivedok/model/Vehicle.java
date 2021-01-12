@@ -86,4 +86,10 @@ public class Vehicle {
         this.user = user;
     }
 
+    public boolean isNew() {
+        return null == this.getId()
+                && null == this.getName()
+                && null == this.getLicencePlate()
+                && null == this.getParkingType();
+    }
 }

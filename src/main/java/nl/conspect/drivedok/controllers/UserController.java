@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Collections;
 import java.util.List;
 
 import static nl.conspect.drivedok.model.ParkingType.possibleTypes;
@@ -41,52 +40,46 @@ public class UserController {
         return "userlistpage";
     }
 
-    @GetMapping("/{id}")
-    public String editPage(Model model, @PathVariable Long id) {
-        final var user = userService.getById(id);
-        model.addAttribute("user", user);
-        model.addAttribute("vehicles", user.getVehicles());
-        return "usereditpage";
-    }
-
-    @GetMapping("/save")
-    public String createPage(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("vehicles", Collections.emptySet());
-        return "usereditpage";
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public String save(Model model, @ModelAttribute User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "usereditpage";
+        }
+        if (user.isNew()) {
+            return editPage(model, -1L);
         }
         userService.createOrUpdate(user);
         model.addAttribute("users", userService.findAll());
         return "userlistpage";
     }
 
-    @GetMapping("/{id}/vehicles/save")
-    public String vehiclesForUser(Model model, @PathVariable Long id) {
-        model.addAttribute("user", userService.getById(id));
-        model.addAttribute("vehicle", new Vehicle());
-        model.addAttribute("parkingTypes", possibleTypes());
-        return "vehicleeditpage";
-    }
-
-    @PostMapping("/{id}/vehicles/save")
-    public String addVehicleToUser(Model model, @PathVariable Long id, @ModelAttribute Vehicle vehicle) {
-        final var user = userService.addVehicleByUserId(id, vehicle);
+    @GetMapping("/{id}")
+    public String editPage(Model model, @PathVariable Long id) {
+        final var user = userService.findById(id).orElseGet(User::new);
         model.addAttribute("user", user);
         model.addAttribute("vehicles", user.getVehicles());
         return "usereditpage";
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String delete(Model model, @PathVariable Long id) {
         userService.findById(id).ifPresent(userService::delete);
         model.addAttribute("users", userService.findAll());
         return "userlistpage";
+    }
+
+    @PostMapping("/{userId}/vehicles")
+    public String addVehicleToUser(Model model, @PathVariable Long userId, @ModelAttribute Vehicle vehicle) {
+        if (vehicle.isNew()) {
+            model.addAttribute("user", userService.getById(userId));
+            model.addAttribute("vehicle", new Vehicle());
+            model.addAttribute("parkingTypes", possibleTypes());
+            return "vehicleeditpage";
+        }
+        final var user = userService.addVehicleByUserId(userId, vehicle);
+        model.addAttribute("user", user);
+        model.addAttribute("vehicles", user.getVehicles());
+        return "usereditpage";
     }
 
     /* Json controllers */

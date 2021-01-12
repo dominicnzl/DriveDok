@@ -16,7 +16,7 @@
     </nav>
     <div class="container-sm">
         <h1 th:text="${user.name}">User</h1>
-        <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
+        <form action="#" th:action="@{/users}" th:object="${user}" method="post">
             <div class="mb-3">
                 <label for="userName" class="form-label">Name</label>
                 <input type="text" class="form-control" id="userName" th:field="${user.name}">
@@ -33,11 +33,14 @@
             <input type="hidden" th:field="${user.vehicles}">
             <input type="submit" th:value="Save" class="btn btn-primary">
             <input type="reset" th:value="Reset" class="btn btn-warning">
-            <a th:href="@{/users/delete/{id} (id=${user.id})}" th:text="Delete" class="btn btn-danger">Delete</a>
+        </form>
+        <form th:unless="${null == user.id}" action="#" th:action="@{/users/{id} (id=${user.id})}" th:object="${user}"
+              method="post" th:method="delete">
+            <input type="submit" th:value="Delete" class="btn btn-danger">
         </form>
     </div>
     <div class="container">
-            <h1 th:text="${null == user.name} ? |Vehicles| : |${user.name}'s Vehicles|">Vehicles</h1>
+        <h1 th:text="${null == user.name} ? |Vehicles| : |${user.name}'s Vehicles|">Vehicles</h1>
         <table class="table">
             <thead>
             <tr>
@@ -49,15 +52,22 @@
             </thead>
             <tbody>
             <tr th:each="vehicle : ${vehicles}">
-                <td th:text="${vehicle.name}"></td>
+                <td><a href="#" th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}" th:text="${vehicle.name}">Vehicle name</a></td>
                 <td th:text="${vehicle.licencePlate}"></td>
                 <td th:text="${vehicle.parkingType}"></td>
-                <td><a th:href="@{/vehicles/delete/{vehicleId} (vehicleId = ${vehicle.id})}" class="btn btn-danger">Delete</a></td>
+                <td>
+                    <form action="#" th:action="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}" method="post"
+                          th:method="delete" th:object="${vehicle}">
+                        <input type="submit" th:value="Delete" class="btn btn-danger">
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
         <div th:unless="${null == user.id}">
-            <a href="#" th:href="@{/users/{id}/vehicles/save (id = ${user.id})}" class="btn btn-primary">Add Vehicle</a>
+            <form action="#" th:action="@{/users/{id}/vehicles (id = ${user.id})}" method="post">
+                <input type="submit" class="btn btn-primary" value="Add Vehicle">
+            </form>
         </div>
     </div>
     <div class="container-sm">

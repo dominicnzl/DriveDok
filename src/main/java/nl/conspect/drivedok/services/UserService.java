@@ -49,8 +49,7 @@ public class UserService {
     }
 
     public User addVehicleByUserId(Long id, Vehicle vehicle) {
-        var user = findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        var user = findById(id).orElseThrow(() -> new UserNotFoundException(id));
         user.addVehicle(vehicle);
         return userRepository.save(user);
     }
