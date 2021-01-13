@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +44,8 @@ class ZoneControllerTest {
     @Test
     public void shouldShowListOfZones() throws Exception {
         List<Zone> listPZ = new ArrayList<>();
-        Zone pz1 = new Zone(1L, "Zone 1", null, 100);
-        Zone pz2 = new Zone(2L, "Zone 2", null, 200);
+        Zone pz1 = new Zone("Zone 1", 100);
+        Zone pz2 = new Zone("Zone 2",200);
         listPZ.add(pz1);
         listPZ.add(pz2);
 
@@ -80,8 +79,7 @@ class ZoneControllerTest {
 
     @Test
     public void shouldReturnZoneById() throws Exception {
-        //    ParkingSpot ps = new ParkingSpot();
-        Zone pz1 = new Zone("Zone 1", Collections.emptySet(), 100);
+        Zone pz1 = new Zone("Zone 1",  100);
 
         when(zoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
@@ -106,7 +104,7 @@ class ZoneControllerTest {
     @Test
     public void shouldDeleteZone() throws Exception {
 
-        Zone pz1 = new Zone(1L, "Zone 1", null, 100);
+        Zone pz1 = new Zone("Zone 1", 100);
         when(zoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
 
