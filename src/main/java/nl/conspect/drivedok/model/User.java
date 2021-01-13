@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.util.Collections.unmodifiableSet;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
@@ -78,23 +79,24 @@ public class User extends AbstractPersistable<Long> {
     }
 
     public Set<Vehicle> getVehicles() {
-        return vehicles;
+        return unmodifiableSet(vehicles);
     }
 
     public void setVehicles(Set<Vehicle> vehicles) {
         this.vehicles = vehicles;
     }
 
-    public void addVehicle(Vehicle vehicle) {
-        if (getVehicles().contains(vehicle)) {
-            return;
+    public Set<Vehicle> addVehicle(Vehicle vehicle) {
+        if (this.vehicles.add(vehicle)) {
+            vehicle.setUser(this);
         }
-        getVehicles().add(vehicle);
-        vehicle.setUser(this);
+        return getVehicles();
     }
 
-    public void removeVehicle(Vehicle vehicle) {
-        this.getVehicles().remove(vehicle);
-        vehicle.setUser(null);
+    public Set<Vehicle> removeVehicle(Vehicle vehicle) {
+        if (this.vehicles.remove(vehicle)) {
+            vehicle.setUser(null);
+        }
+        return getVehicles();
     }
 }
