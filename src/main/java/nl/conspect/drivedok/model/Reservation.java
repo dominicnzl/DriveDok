@@ -1,12 +1,13 @@
 package nl.conspect.drivedok.model;
 
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
-public class Reservation {
+public class Reservation extends AbstractPersistable<Long> {
 
     @Id
     private Long id;
@@ -44,21 +45,6 @@ public class Reservation {
 
     public void setEnd(LocalDateTime end) {
         this.end = end;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Reservation that = (Reservation) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(start, that.start) &&
-                Objects.equals(end, that.end);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, start, end);
     }
 
     @Override

@@ -1,14 +1,15 @@
 package nl.conspect.drivedok.model;
 
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Objects;
 
 @Entity
-public class ParkingSpot {
+public class ParkingSpot extends AbstractPersistable<Long> {
 
     @Id
     @GeneratedValue
@@ -54,19 +55,6 @@ public class ParkingSpot {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ParkingSpot that = (ParkingSpot) o;
-        return quantity == that.quantity && Objects.equals(id, that.id) && parkingType == that.parkingType;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, parkingType);
     }
 
     @Override

@@ -2,6 +2,7 @@ package nl.conspect.drivedok.model;
 
 import nl.conspect.drivedok.utilities.ParkingTypeComparator;
 import org.hibernate.annotations.SortComparator;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,12 +13,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
 @Entity
-public class Zone {
+public class Zone extends AbstractPersistable<Long> {
 
     @Id
     @GeneratedValue
@@ -80,19 +80,6 @@ public class Zone {
 
     public void setTotalParkingSpots(int totalParkingSpots) {
         this.totalParkingSpots = totalParkingSpots;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Zone that = (Zone) o;
-        return totalParkingSpots == that.totalParkingSpots && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parkingSpots, that.parkingSpots);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, parkingSpots, totalParkingSpots);
     }
 
     @Override

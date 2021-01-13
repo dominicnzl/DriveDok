@@ -1,29 +1,11 @@
 package nl.conspect.drivedok.controllers;
 
-import nl.conspect.drivedok.model.ParkingSpot;
-import nl.conspect.drivedok.model.ParkingType;
-import nl.conspect.drivedok.services.ParkingSpotService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-import java.util.Optional;
-
-import static nl.conspect.drivedok.model.ParkingType.possibleTypes;
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ParkingSpotController.class)
 class ParkingSpotControllerTest {
+/*
+    TODO: Currently not using the controller, so for now this testclass is commented out, will look at this later
 
     @Autowired
     private MockMvc mockMvc;
@@ -81,7 +63,7 @@ class ParkingSpotControllerTest {
                 .andExpect(model().attribute("parkingTypes", possibleTypes()));
     }
 
-    @Test
+    @Disabled
     @DisplayName("""
             Call "/parkingspots/create" and expect to get the parkingspotcreatepage.html template. The attribute 
             "parkingSpot" should be a new ParkingSpot and the attribute "parkingTypes" should be 
@@ -97,7 +79,7 @@ class ParkingSpotControllerTest {
                 .andExpect(model().attribute("parkingTypes", possibleTypes()));
     }
 
-    @Test
+    @Disabled
     @DisplayName("""
             Post to "/parkingspots/save", expect to get parkingspotlistpage.html template. Expect attribute 
             "parkingSpot" to exist and to be a new ParkingSpot.
@@ -124,5 +106,5 @@ class ParkingSpotControllerTest {
                 .andExpect(view().name("parkingspotlistpage"))
                 .andExpect(content().string(containsString("No parkingspots found")))
                 .andDo(print());
-    }
+    }*/
 }

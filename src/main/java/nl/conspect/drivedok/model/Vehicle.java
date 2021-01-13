@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Vehicle {
+public class Vehicle extends AbstractPersistable<Long> {
 
     @Id
     @GeneratedValue
