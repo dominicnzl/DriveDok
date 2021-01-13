@@ -97,5 +97,4 @@ public class User extends AbstractPersistable<Long> {
         this.getVehicles().remove(vehicle);
         vehicle.setUser(null);
     }
-
 }

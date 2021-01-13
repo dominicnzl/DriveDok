@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.exceptions.VehicleNotFoundException;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.VehicleService;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,20 @@ public class VehicleController {
         return "vehiclelistpage";
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping
+    public String createEditpage(Model model) {
+        model.addAttribute("vehicle", new Vehicle());
+        return "vehicleeditpage";
+    }
+
+    @GetMapping("/{id}")
+    public String editpage(Model model, @PathVariable Long id) {
+        final var vehicle = vehicleService.findById(id).orElseThrow(() -> new VehicleNotFoundException(id));
+        model.addAttribute("vehicle", vehicle);
+        return "vehicleeditpage";
+    }
+
+    @DeleteMapping("/{id}")
     public String deleteAndReturnToListPage(@PathVariable Long id) {
         final var returnpage = vehicleService.pageAfterDelete(id);
         vehicleService.findById(id).ifPresent(vehicleService::delete);

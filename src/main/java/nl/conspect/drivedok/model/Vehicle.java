@@ -86,5 +86,4 @@ public class Vehicle extends AbstractPersistable<Long> {
     public void setUser(User user) {
         this.user = user;
     }
-
 }

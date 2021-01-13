@@ -40,20 +40,7 @@ public class UserController {
         return "userlistpage";
     }
 
-    @GetMapping("/{id}")
-    public String editPage(Model model, @PathVariable Long id) {
-        final var user = userService.getById(id);
-        model.addAttribute("user", user);
-        return "usereditpage";
-    }
-
-    @GetMapping("/save")
-    public String createPage(Model model) {
-        model.addAttribute("user", new User());
-        return "usereditpage";
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public String save(Model model, @ModelAttribute User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "usereditpage";
@@ -63,26 +50,39 @@ public class UserController {
         return "userlistpage";
     }
 
-    @GetMapping("/{id}/vehicles/save")
-    public String vehiclesForUser(Model model, @PathVariable Long id) {
-        model.addAttribute("user", userService.getById(id));
+    @GetMapping("/new")
+    public String addNewUserPage(Model model) {
+        model.addAttribute("user", new User());
+        return "usereditpage";
+    }
+
+    @GetMapping("/{id}")
+    public String editPage(Model model, @PathVariable Long id) {
+        final var user = userService.getById(id);
+        model.addAttribute("user", user);
+        return "usereditpage";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(Model model, @PathVariable Long id) {
+        userService.findById(id).ifPresent(userService::delete);
+        model.addAttribute("users", userService.findAll());
+        return "userlistpage";
+    }
+
+    @GetMapping("/{userId}/vehicles/new")
+    public String addNewVehicleToUserPage(Model model, @PathVariable Long userId) {
+        model.addAttribute("user", userService.getById(userId));
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("parkingTypes", possibleTypes());
         return "vehicleeditpage";
     }
 
-    @PostMapping("/{id}/vehicles/save")
-    public String addVehicleToUser(Model model, @PathVariable Long id, @ModelAttribute Vehicle vehicle) {
-        final var user = userService.addVehicleByUserId(id, vehicle);
+    @PostMapping("/{userId}/vehicles")
+    public String addVehicleToUser(Model model, @PathVariable Long userId, @ModelAttribute Vehicle vehicle) {
+        final var user = userService.addVehicleByUserId(userId, vehicle);
         model.addAttribute("user", user);
         return "usereditpage";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String delete(Model model, @PathVariable Long id) {
-        userService.findById(id).ifPresent(userService::delete);
-        model.addAttribute("users", userService.findAll());
-        return "userlistpage";
     }
 
     /* Json controllers */
