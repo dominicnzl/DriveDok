@@ -30,7 +30,7 @@ public class Zone {
 
     @OneToMany(cascade = CascadeType.ALL)
     @SortComparator(ParkingTypeComparator.class)
-    private Set<ParkingSpot> parkingSpots = new TreeSet<ParkingSpot>(new ParkingTypeComparator());;
+    private Set<ParkingSpot> parkingSpots = new TreeSet<>(new ParkingTypeComparator());;
 
     @NotNull
     @Min(value = 1, message = "Your zone should have at least 1 parking spot")

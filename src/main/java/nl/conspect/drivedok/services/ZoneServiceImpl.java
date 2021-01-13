@@ -8,7 +8,6 @@ import nl.conspect.drivedok.repositories.ZoneRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,9 +51,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     private void updateNormalParkingSpots(Zone zone){
         if(null != zone.getParkingSpots()) {
-            Iterator<ParkingSpot> iterator = zone.getParkingSpots().iterator();
-            while (iterator.hasNext()){
-                var parkingSpot = iterator.next();
+            for(ParkingSpot parkingSpot : zone.getParkingSpots()){
                 if (parkingSpot.getParkingType() == ParkingType.NORMAL){
                     parkingSpot.setQuantity(zone.getTotalParkingSpots());
                 }
