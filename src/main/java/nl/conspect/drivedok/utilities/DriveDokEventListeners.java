@@ -1,7 +1,6 @@
 package nl.conspect.drivedok.utilities;
 
 
-import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
@@ -13,7 +12,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 
 @Component
@@ -31,27 +29,17 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//      // createDummyParkingZones();
-//      // createDummyParkingSpots();
+        createDummyZones();
         createDummyUsersAndVehicles();
     }
 
     private void createDummyZones() {
-        var greet = new Zone("Greet", Collections.emptySet(), 10);
-        var piet = new Zone("Piet", Collections.emptySet(), 20);
-        var joop = new Zone("Joop", Collections.emptySet(), 30);
+        var greet = new Zone("Greet",  10);
+        var piet = new Zone("Piet", 20);
+        var joop = new Zone("Joop", 30);
         zoneService.create(greet);
         zoneService.create(piet);
         zoneService.create(joop);
-    }
-
-    private void createDummyParkingSpots() {
-        var plek1 = new ParkingSpot(ParkingType.DISABLED, 0);
-        var plek2 = new ParkingSpot(ParkingType.ELECTRIC, 0);
-        var plek3 = new ParkingSpot(ParkingType.NORMAL, 12);
-        parkingSpotService.create(plek1);
-        parkingSpotService.create(plek2);
-        parkingSpotService.create(plek3);
     }
 
     private void createDummyUsersAndVehicles() {

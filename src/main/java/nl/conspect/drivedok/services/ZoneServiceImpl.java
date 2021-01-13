@@ -17,13 +17,12 @@ public class ZoneServiceImpl implements ZoneService {
 
     private final ZoneRepository zoneRepository;
 
-
     public ZoneServiceImpl(ZoneRepository zoneRepository) {
         this.zoneRepository = zoneRepository;
     }
 
     public List<Zone> findAll(){
-        return zoneRepository.findAll();
+        return  zoneRepository.findAll();
     }
 
     public Optional<Zone> findById(Long id){
@@ -31,12 +30,12 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     public Zone create(Zone zone){
-        setDefaultParkingSpots(zone);
+        setParkingSpotsAtInitiation(zone);
         return zoneRepository.save(zone);
     }
 
     public Zone update(Zone zone) {
-            updateNormalParkingSpots(zone);
+        updateNormalParkingSpots(zone);
         return zoneRepository.save(zone);
     }
 
@@ -44,17 +43,19 @@ public class ZoneServiceImpl implements ZoneService {
         zoneRepository.deleteById(id);
     }
 
-
-    private void setDefaultParkingSpots(Zone zone){
-            zone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, zone.getTotalParkingSpots()));
-            zone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
-            zone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
+    private void setParkingSpotsAtInitiation(Zone zone){
+        zone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
+        zone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
+        zone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, zone.getTotalParkingSpots()));
     }
 
     private void updateNormalParkingSpots(Zone zone){
         if(null != zone.getParkingSpots()) {
-            ParkingSpot spot = zone.getParkingSpots().iterator().next();
-            spot.setQuantity(zone.getTotalParkingSpots());
+            for(ParkingSpot parkingSpot : zone.getParkingSpots()){
+                if (parkingSpot.getParkingType() == ParkingType.NORMAL){
+                    parkingSpot.setQuantity(zone.getTotalParkingSpots());
+                }
+            }
         }
     }
 }

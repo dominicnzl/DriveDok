@@ -1,5 +1,8 @@
 package nl.conspect.drivedok.model;
 
+import nl.conspect.drivedok.utilities.ParkingTypeComparator;
+import org.hibernate.annotations.SortComparator;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,9 +12,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 public class Zone {
@@ -26,7 +29,8 @@ public class Zone {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<ParkingSpot> parkingSpots = new LinkedHashSet<>();
+    @SortComparator(ParkingTypeComparator.class)
+    private Set<ParkingSpot> parkingSpots = new TreeSet<>(new ParkingTypeComparator());;
 
     @NotNull
     @Min(value = 1, message = "Your zone should have at least 1 parking spot")
@@ -35,16 +39,8 @@ public class Zone {
     public Zone() {
     }
 
-    public Zone(String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
+    public Zone(String name, int totalParkingSpots){
         this.name = name;
-        this.parkingSpots = parkingSpots;
-        this.totalParkingSpots = totalParkingSpots;
-    }
-
-    public Zone(Long id, String name, Set<ParkingSpot> parkingSpots, int totalParkingSpots) {
-        this.id = id;
-        this.name = name;
-        this.parkingSpots = parkingSpots;
         this.totalParkingSpots = totalParkingSpots;
     }
 
@@ -69,7 +65,9 @@ public class Zone {
     }
 
     public void setParkingSpots(Set<ParkingSpot> parkingSpots) {
-        this.parkingSpots = parkingSpots;
+        Set<ParkingSpot> parkingSpots1 = new TreeSet<>(new ParkingTypeComparator());
+        parkingSpots.forEach(parkingSpot -> parkingSpots1.add(parkingSpot));
+        this.parkingSpots = parkingSpots1;
     }
 
     public void addParkingSpot(ParkingSpot parkingSpot){
