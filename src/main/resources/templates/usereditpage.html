@@ -65,9 +65,7 @@
             </tbody>
         </table>
         <div th:unless="*{null == id}">
-            <form action="#" th:action="@{/users/{id}/vehicles (id = ${user.id})}" method="post">
-                <input type="submit" class="btn btn-primary" value="Add Vehicle">
-            </form>
+            <a href="#" th:href="@{/users/{id}/vehicles/new (id = ${user.id})}" class="btn btn-primary">Add Vehicle</a>
         </div>
     </div>
     <div class="container-sm">

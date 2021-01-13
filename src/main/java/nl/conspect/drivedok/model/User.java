@@ -111,8 +111,4 @@ public class User {
     public int hashCode() {
         return getClass().hashCode();
     }
-
-    public boolean isNew() {
-        return null == this.getId() && null == this.getName() && null == this.getEmail() && null == this.getPassword();
-    }
 }

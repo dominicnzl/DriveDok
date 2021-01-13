@@ -45,12 +45,15 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "usereditpage";
         }
-        if (user.isNew()) {
-            return editPage(model, -1L);
-        }
         userService.createOrUpdate(user);
         model.addAttribute("users", userService.findAll());
         return "userlistpage";
+    }
+
+    @GetMapping("/new")
+    public String addNewUserPage(Model model) {
+        model.addAttribute("user", new User());
+        return "usereditpage";
     }
 
     @GetMapping("/{id}")
@@ -67,14 +70,16 @@ public class UserController {
         return "userlistpage";
     }
 
+    @GetMapping("/{userId}/vehicles/new")
+    public String addNewVehicleToUserPage(Model model, @PathVariable Long userId) {
+        model.addAttribute("user", userService.getById(userId));
+        model.addAttribute("vehicle", new Vehicle());
+        model.addAttribute("parkingTypes", possibleTypes());
+        return "vehicleeditpage";
+    }
+
     @PostMapping("/{userId}/vehicles")
     public String addVehicleToUser(Model model, @PathVariable Long userId, @ModelAttribute Vehicle vehicle) {
-        if (vehicle.isNew()) {
-            model.addAttribute("user", userService.getById(userId));
-            model.addAttribute("vehicle", new Vehicle());
-            model.addAttribute("parkingTypes", possibleTypes());
-            return "vehicleeditpage";
-        }
         final var user = userService.addVehicleByUserId(userId, vehicle);
         model.addAttribute("user", user);
         return "usereditpage";
