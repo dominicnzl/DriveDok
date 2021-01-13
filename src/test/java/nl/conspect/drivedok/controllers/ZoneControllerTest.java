@@ -79,7 +79,6 @@ class ZoneControllerTest {
 
     @Test
     public void shouldReturnZoneById() throws Exception {
-        //    ParkingSpot ps = new ParkingSpot();
         Zone pz1 = new Zone("Zone 1",  100);
 
         when(zoneService.findById(1L))
