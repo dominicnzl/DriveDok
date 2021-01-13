@@ -9,7 +9,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -27,7 +26,6 @@ public class Vehicle extends AbstractPersistable<Long> {
     private ParkingType parkingType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
     @JsonBackReference
     private User user;
 
