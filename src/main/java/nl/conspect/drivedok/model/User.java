@@ -13,7 +13,7 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-public class User {
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue

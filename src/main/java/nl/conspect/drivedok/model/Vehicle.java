@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Vehicle {
+public class Vehicle extends BaseEntity{
 
     @Id
     @GeneratedValue
