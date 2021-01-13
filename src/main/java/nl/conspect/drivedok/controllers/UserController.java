@@ -55,9 +55,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String editPage(Model model, @PathVariable Long id) {
-        final var user = userService.findById(id).orElseGet(User::new);
+        final var user = userService.getById(id);
         model.addAttribute("user", user);
-        model.addAttribute("vehicles", user.getVehicles());
         return "usereditpage";
     }
 
@@ -78,7 +77,6 @@ public class UserController {
         }
         final var user = userService.addVehicleByUserId(userId, vehicle);
         model.addAttribute("user", user);
-        model.addAttribute("vehicles", user.getVehicles());
         return "usereditpage";
     }
 
