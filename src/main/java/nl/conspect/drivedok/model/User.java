@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-public class User extends BaseEntity{
+public class User extends AbstractPersistable<Long> {
 
     @Id
     @GeneratedValue

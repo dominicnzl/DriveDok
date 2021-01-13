@@ -2,6 +2,7 @@ package nl.conspect.drivedok.model;
 
 import nl.conspect.drivedok.utilities.ParkingTypeComparator;
 import org.hibernate.annotations.SortComparator;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Entity
-public class Zone extends BaseEntity{
+public class Zone extends AbstractPersistable<Long> {
 
     @Id
     @GeneratedValue

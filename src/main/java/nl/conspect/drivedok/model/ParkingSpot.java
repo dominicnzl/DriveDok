@@ -1,5 +1,7 @@
 package nl.conspect.drivedok.model;
 
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -7,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class ParkingSpot extends BaseEntity{
+public class ParkingSpot extends AbstractPersistable<Long> {
 
     @Id
     @GeneratedValue

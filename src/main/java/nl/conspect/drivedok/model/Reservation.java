@@ -1,11 +1,13 @@
 package nl.conspect.drivedok.model;
 
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
-public class Reservation extends BaseEntity{
+public class Reservation extends AbstractPersistable<Long> {
 
     @Id
     private Long id;
