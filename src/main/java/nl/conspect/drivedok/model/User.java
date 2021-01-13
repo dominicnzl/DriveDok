@@ -96,19 +96,4 @@ public class User {
         this.getVehicles().remove(vehicle);
         vehicle.setUser(null);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) {
-            return false;
-        }
-        User other = (User) o;
-        return id != null && id.equals(other.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
