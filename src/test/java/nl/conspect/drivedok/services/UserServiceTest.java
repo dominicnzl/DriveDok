@@ -67,7 +67,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Change the name for user1 and update. Expect the subsequent found User to have the updated name")
-    void update() {
+    void createOrUpdate() {
         var toos = userService.getById(user1.getId());
         assertEquals("Toos", toos.getName());
         toos.setName("Tante Toos");
@@ -75,6 +75,17 @@ class UserServiceTest {
 
         var tanteToos = userService.getById(user1.getId());
         assertEquals("Tante Toos", tanteToos.getName());
+    }
+
+    @Test
+    @DisplayName("Change the password for user2 and update. Expect the updated user to have the new password")
+    void update() {
+        var miep = userService.getById(user2.getId());
+        assertEquals("zomer123", miep.getPassword());
+        miep.setPassword("qwerty");
+        var updatedMiep = userService.update(miep.getId(), miep);
+
+        assertEquals("qwerty", updatedMiep.getPassword());
     }
 
     @Test
@@ -119,5 +130,11 @@ class UserServiceTest {
         var nonNullUser = userService.getById(user1.getId());
         assertNotNull(nonNullUser);
         assertEquals(user1, nonNullUser);
+    }
+
+    @Test
+    @DisplayName("Calling getById will null should throw a UserNotFoundException")
+    void getByIdWithNull() {
+        assertThrows(UserNotFoundException.class, () -> userService.getById(null));
     }
 }

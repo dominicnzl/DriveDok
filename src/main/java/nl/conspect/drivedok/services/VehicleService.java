@@ -1,8 +1,10 @@
 package nl.conspect.drivedok.services;
 
+import nl.conspect.drivedok.exceptions.VehicleNotFoundException;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.repositories.VehicleRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +30,24 @@ public class VehicleService {
         return vehicleRepository.findById(id);
     }
 
-    public Vehicle create(Vehicle vehicle) {
+    @NonNull
+    public Vehicle getById(Long id) throws VehicleNotFoundException {
+        return Optional.ofNullable(id)
+                .flatMap(this::findById)
+                .orElseThrow(() -> new VehicleNotFoundException(id));
+    }
+
+    public Vehicle createOrUpdate(Vehicle vehicle) {
         return vehicleRepository.save(vehicle);
     }
 
-    public Vehicle update(Vehicle vehicle) {
-        return vehicleRepository.save(vehicle);
+    public Vehicle update(Long id, Vehicle newVehicle) {
+        var vehicle = getById(id);
+        vehicle.setName(newVehicle.getName());
+        vehicle.setLicencePlate(newVehicle.getLicencePlate());
+        vehicle.setUser(newVehicle.getUser());
+        vehicle.setParkingType(newVehicle.getParkingType());
+        return createOrUpdate(vehicle);
     }
 
     public void deleteById(Long id) {
