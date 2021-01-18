@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <title th:text="Welcome">Welcome</title>
+    <title>Welcome</title>
 </head>
 <body>
 <div class="container">
@@ -30,14 +30,14 @@
                     <div>
                         <tbody>
                         <div th:each="zone : ${zones}">
-                            <a th:href="@{/zone/{id}(id=${zone.id})}">
+                            <a th:href="@{/zones/{id}(id=${zone.id})}">
                                 <span th:text="${zone.name}"></span>
                             </a>
-                            <a th:href="@{'/zone/' + ${zone.id}}">
+                            <a th:href="@{'/zones/' + ${zone.id}}">
                                 <span th:text="${zone.totalParkingSpots}"></span>
                             </a>
                             <a>
-                                <form th:action="@{/zone/delete/{id}(id=${zone.id})}"
+                                <form th:action="@{/zones/delete/{id}(id=${zone.id})}"
                                       th:object="${zone}"
                                       method="get"
                                       value="delete zone">
@@ -61,7 +61,7 @@
         <div class="col">
         </div>
         <div class="col">
-            <div> <button onclick="location.href='/zone/create'">Create a new DriveDok Zone</button></div>
+            <div> <button onclick="location.href='/zones/create'">Create a new DriveDok Zone</button></div>
         </div>
         <div class="col">
         </div>

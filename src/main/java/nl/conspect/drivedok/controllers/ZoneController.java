@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("zone")
+@RequestMapping("zones")
 public class ZoneController {
 
     private final ZoneService zoneService;
@@ -22,23 +22,23 @@ public class ZoneController {
         this.zoneService = zoneService;
     }
 
-    @GetMapping("/home")
+    @GetMapping
     public String showHomePage(Model model){
         model.addAttribute("zones", zoneService.findAll());
-        return "homepage";
+        return "zonehome";
     }
 
     @GetMapping("/create")
     public String showZoneForm(Model model, Zone zone) {
         model.addAttribute("zone", zone);
-        return "createzoneform";
+        return "zonecreateform";
     }
 
     @PostMapping("/create")
     public String saveZone(Model model, @Valid Zone zone,
                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            return "createzoneform";
+            return "zonecreateform";
         }
         zoneService.create(zone);
         model.addAttribute("zone", zone);
@@ -60,7 +60,7 @@ public class ZoneController {
     public String deleteZone(Model model, @PathVariable Long id){
         zoneService.deleteById(id);
         model.addAttribute("zones", zoneService.findAll());
-        return "homepage";
+        return "zonehome";
     }
 
     @GetMapping("/{id}")
