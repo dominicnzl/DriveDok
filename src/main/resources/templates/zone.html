@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,34 +7,40 @@
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <title th:text="|PZ ${zone.name} |">Zone</title>
 </head>
-<body>
-<header><img src="logo.png" th:src="@{/img/quickLogo.png}" alt="logo"></header>
+<body class="d-flex h-100 text-center">
 <div class="container">
-    <div th:object="${zone}">
-        <h2>This is your DriveDok Zone:</h2>
-        <p th:text="|DriveDok Zone: *{name}|">filler text</p>
-        <p th:text="|has *{totalParkingSpots} parking spots.|">filler number</p>
-        <br><br>
+    <div class="starter-template text-center py-3 px-3">
+        <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy">
+    </div>
+    <section class="album py-3 bg-light" th:object="${zone}">
+        <div class="album py-3 bg-light">
+            <p th:text="|Your Zone *{name} has *{totalParkingSpots} parking spots:|"></p>
+        </div>
 
-        <form action="#" th:action="@{/zones/update}" th:object="${zone}" th:method="post">
+        <form action="#" class="album py-3 bg-light" th:action="@{/zones/update}"
+                                            th:object="${zone}" th:method="post">
             <input type="hidden" th:field="*{id}">
             <input type="text" th:field="*{name}" th:placeholder="*{name}">
             <input type="number" th:field="*{totalParkingSpots}" th:placeholder="*{totalParkingSpots}">
 
-            <br><br>
-            <div th:each="spot : *{parkingSpots}">
-                <span th:text="${spot.quantity}"></span>
-                <span th:text="| ${spot.parkingType} spots |"></span>
-                </p>
+            <div class="album py-3 bg-light">
+                <div th:each="spot : *{parkingSpots}">
+                    <span th:text="${spot.quantity}"></span>
+                    <span th:text="| ${spot.parkingType} spots |"></span>
+                </div>
             </div>
+
             <input type="hidden" th:field="*{parkingSpots}">
-            <button type="submit" value="Update">Update</button>
+            <div class="album py-5 bg-light">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
         </form>
-        <button onclick="location.href='/zones'">Go to overview</button>
-    </div>
+    </section>
+    <button class="btn btn-warning" onclick="location.href='/zones'">Go to overview</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
+
 </body>
 </html>
