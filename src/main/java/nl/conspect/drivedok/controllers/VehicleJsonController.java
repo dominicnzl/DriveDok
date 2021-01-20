@@ -36,7 +36,7 @@ public class VehicleJsonController {
 
     @PostMapping
     public ResponseEntity<Vehicle> create(@RequestBody Vehicle vehicle) {
-        return ResponseEntity.ok(vehicleService.createOrUpdate(vehicle));
+        return ResponseEntity.ok(vehicleService.save(vehicle));
     }
 
     @PutMapping("/{id}")

@@ -40,7 +40,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "usereditpage";
         }
-        userService.createOrUpdate(user);
+        userService.save(user);
         model.addAttribute("users", userService.findAll());
         return "userlistpage";
     }

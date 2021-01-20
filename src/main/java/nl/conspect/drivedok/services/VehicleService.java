@@ -37,7 +37,7 @@ public class VehicleService {
                 .orElseThrow(() -> new VehicleNotFoundException(id));
     }
 
-    public Vehicle createOrUpdate(Vehicle vehicle) {
+    public Vehicle save(Vehicle vehicle) {
         return vehicleRepository.save(vehicle);
     }
 
@@ -47,7 +47,7 @@ public class VehicleService {
         vehicle.setLicencePlate(newVehicle.getLicencePlate());
         vehicle.setUser(newVehicle.getUser());
         vehicle.setParkingType(newVehicle.getParkingType());
-        return createOrUpdate(vehicle);
+        return save(vehicle);
     }
 
     public void deleteById(Long id) {

@@ -61,7 +61,7 @@ class UserServiceTest {
     @DisplayName("Expect findAll() to return a list with size 3 after new User has been created")
     void create() {
         var newUser = new User("Bep", "xyz@abc.nl", "hallo123", Collections.emptySet());
-        userService.createOrUpdate(newUser);
+        userService.save(newUser);
         assertEquals(3, userService.findAll().size());
     }
 
@@ -71,7 +71,7 @@ class UserServiceTest {
         var toos = userService.getById(user1.getId());
         assertEquals("Toos", toos.getName());
         toos.setName("Tante Toos");
-        userService.createOrUpdate(toos);
+        userService.save(toos);
 
         var tanteToos = userService.getById(user1.getId());
         assertEquals("Tante Toos", tanteToos.getName());

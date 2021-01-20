@@ -54,9 +54,9 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
         );
         var sjaak = new User("Sjaak", "sjaak@email.nl", "password123");
         sjaaksVehicles.forEach(sjaak::addVehicle);
-        userService.createOrUpdate(sjaak);
+        userService.save(sjaak);
         var pien = new User("Pien", "pien@email.nl", "zomer2020");
         piensVehicles.forEach(pien::addVehicle);
-        userService.createOrUpdate(pien);
+        userService.save(pien);
     }
 }

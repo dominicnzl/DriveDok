@@ -60,7 +60,7 @@ class VehicleServiceTest {
     @DisplayName("Assert initial findAll() to return empty list. Expect subsequent findAll().size() to be exactly 1 after create()")
     void create() {
         assertTrue(vehicleService.findAll().isEmpty());
-        vehicleService.createOrUpdate(new Vehicle());
+        vehicleService.save(new Vehicle());
         assertEquals(1, vehicleService.findAll().size());
     }
 
@@ -75,7 +75,7 @@ class VehicleServiceTest {
         assertEquals(ParkingType.DISABLED, beforeUpdate.getParkingType());
 
         beforeUpdate.setParkingType(ParkingType.ELECTRIC);
-        vehicleService.createOrUpdate(beforeUpdate);
+        vehicleService.save(beforeUpdate);
         final var afterUpdate = vehicleService.findById(vehicle.getId()).orElse(null);
         assertNotNull(afterUpdate);
         assertEquals(ParkingType.ELECTRIC, vehicleService.findById(vehicle.getId()).map(Vehicle::getParkingType).orElse(null));
