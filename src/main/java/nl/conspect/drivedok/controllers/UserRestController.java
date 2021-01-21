@@ -16,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
@@ -54,16 +53,6 @@ public class UserRestController {
         var createdUser = userService.save(user);
         var uri = builder.path("/api/users/{id}").buildAndExpand(createdUser.getId()).toUri();
         return created(uri).body(createdUser);
-    }
-
-    @PutMapping
-    public ResponseEntity<User> update(@RequestBody User user) {
-        return Optional.ofNullable(user)
-                .map(User::getId)
-                .flatMap(userService::findById)
-                .map(u -> userService.update(u.getId(), user))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> notFound().build());
     }
 
     @PutMapping("/{id}")
