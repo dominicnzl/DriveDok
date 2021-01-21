@@ -34,6 +34,10 @@ public class UserRestController {
         this.userService = userService;
     }
 
+    private boolean isUserFound(Long id) {
+        return userService.findById(id).isPresent();
+    }
+
     @GetMapping
     public ResponseEntity<UserList> findAllUsers() {
         var userList = new UserList(userService.findAll());
@@ -64,18 +68,21 @@ public class UserRestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
-        return ok(userService.update(id, user));
+        return isUserFound(id) ? ok(userService.update(id, user)) : notFound().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> partiallyUpdate(@PathVariable Long id, @RequestBody Map<String, String> properties) {
-        return ok(userService.updatePartially(id, properties));
+    public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody Map<String, String> properties) {
+        return isUserFound(id) ? ok(userService.updatePartially(id, properties)) : notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userService.deleteById(id);
-        return noContent().build();
+        if (isUserFound(id)) {
+            userService.deleteById(id);
+            return noContent().build();
+        }
+        return notFound().build();
     }
 
     static class UserList {
