@@ -34,8 +34,8 @@
                             th:text="${type.toString()}"></option>
                 </select>
             </div>
-            <input type="submit" th:value="Save">
-            <input type="reset" th:value="Reset">
+            <input type="submit" th:value="Save" class="btn btn-primary">
+            <input type="reset" th:value="Reset" class="btn btn-warning">
         </form>
         <a href="#" th:href="@{/users/{id} (id = ${user.id})}">Back to User</a>
     </div>

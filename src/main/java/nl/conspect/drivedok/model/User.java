@@ -25,7 +25,7 @@ public class User extends AbstractPersistable<Long> {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 64, message = "Name should have between 1 and 64 characters")
+    @Size(min = 1, max = 64, message = "Name should be between 1 and 64 characters")
     private String name;
 
     @Email
