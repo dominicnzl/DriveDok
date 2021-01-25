@@ -34,6 +34,7 @@ public class User extends AbstractPersistable<Long> {
     private String email;
 
     @NotNull
+    @Size(min = 4, message = "Password should be at least 4 characters")
     @Column(nullable = false)
     private String password; // TODO: 02/12/2020 should probably not be a String but a Char[]
 
