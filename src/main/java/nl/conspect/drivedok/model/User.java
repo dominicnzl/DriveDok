@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +23,14 @@ public class User extends AbstractPersistable<Long> {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotNull
+    @Size(min = 1, max = 64, message = "Name should have between 1 and 64 characters")
     private String name;
+
+    @Email
     private String email;
+
     private String password; // TODO: 02/12/2020 should probably not be a String but a Char[]
     @OneToMany(mappedBy = "user",
             cascade = ALL,

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static nl.conspect.drivedok.model.ParkingType.possibleTypes;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String save(Model model, @ModelAttribute User user, BindingResult bindingResult) {
+    public String save(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "usereditpage";
         }
@@ -79,8 +80,17 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/vehicles")
-    public String addVehicleToUser(Model model, @PathVariable Long userId, @ModelAttribute Vehicle vehicle) {
-        final var user = userService.addVehicleByUserId(userId, vehicle);
+    public String addVehicleToUser(Model model,
+                                   @PathVariable Long userId,
+                                   @ModelAttribute @Valid Vehicle vehicle,
+                                   BindingResult bindingResult) {
+        var user = userService.getById(userId);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", user);
+            model.addAttribute("parkingTypes", possibleTypes());
+            return "vehicleeditpage";
+        }
+        user = userService.addVehicleByUserId(userId, vehicle);
         model.addAttribute("user", user);
         return "usereditpage";
     }

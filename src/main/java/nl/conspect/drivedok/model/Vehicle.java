@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Vehicle extends AbstractPersistable<Long> {
@@ -18,10 +20,15 @@ public class Vehicle extends AbstractPersistable<Long> {
     @GeneratedValue
     private Long id;
 
+    @NotNull
+    @Size(min = 1, max = 64, message = "Name should be between 1 and 64 characters")
     private String name;
 
+    @NotNull
+    @Size(min = 6, max = 8, message = "Licence plate should be between 6 and 8 characters")
     private String licencePlate;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private ParkingType parkingType;
 

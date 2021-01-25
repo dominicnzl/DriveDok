@@ -17,6 +17,9 @@
     <div class="container-sm">
         <h1 th:text="${user.name}">User</h1>
         <form action="#" th:action="@{/users}" th:object="${user}" method="post">
+            <div th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
+            </div>
             <div class="mb-3">
                 <label for="userName" class="form-label">Name</label>
                 <input type="text" class="form-control" id="userName" th:field="${user.name}">
@@ -40,7 +43,7 @@
         </form>
     </div>
     <div class="container" th:object="${user}">
-            <h1 th:text="*{null == name} ? |Vehicles| : |*{name}'s Vehicles|">Vehicles</h1>
+        <h1 th:text="*{null == name} ? |Vehicles| : |*{name}'s Vehicles|">Vehicles</h1>
         <table class="table">
             <thead>
             <tr>
@@ -52,7 +55,8 @@
             </thead>
             <tbody>
             <tr th:each="vehicle : *{vehicles}">
-                <td><a href="#" th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}" th:text="${vehicle.name}">Vehicle name</a></td>
+                <td><a href="#" th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
+                       th:text="${vehicle.name}">Vehicle name</a></td>
                 <td th:text="${vehicle.licencePlate}"></td>
                 <td th:text="${vehicle.parkingType}"></td>
                 <td>
