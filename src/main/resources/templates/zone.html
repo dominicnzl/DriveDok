@@ -6,8 +6,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <title th:text="|PZ ${zone.name} |">Zone</title>
 </head>
 <body class="d-flex h-100 text-center">
@@ -16,27 +14,36 @@
         <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy" onclick="location.href='/zones'">
     </div>
     <section class="album py-3 bg-light" th:object="${zone}">
-        <div class="album py-3 bg-light">
+        <div>
             <p th:text="|Your Zone *{name} has |">
             <p th:text="|*{totalParkingSpots}|" id="totalSpots"></p>
             <p th:text="|parking spots:|"></p>
         </div>
+        <form action="#" th:action="@{/zones/update}" th:object="${zone}" method="post">
+            <input type="hidden" th:field="*{id}">
 
-        <div th:each="spot : *{parkingSpots}">
-                <input type="text" th:value="${spot.quantity}"
-                       th:id="${spot.parkingType}"></input>
-                <span th:text="| ${spot.parkingType} spots |" >></span>
+            <div th:each="spot : *{parkingSpots}">
+                <data th:text="${spot.quantity}" th:value="${spot.quantity}" th:id="${spot.parkingType}"
+                      th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"></data>
+                <data th:text="| ${spot.parkingType} spots |"
+                      th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"></data>
+
+                <input type="text" th:value="${spot.quantity}" th:id="${spot.parkingType}"
+                       th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"></input>
+                <span th:text="| ${spot.parkingType} spots |"
+                      th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"></span>
+            </div>
+            <input id="submit-new-period" type="button"  value="update"> UPDATE</input>
+        </form>
+        <div class="album py-3 bg-light">
+            <button class="btn btn-warning" onclick="location.href='/zones'">Go to overview</button>
         </div>
-<div class="album py-3 bg-light">
-        <button class="btn btn-warning" onclick="location.href='/zones'">Go to overview</button>
-</div>
 
         <script th:inline="javascript">
         /*<![CDATA[*/
-
-            var normal = parseInt((document.getElementById("NORMAL").value));
-            var disabled = parseInt((document.getElementById("DISABLED").value));
-            var electric = parseInt((document.getElementById("ELECTRIC").value));
+            var normal =   parseInt(document.getElementById("NORMAL").innerHTML);
+            var disabled = parseInt(document.getElementById("DISABLED").value);
+            var electric = parseInt(document.getElementById("ELECTRIC").value);
 
             var parkingType;
             var prev;
@@ -47,6 +54,7 @@
             .on('focusin', 'input', function(){
                $(this).data('val', $(this).val());
                 prev = $(this).val();
+
             })
             .on('change','input', function(){
                 parkingType = $(this)[0].attributes[2].nodeValue;
@@ -55,11 +63,17 @@
 
                 if(parkingType == 'DISABLED' || parkingType == 'ELECTRIC'){
                    normal += difference;
-                   document.getElementById("NORMAL").value = normal;
+                   normal = parseInt(normal);
+                   document.getElementById("NORMAL").innerHTML = normal;
                    prev = $(this).val();
+                   /*[[${zone.parkingSpots[2].quantity}]]*/ = current;
+                   console.log(/*[[${zone.parkingSpots[2].quantity}]]*/ );
                 }
+                console.log($(this).val());
 
             });
+
+
         </script>
     </section>
 </div>
