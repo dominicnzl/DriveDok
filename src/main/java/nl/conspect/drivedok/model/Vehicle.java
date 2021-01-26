@@ -3,6 +3,7 @@ package nl.conspect.drivedok.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Vehicle extends AbstractPersistable<Long> {
@@ -18,11 +21,19 @@ public class Vehicle extends AbstractPersistable<Long> {
     @GeneratedValue
     private Long id;
 
+    @NotNull
+    @Size(min = 1, max = 64, message = "Name should be between 1 and 64 characters")
+    @Column(nullable = false, length = 64)
     private String name;
 
+    @NotNull
+    @Size(min = 6, max = 8, message = "Licence plate should be between 6 and 8 characters")
+    @Column(nullable = false, length = 8)
     private String licencePlate;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ParkingType parkingType;
 
     @ManyToOne(fetch = FetchType.LAZY)

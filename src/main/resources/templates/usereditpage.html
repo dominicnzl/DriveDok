@@ -16,31 +16,35 @@
     </nav>
     <div class="container-sm">
         <h1 th:text="${user.name}">User</h1>
-        <form action="#" th:action="@{/users}" th:object="${user}" method="post">
+        <form action="#" th:action="@{/users}" th:object="${user}" method="post" id="saveuserform">
+            <div th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
+            </div>
             <div class="mb-3">
                 <label for="userName" class="form-label">Name</label>
                 <input type="text" class="form-control" id="userName" th:field="${user.name}">
             </div>
             <div class="mb-3">
                 <label for="userEmail" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="userEmail" th:field="${user.email}">
+                <input type="email" class="form-control" id="userEmail" th:field="${user.email}" placeholder="name@example.nl">
             </div>
             <div class="mb-3">
                 <label for="userPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="userPassword" th:field="${user.password}">
+                <input type="password" class="form-control" id="userPassword" th:field="${user.password}" placeholder="Password">
             </div>
             <input type="hidden" th:field="${user.id}">
             <input type="hidden" th:field="${user.vehicles}">
-            <input type="submit" th:value="Save" class="btn btn-primary">
-            <input type="reset" th:value="Reset" class="btn btn-warning">
         </form>
         <form th:unless="${null == user.id}" action="#" th:action="@{/users/{id} (id=${user.id})}" th:object="${user}"
-              method="post" th:method="delete">
-            <input type="submit" th:value="Delete" class="btn btn-danger">
-        </form>
+              method="post" th:method="delete" id="deleteuserform"></form>
+        <button form="saveuserform" type="submit" class="btn btn-primary">Save</button>
+        <button form="saveuserform" type="reset" class="btn btn-warning">Reset</button>
+        <button th:disabled="${null == user.id ?: false}" type="submit" form="deleteuserform" class="btn btn-danger">
+            Delete
+        </button>
     </div>
     <div class="container" th:object="${user}">
-            <h1 th:text="*{null == name} ? |Vehicles| : |*{name}'s Vehicles|">Vehicles</h1>
+        <h1 th:text="*{null == name} ? |Vehicles| : |*{name}'s Vehicles|">Vehicles</h1>
         <table class="table">
             <thead>
             <tr>
@@ -52,7 +56,8 @@
             </thead>
             <tbody>
             <tr th:each="vehicle : *{vehicles}">
-                <td><a href="#" th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}" th:text="${vehicle.name}">Vehicle name</a></td>
+                <td><a href="#" th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
+                       th:text="${vehicle.name}">Vehicle name</a></td>
                 <td th:text="${vehicle.licencePlate}"></td>
                 <td th:text="${vehicle.parkingType}"></td>
                 <td>
