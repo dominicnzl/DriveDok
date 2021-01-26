@@ -3,10 +3,14 @@ package nl.conspect.drivedok.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +24,20 @@ public class User extends AbstractPersistable<Long> {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotNull
+    @Size(min = 1, max = 64, message = "Name should be between 1 and 64 characters")
+    @Column(nullable = false, length = 64)
     private String name;
+
+    @Email
     private String email;
+
+    @NotNull
+    @Size(min = 4, message = "Password should be at least 4 characters")
+    @Column(nullable = false)
     private String password; // TODO: 02/12/2020 should probably not be a String but a Char[]
+
     @OneToMany(mappedBy = "user",
             cascade = ALL,
             orphanRemoval = true,

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static nl.conspect.drivedok.model.ParkingType.possibleTypes;
 
 @Controller
 @RequestMapping("/vehicles")
@@ -37,6 +38,10 @@ public class VehicleController {
     @GetMapping("/{id}")
     public String editpage(Model model, @PathVariable Long id) {
         final var vehicle = vehicleService.findById(id).orElseThrow(() -> new VehicleNotFoundException(id));
+        if (null != vehicle.getUser()) {
+            model.addAttribute("user", vehicle.getUser());
+        }
+        model.addAttribute("parkingTypes", possibleTypes());
         model.addAttribute("vehicle", vehicle);
         return "vehicleeditpage";
     }
