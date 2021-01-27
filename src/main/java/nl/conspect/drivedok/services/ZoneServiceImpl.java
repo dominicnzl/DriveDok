@@ -35,7 +35,6 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     public Zone update(Zone zone) {
-        updateNormalParkingSpots(zone);
         return zoneRepository.save(zone);
     }
 
@@ -49,13 +48,4 @@ public class ZoneServiceImpl implements ZoneService {
         zone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, zone.getTotalParkingSpots()));
     }
 
-    private void updateNormalParkingSpots(Zone zone){
-        if(null != zone.getParkingSpots()) {
-            for(ParkingSpot parkingSpot : zone.getParkingSpots()){
-                if (parkingSpot.getParkingType() == ParkingType.NORMAL){
-                    parkingSpot.setQuantity(zone.getTotalParkingSpots());
-                }
-            }
-        }
-    }
 }
