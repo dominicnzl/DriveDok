@@ -1,7 +1,6 @@
 package nl.conspect.drivedok.services;
 
 import nl.conspect.drivedok.model.ParkingType;
-import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.repositories.VehicleRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +14,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
@@ -105,30 +103,5 @@ class VehicleServiceTest {
 
         vehicleService.delete(vehicle);
         assertTrue(vehicleService.findAll().isEmpty());
-    }
-
-    @Test
-    @DisplayName("Controller should redirect to /vehicles if no vehicleId is passed")
-    void pageAfterDeleteWhenNoVehicleId() {
-        assertEquals("redirect:/vehicles", vehicleService.pageAfterDelete(null));
-    }
-
-    @Test
-    @DisplayName("Persist a single User and his Vehicle. Expect pageAfterDelete to redirect to the editpage for that User")
-    void pageAfterDeleteWhenUserFound() {
-        final var vehicle = new Vehicle("e", "567-890", ParkingType.NORMAL);
-        final var user = new User("Fred", "fred@email.nl", "ww123");
-        user.addVehicle(vehicle);
-        final var id = testEntityManager.persistAndGetId(user).toString();
-        assertEquals("redirect:/users/".concat(id), vehicleService.pageAfterDelete(vehicle.getId()));
-    }
-
-    @Test
-    @DisplayName("Persist a vehicle without a User. Expect pageAfterDelete to redirect to /vehicles")
-    void pageAfterDeleteWhenUserNotFound() {
-        final var vehicle = new Vehicle("f", "678-901", ParkingType.DISABLED);
-        testEntityManager.persist(vehicle);
-        assertNull(vehicle.getUser());
-        assertEquals("redirect:/vehicles", vehicleService.pageAfterDelete(vehicle.getId()));
     }
 }

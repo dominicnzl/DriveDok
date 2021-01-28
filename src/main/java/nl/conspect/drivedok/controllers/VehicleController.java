@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.exceptions.VehicleNotFoundException;
+import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.VehicleService;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static nl.conspect.drivedok.model.ParkingType.possibleTypes;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -53,9 +56,22 @@ public class VehicleController {
         return "vehicleeditpage";
     }
 
+    /**
+     * Determine the correct landing page to redirect to based on the vehicle id: if a vehicle with that Id is found,
+     * and that vehicle has an associated User, redirect to that User's editpage. Otherwise redirect to the vehicle
+     * listpage. Delete the vehicle if present.
+     * @param id The VehicleId
+     * @return the appropriate Thymeleaf template uri after Vehicle deletion attempt
+     */
     @DeleteMapping("/{id}")
     public String deleteAndReturnToListPage(@PathVariable Long id) {
-        final var returnpage = vehicleService.pageAfterDelete(id);
+        final var returnpage = null == id ? "redirect:/vehicles" : Optional.of(id)
+                .flatMap(vehicleService::findById)
+                .map(Vehicle::getUser)
+                .map(User::getId)
+                .map(Objects::toString)
+                .map("redirect:/users/"::concat)
+                .orElse("redirect:/vehicles");
         vehicleService.findById(id).ifPresent(vehicleService::delete);
         return returnpage;
     }
