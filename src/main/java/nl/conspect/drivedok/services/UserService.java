@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -46,20 +45,6 @@ public class UserService {
         user.setName(newUser.getName());
         user.setEmail(newUser.getEmail());
         user.setPassword(newUser.getPassword());
-        return save(user);
-    }
-
-    public User updatePartially(Long id, Map<String, String> properties) {
-        var user = getById(id);
-        if (properties.containsKey("name")) {
-            user.setName(properties.get("name"));
-        }
-        if (properties.containsKey("email")) {
-            user.setEmail(properties.get("email"));
-        }
-        if (properties.containsKey("password")) {
-            user.setPassword(properties.get("password"));
-        }
         return save(user);
     }
 

@@ -1,5 +1,8 @@
 package nl.conspect.drivedok.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
@@ -29,8 +32,11 @@ public class UserRestController {
 
     private final UserService userService;
 
-    public UserRestController(UserService userService) {
+    private final ObjectMapper objectMapper;
+
+    public UserRestController(UserService userService, ObjectMapper objectMapper) {
         this.userService = userService;
+        this.objectMapper = objectMapper;
     }
 
     private boolean isUserFound(Long id) {
@@ -61,17 +67,32 @@ public class UserRestController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody Map<String, String> properties) {
-        return isUserFound(id) ? ok(userService.updatePartially(id, properties)) : notFound().build();
+    public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody String properties)
+            throws JsonProcessingException {
+        if (!isUserFound(id)) {
+            return notFound().build();
+        }
+        User entity = userService.getById(id);
+        JsonNode json = objectMapper.readTree(properties);
+        Optional.ofNullable(json.get("name"))
+                .map(JsonNode::asText)
+                .ifPresent(entity::setName);
+        Optional.ofNullable(json.get("email"))
+                .map(JsonNode::asText)
+                .ifPresent(entity::setEmail);
+        Optional.ofNullable(json.get("password"))
+                .map(JsonNode::asText)
+                .ifPresent(entity::setPassword);
+        return ok(userService.save(entity));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (isUserFound(id)) {
-            userService.deleteById(id);
-            return noContent().build();
+        if (!isUserFound(id)) {
+            return notFound().build();
         }
-        return notFound().build();
+        userService.deleteById(id);
+        return noContent().build();
     }
 
     static class UserList {
