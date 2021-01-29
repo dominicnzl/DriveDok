@@ -39,7 +39,10 @@ class VehicleServiceTest {
     @Test
     @DisplayName("Create 3 vehicles and persist. Expect findAll() to return a list with size 3")
     void findAll() {
-        final var vehicles = List.of(new Vehicle(), new Vehicle(), new Vehicle());
+        final var vehicles = List.of(
+                new Vehicle("a", "123-456", ParkingType.NORMAL),
+                new Vehicle("b", "123-456", ParkingType.ELECTRIC),
+                new Vehicle("c", "123-456", ParkingType.DISABLED));
         vehicles.forEach(testEntityManager::persist);
         assertEquals(3, vehicleService.findAll().size());
     }
@@ -60,7 +63,7 @@ class VehicleServiceTest {
     @DisplayName("Assert initial findAll() to return empty list. Expect subsequent findAll().size() to be exactly 1 after create()")
     void create() {
         assertTrue(vehicleService.findAll().isEmpty());
-        vehicleService.save(new Vehicle());
+        vehicleService.save(new Vehicle("a", "123-456", ParkingType.NORMAL));
         assertEquals(1, vehicleService.findAll().size());
     }
 
