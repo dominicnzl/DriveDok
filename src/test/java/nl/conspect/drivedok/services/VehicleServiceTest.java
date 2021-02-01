@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.services;
 
+import nl.conspect.drivedok.exceptions.VehicleNotFoundException;
 import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
@@ -61,7 +63,7 @@ class VehicleServiceTest {
     @DisplayName("Assert initial findAll() to return empty list. Expect subsequent findAll().size() to be exactly 1 after create()")
     void create() {
         assertTrue(vehicleService.findAll().isEmpty());
-        vehicleService.create(new Vehicle("a", "123-456", ParkingType.NORMAL));
+        vehicleService.save(new Vehicle("a", "123-456", ParkingType.NORMAL));
         assertEquals(1, vehicleService.findAll().size());
     }
 
@@ -76,7 +78,7 @@ class VehicleServiceTest {
         assertEquals(ParkingType.DISABLED, beforeUpdate.getParkingType());
 
         beforeUpdate.setParkingType(ParkingType.ELECTRIC);
-        vehicleService.update(beforeUpdate);
+        vehicleService.save(beforeUpdate);
         final var afterUpdate = vehicleService.findById(vehicle.getId()).orElse(null);
         assertNotNull(afterUpdate);
         assertEquals(ParkingType.ELECTRIC, vehicleService.findById(vehicle.getId()).map(Vehicle::getParkingType).orElse(null));
@@ -130,5 +132,20 @@ class VehicleServiceTest {
         testEntityManager.persist(vehicle);
         assertNull(vehicle.getUser());
         assertEquals("redirect:/vehicles", vehicleService.pageAfterDelete(vehicle.getId()));
+    }
+
+    @Test
+    @DisplayName("Persist a vehicle, getById should return that vehicle")
+    void getById() {
+        final var vehicle = new Vehicle("g", "897-987", ParkingType.NORMAL);
+        Long id = (Long) testEntityManager.persistAndGetId(vehicle);
+        assertNotNull(vehicleService.getById(id));
+        assertEquals(vehicle, vehicleService.getById(id));
+    }
+
+    @Test
+    @DisplayName("Calling getById with null should throw a VehicleNotFoundException")
+    void getByIdWithNull() {
+        assertThrows(VehicleNotFoundException.class, () -> vehicleService.getById(null));
     }
 }
