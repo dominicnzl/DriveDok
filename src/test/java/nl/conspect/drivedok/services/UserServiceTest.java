@@ -133,7 +133,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Calling getById will null should throw a UserNotFoundException")
+    @DisplayName("Calling getById with null should throw a UserNotFoundException")
     void getByIdWithNull() {
         assertThrows(UserNotFoundException.class, () -> userService.getById(null));
     }
