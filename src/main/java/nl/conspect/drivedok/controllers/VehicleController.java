@@ -58,7 +58,7 @@ public class VehicleController {
      * @return the appropriate Thymeleaf template uri after Vehicle deletion attempt
      */
     @DeleteMapping("/{id}")
-    public String deleteAndReturnToListPage(@PathVariable Long id) {
+    public String deleteAndReturnToPage(@PathVariable Long id) {
         final var returnpage = null == id ? "redirect:/vehicles" : Optional.of(id)
                 .flatMap(vehicleService::findById)
                 .map(Vehicle::getUser)

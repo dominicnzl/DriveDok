@@ -29,14 +29,14 @@ class VehicleControllerTest {
     @DisplayName("When delete is called with id null, redirect to /vehicles")
     void idNullThenReturnVehiclesListPage() {
         Mockito.when(vehicleService.findById(null)).thenReturn(Optional.of(new Vehicle()));
-        Assertions.assertEquals("redirect:/vehicles", vehicleController.deleteAndReturnToListPage(null));
+        Assertions.assertEquals("redirect:/vehicles", vehicleController.deleteAndReturnToPage(null));
     }
 
     @Test
     @DisplayName("When delete is called on a vehicle without an associated user, redirect to /vehicles")
     void vehicleWithoutUser() {
         Mockito.when(vehicleService.findById(1L)).thenReturn(Optional.of(new Vehicle()));
-        Assertions.assertEquals("redirect:/vehicles", vehicleController.deleteAndReturnToListPage(1L));
+        Assertions.assertEquals("redirect:/vehicles", vehicleController.deleteAndReturnToPage(1L));
     }
 
     @Test
@@ -47,6 +47,6 @@ class VehicleControllerTest {
         var vehicle = new Vehicle();
         vehicle.setUser(user);
         Mockito.when(vehicleService.findById(1L)).thenReturn(Optional.of(vehicle));
-        Assertions.assertEquals("redirect:/users/123", vehicleController.deleteAndReturnToListPage(1L));
+        Assertions.assertEquals("redirect:/users/123", vehicleController.deleteAndReturnToPage(1L));
     }
 }
