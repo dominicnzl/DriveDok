@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.services;
 
+import nl.conspect.drivedok.exceptions.VehicleNotFoundException;
 import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.repositories.VehicleRepository;
@@ -59,7 +60,7 @@ class VehicleServiceTest {
     @DisplayName("Assert initial findAll() to return empty list. Expect subsequent findAll().size() to be exactly 1 after create()")
     void create() {
         assertTrue(vehicleService.findAll().isEmpty());
-        vehicleService.create(new Vehicle("a", "123-456", ParkingType.NORMAL));
+        vehicleService.save(new Vehicle("a", "123-456", ParkingType.NORMAL));
         assertEquals(1, vehicleService.findAll().size());
     }
 
@@ -74,7 +75,7 @@ class VehicleServiceTest {
         assertEquals(ParkingType.DISABLED, beforeUpdate.getParkingType());
 
         beforeUpdate.setParkingType(ParkingType.ELECTRIC);
-        vehicleService.update(beforeUpdate);
+        vehicleService.save(beforeUpdate);
         final var afterUpdate = vehicleService.findById(vehicle.getId()).orElse(null);
         assertNotNull(afterUpdate);
         assertEquals(ParkingType.ELECTRIC, vehicleService.findById(vehicle.getId()).map(Vehicle::getParkingType).orElse(null));

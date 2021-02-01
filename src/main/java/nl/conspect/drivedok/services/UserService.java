@@ -36,8 +36,16 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User createOrUpdate(User user) {
+    public User save(User user) {
         return userRepository.save(user);
+    }
+
+    public User update(Long id, User newUser) {
+        var user = getById(id);
+        user.setName(newUser.getName());
+        user.setEmail(newUser.getEmail());
+        user.setPassword(newUser.getPassword());
+        return save(user);
     }
 
     public void deleteById(Long id) {
@@ -51,6 +59,7 @@ public class UserService {
     public User addVehicleByUserId(Long id, Vehicle vehicle) {
         var user = findById(id).orElseThrow(() -> new UserNotFoundException(id));
         user.addVehicle(vehicle);
+        vehicle.setUser(user);
         return userRepository.save(user);
     }
 }
