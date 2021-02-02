@@ -28,8 +28,12 @@
             <th:block th:each="spot,i : ${zone.parkingSpots}">
                 <input type="hidden" th:field="*{parkingSpots[__${i.index}__].id}" /><br />
                 <input type="text" th:field="*{parkingSpots[__${i.index}__].parkingType}" /><br />
-                <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}" /><br />
-            </th:block>
+                <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
+                th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"
+                readonly="readonly"/>
+                <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
+                       th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"/>
+            </th:block><br>
 
             <input type="submit"  value="update"></input>
         </form>
