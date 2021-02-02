@@ -2,13 +2,40 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <title>Vehicles</title>
 </head>
 <body>
-this page is yet to be implemented
-
-<div th:each="vehicle : ${vehicles}">
-    <p th:text="${vehicle.name}"></p>
+<div class="container">
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
+        </a>
+    </nav>
+    <h1>Vehicles</h1>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Licence Plate</th>
+            <th>Parking Type</th>
+            <th>User</th>
+        </tr>
+        <tr th:each="vehicle : ${vehicles}">
+            <td>
+                <a href="#" th:text="*{vehicle.name}" th:href="@{|/vehicles/*{vehicle.id}|}"></a>
+            </td>
+            <td th:text="*{vehicle.licencePlate}"></td>
+            <td th:text="*{vehicle.parkingType}"></td>
+            <td>
+                <a href="#"  th:text="*{vehicle.user.name}" th:href="@{|/users/*{vehicle.user.id}|}"></a>
+            </td>
+        </tr>
+    </table>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
 </body>
 </html>
