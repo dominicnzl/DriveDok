@@ -2,7 +2,6 @@ package nl.conspect.drivedok.services;
 
 import nl.conspect.drivedok.exceptions.VehicleNotFoundException;
 import nl.conspect.drivedok.model.ParkingType;
-import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.repositories.VehicleRepository;
 import org.springframework.lang.NonNull;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -75,16 +73,5 @@ public class VehicleService {
             vehicle.getUser().removeVehicle(vehicle);
         }
         vehicleRepository.delete(vehicle);
-    }
-    /* Look for a User to which this vehicle belongs. If a User is found, go to that User editpage. Otherwise go to
-    the Vehicle listpage. */
-    public String pageAfterDelete(Long vehicleId) {
-        return null == vehicleId ? "redirect:/vehicles" : Optional.of(vehicleId)
-                .flatMap(this::findById)
-                .map(Vehicle::getUser)
-                .map(User::getId)
-                .map(Objects::toString)
-                .map("redirect:/users/"::concat)
-                .orElse("redirect:/vehicles");
     }
 }
