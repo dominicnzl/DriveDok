@@ -28,7 +28,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    /* Thymeleaf controllers */
     @GetMapping
     public String listPage(Model model) {
         final List<User> users = userService.findAll();
