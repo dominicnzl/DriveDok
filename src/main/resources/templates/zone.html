@@ -23,7 +23,9 @@
             <input type="hidden" th:field="*{id}">
             <input type="hidden" th:field="*{name}">
             <input type="hidden" th:field="*{parkingSpots}">
-            <input type="hidden" th:field="*{totalParkingSpots}">
+            <input type="hidden" th:field="*{totalParkingSpots}" th:id="myTotalParkingSpots"}>
+
+            <div type="text" th:id="myMessage" ></div>
 
             <th:block th:each="spot,i : ${zone.parkingSpots}">
                 <input type="hidden" th:field="*{parkingSpots[__${i.index}__].id}" /><br />
@@ -46,18 +48,32 @@
             let normal ;
             let prev;
             let current;
+            let temp;
+            let myTotal = document.getElementById("myTotalParkingSpots").value;
 
             $(document)
             .on('focusin', 'input', function(){
-               $(this).data('val', $(this).val());
+                $(this).data('val', $(this).val());
                 normal =   parseInt(document.getElementById("NORMAL").value);
                 prev = $(this).val();
             })
             .on('change','input', function(){
                 current = $(this).val();
-                document.getElementById("NORMAL").value = (normal-(current - prev));
-                $(this).data('val', current);
-                prev = $(this).val();
+                temp = normal-(current - prev);
+                if (temp >= 0 || current < 0 ){
+                    document.getElementById("NORMAL").value = normal-(current - prev);
+                    $(this).data('val', current);
+                    prev = $(this).val();
+                    document.getElementById("myMessage").innerHTML = "";
+               }
+               else{
+                    normal =   parseInt(document.getElementById("NORMAL").value);
+                    document.getElementById("DISABLED").value = 0;
+                    document.getElementById("ELECTRIC").value = 0;
+                    document.getElementById("NORMAL").value = myTotal;
+                    document.getElementById("myMessage").innerHTML = "Please use valid numbers";
+                    prev = current;
+               }
             });
         </script>
     </section>
