@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Objects;
@@ -31,12 +30,6 @@ public class VehicleController {
     public String listpage(Model model) {
         model.addAttribute("vehicles", vehicleService.findAll());
         return "vehiclelistpage";
-    }
-
-    @PostMapping
-    public String createEditpage(Model model) {
-        model.addAttribute("vehicle", new Vehicle());
-        return "vehicleeditpage";
     }
 
     @GetMapping("/{id}")
