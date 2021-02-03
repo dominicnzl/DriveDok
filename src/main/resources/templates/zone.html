@@ -60,7 +60,7 @@
             .on('change','input', function(){
                 current = $(this).val();
                 temp = normal-(current - prev);
-                if (temp >= 0 || current < 0 ){
+                if (temp >= 0 && current > 0 ){
                     document.getElementById("NORMAL").value = normal-(current - prev);
                     $(this).data('val', current);
                     prev = $(this).val();
