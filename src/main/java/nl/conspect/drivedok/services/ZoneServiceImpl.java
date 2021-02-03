@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.services;
 
 
+import nl.conspect.drivedok.exceptions.ParkingSpotUpdateException;
 import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.Zone;
@@ -35,6 +36,10 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     public Zone update(Zone zone) {
+        int sumOfParkingSpots = zone.getParkingSpots().stream().mapToInt(ParkingSpot::getQuantity).sum();
+        if(zone.getTotalParkingSpots() != sumOfParkingSpots){
+            throw new ParkingSpotUpdateException();
+        }
         return zoneRepository.save(zone);
     }
 
