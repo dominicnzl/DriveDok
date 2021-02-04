@@ -9,6 +9,6 @@ import static java.lang.String.format;
 public class ParkingSpotUpdateException extends RuntimeException {
 
     public ParkingSpotUpdateException() {
-        super(format("Your Parkingspot was unable to update properly"));
+        super("Your Parkingspot was unable to update properly");
     }
 }
