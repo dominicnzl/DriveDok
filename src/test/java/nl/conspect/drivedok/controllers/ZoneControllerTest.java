@@ -65,7 +65,7 @@ class ZoneControllerTest {
 
         mockMvc.perform(get("/zones/create"))
                 .andDo(print())
-                .andExpect(content().string(containsString("Create a new DriveDok Zone for your Parking Spots")));
+                .andExpect(content().string(containsString("Create a new DriveDok Zone")));
     }
 
     @Test
@@ -90,7 +90,7 @@ class ZoneControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(content().string(containsString("DriveDok Zone: Zone 1")));
+                .andExpect(content().string(containsString("Your Zone Zone 1 has")));
     }
 
     @Test
