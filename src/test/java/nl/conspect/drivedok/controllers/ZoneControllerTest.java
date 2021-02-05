@@ -1,7 +1,5 @@
 package nl.conspect.drivedok.controllers;
 
-import nl.conspect.drivedok.model.ParkingSpot;
-import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.services.ZoneService;
 import org.junit.jupiter.api.DisplayName;
@@ -93,31 +91,6 @@ class ZoneControllerTest {
                 .andExpect(content().string(containsString("Your Zone Zone 1 has")));
     }
 
-    @Test
-    public void shouldUpdateZone() throws Exception {
-
-        mockMvc.perform(post("/zones/update", Zone.class)
-                .param("name", "Zone 1")
-                .param("totalParkingSpots", "100"))
-                .andDo(print())
-                .andExpect(content().string(containsString("Zone 1")));
-    }
-
-    @Test
-    public void shouldUpdateZonePSQuantity() throws Exception {
-        Zone zone = new Zone("Zone 1",  100);
-        zone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
-        zone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 20));
-        zone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, zone.getTotalParkingSpots()-20));
-
-        when(zoneService.update(zone)).thenReturn(zone);
-
-        mockMvc.perform(post("/zones/update", Zone.class)
-                .param("name", "Zone 1")
-                .param("totalParkingSpots", "100"))
-                .andDo(print())
-                .andExpect(content().string(containsString("Zone 1")));
-    }
 
     @Test
     public void shouldDeleteZone() throws Exception {
