@@ -1,41 +1,87 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
     <title th:text="|PZ ${zone.name} |">Zone</title>
 </head>
-<body>
-<header><img src="logo.png" th:src="@{/img/quickLogo.png}" alt="logo"></header>
+<body class="d-flex h-100 text-center">
 <div class="container">
-    <div th:object="${zone}">
-        <h2>This is your DriveDok Zone:</h2>
-        <p th:text="|DriveDok Zone: *{name}|">filler text</p>
-        <p th:text="|has *{totalParkingSpots} parking spots.|">filler number</p>
-        <br><br>
-
-        <form action="#" th:action="@{/zone/update}" th:object="${zone}" th:method="post">
-            <input type="hidden" th:field="*{id}">
-            <input type="text" th:field="*{name}" th:placeholder="*{name}">
-            <input type="number" th:field="*{totalParkingSpots}" th:placeholder="*{totalParkingSpots}">
-
-            <br><br>
-            <div th:each="spot : *{parkingSpots}">
-                <span th:text="${spot.quantity}"></span>
-                <span th:text="| ${spot.parkingType} spots |"></span>
-                </p>
-            </div>
-            <input type="hidden" th:field="*{parkingSpots}">
-            <button type="submit" value="Update">Update</button>
-        </form>
-        <button onclick="location.href='/zone/home'">Go to overview</button>
+    <div class="starter-template text-center py-3 px-3">
+        <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy" onclick="location.href='/zones'">
     </div>
+    <section class="album py-3 bg-light" th:object="${zone}">
+        <div>
+            <p th:text="|Your Zone *{name} has |">
+            <p th:text="|*{totalParkingSpots}|" id="totalSpots"></p>
+            <p th:text="|parking spots:|"></p>
+        </div>
+        <form action="#" th:action="@{/zones/update}" th:object="${zone}" method="post">
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{name}">
+            <input type="hidden" th:field="*{parkingSpots}">
+            <input type="hidden" th:field="*{totalParkingSpots}" th:id="myTotalParkingSpots">
+
+            <div type="text" th:id="myMessage" ></div>
+
+            <th:block th:each="spot,i : ${zone.parkingSpots}">
+                <input type="hidden" th:field="*{parkingSpots[__${i.index}__].id}" /><br />
+                <input type="text" th:field="*{parkingSpots[__${i.index}__].parkingType}" /><br />
+                <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
+                th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"
+                readonly="readonly"/>
+                <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
+                       th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"/>
+            </th:block><br>
+
+            <input type="submit"  value="update"></input>
+        </form>
+        <div class="album py-3 bg-light">
+            <button class="btn btn-warning" onclick="location.href='/zones'">Go to overview</button>
+        </div>
+
+        <script th:inline="javascript">
+        /*<![CDATA[*/
+            let normal ;
+            let prev;
+            let current;
+            let temp;
+            let myTotal = document.getElementById("myTotalParkingSpots").value;
+
+            $(document)
+            .on('focusin', 'input', function(){
+                $(this).data('val', $(this).val());
+                normal =   parseInt(document.getElementById("NORMAL").value);
+                prev = $(this).val();
+            })
+            .on('change','input', function(){
+                current = $(this).val();
+                temp = normal-(current - prev);
+                if (temp >= 0 && current > 0 ){
+                    document.getElementById("NORMAL").value = normal-(current - prev);
+                    $(this).data('val', current);
+                    prev = $(this).val();
+                    document.getElementById("myMessage").innerHTML = "";
+               }
+               else{
+                    normal =   parseInt(document.getElementById("NORMAL").value);
+                    document.getElementById("DISABLED").value = 0;
+                    document.getElementById("ELECTRIC").value = 0;
+                    document.getElementById("NORMAL").value = myTotal;
+                    document.getElementById("myMessage").innerHTML = "Please use valid numbers";
+                    prev = current;
+               }
+            });
+            /*]]>*/
+        </script>
+    </section>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
+
 </body>
 </html>

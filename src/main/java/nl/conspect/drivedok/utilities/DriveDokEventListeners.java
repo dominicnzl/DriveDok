@@ -34,12 +34,12 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
     }
 
     private void createDummyZones() {
-        var greet = new Zone("Greet",  10);
-        var piet = new Zone("Piet", 20);
-        var joop = new Zone("Joop", 30);
-        zoneService.create(greet);
-        zoneService.create(piet);
-        zoneService.create(joop);
+        var noord = new Zone("Noord",  10);
+        var zuid = new Zone("Zuid", 20);
+        var west = new Zone("West", 30);
+        zoneService.create(noord);
+        zoneService.create(zuid);
+        zoneService.create(west);
     }
 
     private void createDummyUsersAndVehicles() {
