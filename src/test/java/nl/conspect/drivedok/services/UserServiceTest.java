@@ -62,7 +62,7 @@ class UserServiceTest {
     void create() {
         var newUser = new User("Bep", "xyz@abc.nl", "hallo123", Collections.emptySet());
         userService.save(newUser);
-        assertEquals(3, userService.findAll().size());
+        assertEquals(300, userService.findAll().size());
     }
 
     @Test
