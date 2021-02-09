@@ -34,7 +34,7 @@ class ZoneControllerTest {
 
     @Test
     public void homeShouldShowThereAreNoZonesYet() throws Exception {
-        mockMvc.perform(get("/zone/home"))
+        mockMvc.perform(get("/zones"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("You have no DriveDok Zones yet")))
@@ -51,7 +51,7 @@ class ZoneControllerTest {
 
         when(zoneService.findAll()).thenReturn(listPZ);
 
-        mockMvc.perform(get("/zone/home"))
+        mockMvc.perform(get("/zones"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Zone 1")))
@@ -61,15 +61,15 @@ class ZoneControllerTest {
     @Test
     public void shouldShowZoneForm() throws Exception {
 
-        mockMvc.perform(get("/zone/create"))
+        mockMvc.perform(get("/zones/create"))
                 .andDo(print())
-                .andExpect(content().string(containsString("Create a new DriveDok Zone for your Parking Spots")));
+                .andExpect(content().string(containsString("Create a new DriveDok Zone")));
     }
 
     @Test
     public void shouldCreateZone() throws Exception {
 
-        mockMvc.perform(post("/zone/create", Zone.class)
+        mockMvc.perform(post("/zones/create", Zone.class)
                 .param("name", "Zone 1")
                 .param("totalParkingSpots", "100"))
                 .andDo(print())
@@ -84,22 +84,13 @@ class ZoneControllerTest {
         when(zoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
 
-        mockMvc.perform(get("/zone/1"))
+        mockMvc.perform(get("/zones/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(content().string(containsString("DriveDok Zone: Zone 1")));
+                .andExpect(content().string(containsString("Your Zone Zone 1 has")));
     }
 
-    @Test
-    public void shouldUpdateZone() throws Exception {
-
-        mockMvc.perform(post("/zone/update", Zone.class)
-                .param("name", "Zone 1")
-                .param("totalParkingSpots", "100"))
-                .andDo(print())
-                .andExpect(content().string(containsString("Zone 1")));
-    }
 
     @Test
     public void shouldDeleteZone() throws Exception {
@@ -108,7 +99,7 @@ class ZoneControllerTest {
         when(zoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/zone/delete/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/zones/delete/{id}", 1))
                 .andExpect(status().isOk());
 
     }
@@ -116,7 +107,7 @@ class ZoneControllerTest {
     @Test
     @DisplayName("When an id is used to findById but no Zone is found throw an IllegalArgumentException")
     public void whenFailToFindByIdThrowIllegalArgument() {
-        assertThatThrownBy(() -> mockMvc.perform(get("/zone/-1"))
+        assertThatThrownBy(() -> mockMvc.perform(get("/zones/-1"))
                 .andExpect(status().isOk()))
                 .hasCause(new IllegalArgumentException("Zone with id -1 not found"));
     }

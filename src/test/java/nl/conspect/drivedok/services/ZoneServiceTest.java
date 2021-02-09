@@ -71,17 +71,18 @@ class ZoneServiceTest {
 
     @Test
     @DisplayName("The Zone should be correctly updated")
-    void update() {
-        Zone beforeUpdateZone = zoneService.create(new Zone("Elsa",100));
+    void updateName() {
+        Zone beforeUpdateZone = zoneService.create(new Zone("Noord",100));
         assertNotNull(beforeUpdateZone);
-        assertEquals("Elsa", beforeUpdateZone.getName());
+        assertEquals("Noord", beforeUpdateZone.getName());
 
-        beforeUpdateZone.setName("Anna");
+        beforeUpdateZone.setName("Zuid");
         zoneService.update(beforeUpdateZone);
         Zone afterUpdateZone = zoneService.findById(beforeUpdateZone.getId()).orElse(null);
         assertNotNull(afterUpdateZone);
-        assertEquals("Anna", afterUpdateZone.getName());
+        assertEquals("Zuid", afterUpdateZone.getName());
     }
+
 
     @Test
     @DisplayName("Delete a zone. Expect findAll() to have size 1")
@@ -110,6 +111,3 @@ class ZoneServiceTest {
          all.forEach(zone -> assertEquals(ParkingType.NORMAL, zone.getParkingSpots().iterator().next().getParkingType()));
     }
 }
-
-
-
