@@ -7,6 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class ParkingSpot extends AbstractPersistable<Long> {
@@ -30,10 +31,12 @@ public class ParkingSpot extends AbstractPersistable<Long> {
         this.availability = quantity;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -70,5 +73,19 @@ public class ParkingSpot extends AbstractPersistable<Long> {
                 ", quantity=" + quantity +
                 ", availability=" + availability +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ParkingSpot that = (ParkingSpot) o;
+        return id.equals(that.id) && parkingType == that.parkingType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, parkingType);
     }
 }

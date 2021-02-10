@@ -13,6 +13,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -44,10 +45,12 @@ public class Zone extends AbstractPersistable<Long> {
         this.totalParkingSpots = totalParkingSpots;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -66,7 +69,9 @@ public class Zone extends AbstractPersistable<Long> {
 
     public void setParkingSpots(Set<ParkingSpot> parkingSpots) {
         Set<ParkingSpot> parkingSpots1 = new TreeSet<>(new ParkingTypeComparator());
-        parkingSpots.forEach(parkingSpot -> parkingSpots1.add(parkingSpot));
+        for (ParkingSpot parkingSpot : parkingSpots) {
+            parkingSpots1.add(parkingSpot);
+        }
         this.parkingSpots = parkingSpots1;
     }
 
@@ -90,5 +95,19 @@ public class Zone extends AbstractPersistable<Long> {
                 ", parkingSpots=" + parkingSpots +
                 ", totalParkingSpots=" + totalParkingSpots +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Zone zone = (Zone) o;
+        return id.equals(zone.id) && name.equals(zone.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, name);
     }
 }
