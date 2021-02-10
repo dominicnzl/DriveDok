@@ -20,17 +20,14 @@ public class ParkingSpot extends AbstractPersistable<Long> {
 
     private int quantity;
 
+    private int availability;
+
     public ParkingSpot(){}
 
     public ParkingSpot(ParkingType parkingType, int quantity) {
         this.parkingType = parkingType;
         this.quantity = quantity;
-    }
-
-    public ParkingSpot(Long id, ParkingType parkingType, int quantity) {
-        this.id = id;
-        this.parkingType = parkingType;
-        this.quantity = quantity;
+        this.availability = quantity;
     }
 
     public Long getId() {
@@ -57,12 +54,21 @@ public class ParkingSpot extends AbstractPersistable<Long> {
         this.quantity = quantity;
     }
 
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(int availability) {
+        this.availability = availability;
+    }
+
     @Override
     public String toString() {
         return "ParkingSpot{" +
                 "id=" + id +
                 ", parkingType=" + parkingType +
                 ", quantity=" + quantity +
+                ", availability=" + availability +
                 '}';
     }
 }

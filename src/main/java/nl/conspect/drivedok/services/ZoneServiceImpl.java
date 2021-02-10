@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -36,10 +37,13 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     public Zone update(Zone zone) {
-        int sumOfParkingSpots = zone.getParkingSpots().stream().mapToInt(ParkingSpot::getQuantity).sum();
+        //first an extra check for the zone that returns from the client, because of front-end logics
+        final Set<ParkingSpot> parkingSpots = zone.getParkingSpots();
+        int sumOfParkingSpots = parkingSpots.stream().mapToInt(ParkingSpot::getQuantity).sum();
         if(zone.getTotalParkingSpots() != sumOfParkingSpots){
             throw new ParkingSpotUpdateException();
         }
+        parkingSpots.forEach(parkingSpot -> parkingSpot.setAvailability(parkingSpot.getQuantity()));
         return zoneRepository.save(zone);
     }
 
@@ -48,6 +52,7 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     private void setParkingSpotsAtInitiation(Zone zone){
+        zone.addParkingSpot(new ParkingSpot(ParkingType.MOTOR, 0));
         zone.addParkingSpot(new ParkingSpot(ParkingType.DISABLED, 0));
         zone.addParkingSpot(new ParkingSpot(ParkingType.ELECTRIC, 0));
         zone.addParkingSpot(new ParkingSpot(ParkingType.NORMAL, zone.getTotalParkingSpots()));
