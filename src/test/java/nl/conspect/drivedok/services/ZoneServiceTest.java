@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.services;
 
+import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.repositories.ZoneRepository;
@@ -11,7 +12,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -71,16 +76,39 @@ class ZoneServiceTest {
 
     @Test
     @DisplayName("The Zone should be correctly updated")
-    void updateName() {
+    void updateZone() {
         Zone beforeUpdateZone = zoneService.create(new Zone("Noord",100));
         assertNotNull(beforeUpdateZone);
-        assertEquals("Noord", beforeUpdateZone.getName());
+        Iterator<ParkingSpot> iterator = beforeUpdateZone.getParkingSpots().iterator();
+        ParkingSpot NORMALspot = iterator.next();
+        ParkingSpot DISABLEDspot = iterator.next();
+        ParkingSpot ELECTRICspot = iterator.next();
+        ParkingSpot MOTORspot = iterator.next();
 
-        beforeUpdateZone.setName("Zuid");
-        zoneService.update(beforeUpdateZone);
-        Zone afterUpdateZone = zoneService.findById(beforeUpdateZone.getId()).orElse(null);
+        assertEquals(100, NORMALspot.getQuantity());
+        assertEquals(0, DISABLEDspot.getQuantity());
+        assertEquals(0, ELECTRICspot.getQuantity());
+        assertEquals(0, MOTORspot.getQuantity());
+
+        NORMALspot.setQuantity(80);
+        DISABLEDspot.setQuantity(10);
+        ELECTRICspot.setQuantity(5);
+        MOTORspot.setQuantity(5);
+
+        Zone afterUpdateZone = zoneService.update(beforeUpdateZone);
         assertNotNull(afterUpdateZone);
-        assertEquals("Zuid", afterUpdateZone.getName());
+        System.out.println(afterUpdateZone);
+        Iterator<ParkingSpot> iterator2 = afterUpdateZone.getParkingSpots().iterator();
+
+        ParkingSpot NORMALspot2 = iterator2.next();
+        ParkingSpot DISABLEDspot2 = iterator2.next();
+        ParkingSpot ELECTRICspot2 = iterator2.next();
+        ParkingSpot MOTORspot2 = iterator2.next();
+
+        assertEquals(80, NORMALspot2.getQuantity());
+        assertEquals(10, DISABLEDspot2.getQuantity());
+        assertEquals(5, ELECTRICspot2.getQuantity());
+        assertEquals(5, MOTORspot2.getQuantity());
     }
 
 
