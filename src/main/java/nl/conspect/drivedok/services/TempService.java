@@ -9,12 +9,16 @@ public class TempService {
 
     Logger logger = LoggerFactory.getLogger(TempService.class);
 
-    private static String DELETE_ME = "Ik tel tot ";
+    private static final String DELETE_ME = "Ik tel tot ";
 
     // should trigger code coverage
-    public void triggerCodeCoverage() {
+    public String triggerCodeCoverage() {
+        var sb = new StringBuilder("");
         for (int i = 0; i < 5; i++) {
-            logger.info(DELETE_ME.concat(String.valueOf(i)));
+            var txt = DELETE_ME.concat(String.valueOf(i));
+            logger.info(txt);
+            sb.append(txt);
         }
+        return sb.toString();
     }
 }
