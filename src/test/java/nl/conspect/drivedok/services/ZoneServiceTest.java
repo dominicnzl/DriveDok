@@ -94,7 +94,6 @@ class ZoneServiceTest {
 
         Zone afterUpdateZone = zoneService.update(beforeUpdateZone);
         assertNotNull(afterUpdateZone);
-        System.out.println(afterUpdateZone);
         Iterator<ParkingSpot> iterator2 = afterUpdateZone.getParkingSpots().iterator();
 
         ParkingSpot NORMALspot2 = iterator2.next();
