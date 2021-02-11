@@ -74,18 +74,4 @@ public class ParkingSpot extends AbstractPersistable<Long> {
                 ", availability=" + availability +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        ParkingSpot that = (ParkingSpot) o;
-        return id.equals(that.id) && parkingType == that.parkingType;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id, parkingType);
-    }
 }

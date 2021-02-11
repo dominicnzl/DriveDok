@@ -96,18 +96,4 @@ public class Zone extends AbstractPersistable<Long> {
                 ", totalParkingSpots=" + totalParkingSpots +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Zone zone = (Zone) o;
-        return id.equals(zone.id) && name.equals(zone.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id, name);
-    }
 }
