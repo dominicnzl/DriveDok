@@ -9,8 +9,9 @@ class TempServiceTest {
 
     @Test
     void takeCover() {
+        var result = tempService.triggerCodeCoverage();
         Assertions.assertEquals(
                 "Ik tel tot 0Ik tel tot 1Ik tel tot 2Ik tel tot 3Ik tel tot 4",
-                tempService.triggerCodeCoverage());
+                result);
     }
 }

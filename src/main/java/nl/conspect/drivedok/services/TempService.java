@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TempService {
 
-    Logger logger = LoggerFactory.getLogger(TempService.class);
+    private final Logger logger = LoggerFactory.getLogger(TempService.class);
 
     private static final String DELETE_ME = "Ik tel tot ";
 
