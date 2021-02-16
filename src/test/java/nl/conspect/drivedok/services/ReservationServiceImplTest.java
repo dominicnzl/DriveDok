@@ -64,8 +64,8 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("""
-            Persist a Reservation with a specific date. Update the method with another date. Expect the Reservation to have 
-            the new date on subsequent retrieval.
+            Persist a Reservation with a specific date. Update the method with another date. Expect the Reservation to 
+            have the new date on subsequent retrieval.
             """)
     void update() {
         var startdate = of(2021, JUNE, 1, 8, 0);
