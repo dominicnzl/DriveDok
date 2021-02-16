@@ -1,30 +1,22 @@
 package nl.conspect.drivedok.services;
 
-import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.Reservation;
-import nl.conspect.drivedok.model.User;
-import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.repositories.ReservationRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.of;
-import static java.time.Month.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static java.time.Month.JUNE;
+import static java.time.Month.SEPTEMBER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class ReservationServiceImplTest {
@@ -72,9 +64,9 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("""
-        Persist a Reservation with a specific date. Update the method with another date. Expect the Reservation to have 
-        the new date on subsequent retrieval.
-        """)
+            Persist a Reservation with a specific date. Update the method with another date. Expect the Reservation to have 
+            the new date on subsequent retrieval.
+            """)
     void update() {
         var startdate = of(2021, JUNE, 1, 8, 0);
         var reservation = new Reservation();
