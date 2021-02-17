@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ReservationServiceImpl implements ReservationService {
+public class BasicReservationService implements ReservationService {
 
     private final ReservationRepository repository;
 
-    public ReservationServiceImpl(ReservationRepository repository) {
+    public BasicReservationService(ReservationRepository repository) {
         this.repository = repository;
     }
 

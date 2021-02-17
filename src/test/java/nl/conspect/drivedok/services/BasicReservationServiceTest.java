@@ -20,7 +20,7 @@ import static java.time.Month.SEPTEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-class ReservationServiceImplTest {
+class BasicReservationServiceTest {
 
     ReservationService service;
 
@@ -30,11 +30,11 @@ class ReservationServiceImplTest {
     @Autowired
     TestEntityManager testEntityManager;
 
-    Logger logger = LoggerFactory.getLogger(ReservationServiceImplTest.class);
+    Logger logger = LoggerFactory.getLogger(BasicReservationServiceTest.class);
 
     @BeforeEach
     void init() {
-        service = new ReservationServiceImpl(repository);
+        service = new BasicReservationService(repository);
     }
 
     @Test
@@ -80,8 +80,8 @@ class ReservationServiceImplTest {
         var reservation = new Reservation();
         reservation.setStart(startdate);
         var id = (Long) testEntityManager.persistAndGetId(reservation);
-        var entity = service.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reservation not persisted in test"));
+        var entity = service.findById(id).orElse(null);
+        assertThat(entity).isNotNull();
         assertThat(startdate).isEqualTo(entity.getStart());
 
         var updatedDate = of(2021, SEPTEMBER, 1, 8, 0);
