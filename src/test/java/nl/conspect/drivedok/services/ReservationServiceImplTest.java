@@ -5,6 +5,8 @@ import nl.conspect.drivedok.repositories.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -15,8 +17,7 @@ import java.util.Optional;
 import static java.time.LocalDateTime.of;
 import static java.time.Month.JUNE;
 import static java.time.Month.SEPTEMBER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class ReservationServiceImplTest {
@@ -28,6 +29,8 @@ class ReservationServiceImplTest {
 
     @Autowired
     TestEntityManager testEntityManager;
+
+    Logger logger = LoggerFactory.getLogger(ReservationServiceImplTest.class);
 
     @BeforeEach
     void init() {
@@ -42,7 +45,7 @@ class ReservationServiceImplTest {
         var reservationC = new Reservation();
         var reservations = List.of(reservationA, reservationB, reservationC);
         reservations.forEach(testEntityManager::persist);
-        assertEquals(3, service.findAll().size());
+        assertThat(service.findAll().size()).isEqualTo(3);
     }
 
     @Test
@@ -50,7 +53,7 @@ class ReservationServiceImplTest {
     void findById() {
         var reservation = new Reservation();
         var id = (Long) testEntityManager.persistAndGetId(reservation);
-        assertEquals(Optional.of(reservation), service.findById(id));
+        assertThat(service.findById(id)).isEqualTo(Optional.of(reservation));
     }
 
     @Test
@@ -58,8 +61,13 @@ class ReservationServiceImplTest {
     void create() {
         var reservation = new Reservation();
         var entity = service.create(reservation);
-        assertTrue(service.findById(entity.getId()).isPresent());
-        assertEquals(Optional.of(reservation), service.findById(entity.getId()));
+//        testEntityManager.clear();
+        service.findById(entity.getId())
+                .ifPresentOrElse(
+                        r -> logger.info("****** Gevonden {}", r.toString()),
+                        () -> logger.info("***** Niet gevonden")
+                );
+        assertThat(service.findById(entity.getId())).hasValue(entity);
     }
 
     @Test
@@ -74,12 +82,12 @@ class ReservationServiceImplTest {
         var id = (Long) testEntityManager.persistAndGetId(reservation);
         var entity = service.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reservation not persisted in test"));
-        assertEquals(startdate, entity.getStart());
+        assertThat(startdate).isEqualTo(entity.getStart());
 
         var updatedDate = of(2021, SEPTEMBER, 1, 8, 0);
         reservation.setStart(updatedDate);
         var updatedReservation = service.update(id, reservation);
-        assertEquals(updatedDate, updatedReservation.getStart());
+        assertThat(updatedDate).isEqualTo(updatedReservation.getStart());
     }
 
     @Test
@@ -87,10 +95,10 @@ class ReservationServiceImplTest {
     void delete() {
         var reservation = new Reservation();
         testEntityManager.persist(reservation);
-        assertEquals(1, service.findAll().size());
+        assertThat(service.findAll().size()).isEqualTo(1);
 
         service.delete(reservation);
-        assertEquals(0, service.findAll().size());
+        assertThat(service.findAll()).isEmpty();
     }
 
     @Test
@@ -98,9 +106,9 @@ class ReservationServiceImplTest {
     void deleteById() {
         var reservation = new Reservation();
         var id = (Long) testEntityManager.persistAndGetId(reservation);
-        assertEquals(1, service.findAll().size());
+        assertThat(service.findAll().size()).isEqualTo(1);
 
         service.deleteById(id);
-        assertEquals(0, service.findAll().size());
+        assertThat(service.findAll()).isEmpty();
     }
 }

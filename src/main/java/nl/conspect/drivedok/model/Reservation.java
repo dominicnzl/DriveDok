@@ -5,7 +5,8 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,13 +19,16 @@ public class Reservation extends AbstractPersistable<Long> {
     private LocalDateTime start;
     private LocalDateTime end;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "fk_user")
     private User user;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "fk_vehicle")
     private Vehicle vehicle;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "fk_parking_spot")
     private ParkingSpot parkingSpot;
 
     public Reservation() {
