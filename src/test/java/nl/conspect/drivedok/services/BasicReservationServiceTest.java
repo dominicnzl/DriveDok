@@ -5,116 +5,88 @@ import nl.conspect.drivedok.repositories.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-import static java.time.LocalDateTime.of;
-import static java.time.Month.JUNE;
-import static java.time.Month.SEPTEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@DataJpaTest
+@ExtendWith(SpringExtension.class)
 class BasicReservationServiceTest {
+
+    @MockBean
+    ReservationRepository repository;
 
     ReservationService service;
 
-    @Autowired
-    ReservationRepository repository;
-
-    @Autowired
-    TestEntityManager testEntityManager;
-
     @BeforeEach
     void init() {
-        service = new BasicReservationService(repository);
+        this.service = new BasicReservationService(repository);
     }
 
     @Test
-    @DisplayName("Persist 3 Reservations, expect findall size to be 3.")
+    @DisplayName("Expect service.findAll to call repository.findAll")
     void findAll() {
-        var reservationA = new Reservation();
-        var reservationB = new Reservation();
-        var reservationC = new Reservation();
-        var reservations = List.of(reservationA, reservationB, reservationC);
-        reservations.forEach(testEntityManager::persistAndFlush);
-        testEntityManager.clear();
-        assertThat(service.findAll().size()).isEqualTo(3);
+        var reservations = List.of(new Reservation(), new Reservation(), new Reservation());
+        when(repository.findAll()).thenReturn(reservations);
+
+        var list = service.findAll();
+        assertThat(list.size()).isEqualTo(3);
+        verify(repository, times(1)).findAll();
     }
 
     @Test
-    @DisplayName("Persist a Reservation, expect find to return an Optional of that Reservation.")
+    @DisplayName("Expect service.findById to call repository.findById")
     void findById() {
         var reservation = new Reservation();
-        var id = (Long) testEntityManager.persistAndGetId(reservation);
-        testEntityManager.flush();
-        testEntityManager.clear();
-        assertThat(service.findById(id)).isEqualTo(Optional.of(reservation));
+        when(repository.findById(1L)).thenReturn(Optional.of(reservation));
+        assertThat(service.findById(1L)).hasValue(reservation);
+        verify(repository, times(1)).findById(1L);
     }
 
     @Test
     @DisplayName("Call the create method on Reservation and expect to find that Reservation.")
     void create() {
         var reservation = new Reservation();
+        when(repository.save(reservation)).thenReturn(reservation);
         var entity = service.create(reservation);
-        testEntityManager.flush();
-        testEntityManager.clear();
-        assertThat(service.findById(entity.getId())).hasValue(entity);
+        assertThat(entity).isEqualTo(reservation);
+        verify(repository, times(1)).save(reservation);
     }
 
     @Test
-    @DisplayName("""
-            Persist a Reservation with a specific date. Update the method with another date. Expect the Reservation to 
-            have the new date on subsequent retrieval.
-            """)
+    @DisplayName("Expect service.update to call repository.save")
     void update() {
-        var startdate = of(2021, JUNE, 1, 8, 0);
         var reservation = new Reservation();
-        reservation.setStart(startdate);
-        var id = (Long) testEntityManager.persistAndGetId(reservation);
-        testEntityManager.flush();
-        testEntityManager.clear();
-        var entity = service.findById(id).orElse(null);
-        assertThat(entity).isNotNull();
-        assertThat(startdate).isEqualTo(entity.getStart());
-
-        var updatedDate = of(2021, SEPTEMBER, 1, 8, 0);
-        reservation.setStart(updatedDate);
-        var updatedReservation = service.update(id, reservation);
-        testEntityManager.flush();
-        testEntityManager.clear();
-        assertThat(updatedDate).isEqualTo(updatedReservation.getStart());
+        when(service.findById(1L)).thenReturn(Optional.of(reservation));
+        when(repository.save(reservation)).thenReturn(reservation);
+        var entity = service.update(1L, reservation);
+        assertThat(entity).isEqualTo(reservation);
+        verify(repository, times(1)).save(reservation);
     }
 
     @Test
-    @DisplayName("Persist one Reservation then expect to find none after deleting that Reservation.")
+    @DisplayName("Expect service.delete to call repository.delete")
     void delete() {
+        doNothing().when(repository).delete(isA(Reservation.class));
         var reservation = new Reservation();
-        testEntityManager.persistAndFlush(reservation);
-        testEntityManager.clear();
-        assertThat(service.findAll().size()).isEqualTo(1);
-
         service.delete(reservation);
-        testEntityManager.flush();
-        testEntityManager.clear();
-        assertThat(service.findAll()).isEmpty();
+        verify(repository, times(1)).delete(reservation);
     }
 
     @Test
-    @DisplayName("Persist one Reservation then expect to find none after deleting that Reservation by id.")
+    @DisplayName("Expect service.deleteById to call repository.deleteById")
     void deleteById() {
-        var reservation = new Reservation();
-        var id = (Long) testEntityManager.persistAndGetId(reservation);
-        testEntityManager.flush();
-        testEntityManager.clear();
-        assertThat(service.findAll().size()).isEqualTo(1);
-
-        service.deleteById(id);
-        testEntityManager.flush();
-        testEntityManager.clear();
-        assertThat(service.findAll()).isEmpty();
+        doNothing().when(repository).deleteById(1L);
+        service.deleteById(1L);
+        verify(repository, times(1)).deleteById(1L);
     }
 }
