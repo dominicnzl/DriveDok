@@ -3,6 +3,7 @@ package nl.conspect.drivedok.controllers;
 import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.model.ReservationDto;
 import nl.conspect.drivedok.services.ReservationService;
+import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +23,11 @@ public class ReservationRestController {
 
     private final ReservationService service;
 
-    public ReservationRestController(ReservationService service) {
+    private final ReservationMapper reservationMapper;
+
+    public ReservationRestController(ReservationService service, ReservationMapper reservationMapper) {
         this.service = service;
+        this.reservationMapper = reservationMapper;
     }
 
     @GetMapping
@@ -34,12 +38,7 @@ public class ReservationRestController {
 
     @PostMapping
     public ResponseEntity<Reservation> create(@RequestBody ReservationDto dto, UriComponentsBuilder builder) {
-        var reservation = new Reservation();
-        reservation.setStart(dto.getStart());
-        reservation.setEnd(dto.getEnd());
-        reservation.setUser(dto.getUser());
-        reservation.setVehicle(dto.getVehicle());
-        reservation.setParkingSpot(dto.getParkingSpot());
+        var reservation = reservationMapper.dtoToReservation(dto);
         var entity = service.create(reservation);
         var uri = builder.path("/api/reservations/{id}").buildAndExpand(entity.getId()).toUri();
         return created(uri).body(entity);
