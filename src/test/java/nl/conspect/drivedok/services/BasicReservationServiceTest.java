@@ -2,12 +2,12 @@ package nl.conspect.drivedok.services;
 
 import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.repositories.ReservationRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,18 +19,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class BasicReservationServiceTest {
 
-    @MockBean
+    @Mock
     ReservationRepository repository;
 
-    ReservationService service;
-
-    @BeforeEach
-    void init() {
-        this.service = new BasicReservationService(repository);
-    }
+    @InjectMocks
+    BasicReservationService service;
 
     @Test
     @DisplayName("Expect service.findAll to call repository.findAll")
