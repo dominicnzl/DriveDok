@@ -41,15 +41,6 @@ public class VehicleService {
         return vehicleRepository.save(vehicle);
     }
 
-    public Vehicle update(Long id, Vehicle newVehicle) {
-        var vehicle = getById(id);
-        vehicle.setName(newVehicle.getName());
-        vehicle.setLicencePlate(newVehicle.getLicencePlate());
-        vehicle.setUser(newVehicle.getUser());
-        vehicle.setParkingType(newVehicle.getParkingType());
-        return save(vehicle);
-    }
-
     public Vehicle updatePartially(Long id, Map<String, String> properties) {
         var vehicle = getById(id);
         if (properties.containsKey("name")) {

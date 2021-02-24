@@ -1,12 +1,14 @@
 package nl.conspect.drivedok.controllers;
 
-import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.model.ReservationDto;
 import nl.conspect.drivedok.services.ReservationService;
 import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +16,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.noContent;
+import static org.springframework.http.ResponseEntity.notFound;
+import static org.springframework.http.ResponseEntity.of;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -23,37 +28,43 @@ public class ReservationRestController {
 
     private final ReservationService service;
 
-    private final ReservationMapper reservationMapper;
+    private final ReservationMapper mapper;
 
-    public ReservationRestController(ReservationService service, ReservationMapper reservationMapper) {
+    public ReservationRestController(ReservationService service, ReservationMapper mapper) {
         this.service = service;
-        this.reservationMapper = reservationMapper;
+        this.mapper = mapper;
     }
 
     @GetMapping
-    public ResponseEntity<ReservationList> findAll() {
-        var reservations = new ReservationList(service.findAll());
-        return ok(reservations);
+    public ResponseEntity<List<ReservationDto>> findAll() {
+        return ok(mapper.reservationsToDtos(service.findAll()));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationDto> findById(Long id) {
+        return of(service.findById(id).map(mapper::reservationToDto));
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> create(@RequestBody ReservationDto dto, UriComponentsBuilder builder) {
-        var reservation = reservationMapper.dtoToReservation(dto);
-        var entity = service.create(reservation);
-        var uri = builder.path("/api/reservations/{id}").buildAndExpand(entity.getId()).toUri();
-        return created(uri).body(entity);
+    public ResponseEntity<ReservationDto> create(@RequestBody ReservationDto dto, UriComponentsBuilder builder) {
+        var entity = service.save(mapper.dtoToReservation(dto));
+        return ResponseEntity.status(CREATED).body(mapper.reservationToDto(entity));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ReservationDto> update(@PathVariable Long id, @RequestBody ReservationDto dto) {
+        var reservation = mapper.dtoToReservation(dto);
+        reservation.setId(id);
+        var entity = service.save(reservation);
+        return ok(mapper.reservationToDto(entity));
+    }
 
-    static class ReservationList {
-        private final List<Reservation> reservations;
-
-        public ReservationList(List<Reservation> reservations) {
-            this.reservations = reservations;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (service.findById(id).isEmpty()) {
+            return notFound().build();
         }
-
-        public final List<Reservation> getReservations() {
-            return reservations;
-        }
+        service.deleteById(id);
+        return noContent().build();
     }
 }

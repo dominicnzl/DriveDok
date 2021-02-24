@@ -87,6 +87,6 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
                 sjaak(),
                 autoVanDeSjaak(),
                 null);
-        reservationService.create(reservation);
+        reservationService.save(reservation);
     }
 }

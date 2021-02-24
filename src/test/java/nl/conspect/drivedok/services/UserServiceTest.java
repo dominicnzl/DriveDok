@@ -83,7 +83,7 @@ class UserServiceTest {
         var miep = userService.getById(user2.getId());
         assertEquals("zomer123", miep.getPassword());
         miep.setPassword("qwerty");
-        var updatedMiep = userService.update(miep.getId(), miep);
+        var updatedMiep = userService.save(miep);
 
         assertEquals("qwerty", updatedMiep.getPassword());
     }
@@ -107,7 +107,8 @@ class UserServiceTest {
     @Test
     @DisplayName("Calling addVehiclesByUserId with invalid id should result in UserNotFoundException being thrown")
     void userNotFoundException() {
-        assertThrows(UserNotFoundException.class, () -> userService.addVehicleByUserId(-1L, new Vehicle()));
+        var vehicle = new Vehicle();
+        assertThrows(UserNotFoundException.class, () -> userService.addVehicleByUserId(-1L, vehicle));
     }
 
     @Test
