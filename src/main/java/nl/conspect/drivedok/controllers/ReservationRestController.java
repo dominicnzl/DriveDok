@@ -21,6 +21,7 @@ import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.of;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -48,7 +49,7 @@ public class ReservationRestController {
     @PostMapping
     public ResponseEntity<ReservationDto> create(@RequestBody ReservationDto dto, UriComponentsBuilder builder) {
         var entity = service.save(mapper.dtoToReservation(dto));
-        return ResponseEntity.status(CREATED).body(mapper.reservationToDto(entity));
+        return status(CREATED).body(mapper.reservationToDto(entity));
     }
 
     @PutMapping("/{id}")

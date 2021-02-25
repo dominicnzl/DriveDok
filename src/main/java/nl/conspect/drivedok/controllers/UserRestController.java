@@ -20,6 +20,7 @@ import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.of;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,12 +35,8 @@ public class UserRestController {
         this.mapper = mapper;
     }
 
-    private boolean isUserFound(Long id) {
-        return service.findById(id).isPresent();
-    }
-
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAllUsers() {
+    public ResponseEntity<List<UserDto>> findAll() {
         return ok(mapper.usersToDtos(service.findAll()));
     }
 
@@ -51,12 +48,12 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody UserDto dto) {
         var entity = service.save(mapper.dtoToUser(dto));
-        return ResponseEntity.status(CREATED).body(mapper.userToDto(entity));
+        return status(CREATED).body(mapper.userToDto(entity));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserDto dto) {
-        if (!isUserFound(id)) {
+        if (service.findById(id).isEmpty()) {
             return notFound().build();
         }
         var user = mapper.dtoToUser(dto);
@@ -67,7 +64,7 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!isUserFound(id)) {
+        if (service.findById(id).isEmpty()) {
             return notFound().build();
         }
         service.deleteById(id);
