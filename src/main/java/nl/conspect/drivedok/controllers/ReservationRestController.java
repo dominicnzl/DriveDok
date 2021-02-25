@@ -6,6 +6,7 @@ import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,6 +59,14 @@ public class ReservationRestController {
         reservation.setId(id);
         var entity = service.save(reservation);
         return ok(mapper.reservationToDto(entity));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ReservationDto> updatePartially(@PathVariable Long id, @RequestBody ReservationDto dto) {
+        var entity = service.findById(id)
+                .map(e -> mapper.patchDtoToReservation(dto, e))
+                .map(service::save);
+        return entity.isEmpty() ? notFound().build() : ok(mapper.reservationToDto(entity.get()));
     }
 
     @DeleteMapping("/{id}")

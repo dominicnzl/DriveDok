@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
@@ -70,8 +69,11 @@ public class VehicleRestController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Vehicle> updatePartially(@PathVariable Long id, @RequestBody Map<String, String> properties) {
-        return isVehicleFound(id) ? ok(service.updatePartially(id, properties)) : notFound().build();
+    public ResponseEntity<VehicleDto> updatePartially(@PathVariable Long id, @RequestBody VehicleDto dto) {
+        var entity = service.findById(id)
+                .map(e -> mapper.patchDtoToVehicle(dto, e))
+                .map(service::save);
+        return entity.isEmpty() ? notFound().build() : ok(mapper.vehicleToDto(entity.get()));
     }
 
     @DeleteMapping("/{id}")

@@ -6,6 +6,7 @@ import nl.conspect.drivedok.utilities.UserMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -60,6 +61,14 @@ public class UserRestController {
         user.setId(id);
         var entity = service.save(user);
         return ok(mapper.userToDto(entity));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDto> updatePartially(@PathVariable Long id, @RequestBody UserDto dto) {
+        var entity = service.findById(id)
+                .map(e -> mapper.patchDtoToUser(dto, e))
+                .map(service::save);
+        return entity.isEmpty() ? notFound().build() : ok(mapper.userToDto(entity.get()));
     }
 
     @DeleteMapping("/{id}")
