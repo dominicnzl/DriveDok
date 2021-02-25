@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface VehicleMapper {
 
-    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "user.vehicles", ignore = true)
     VehicleDto vehicleToDto(Vehicle vehicle);
     List<VehicleDto> vehiclesToDtos(List<Vehicle> vehicles);
     Vehicle dtoToVehicle(VehicleDto dto);
