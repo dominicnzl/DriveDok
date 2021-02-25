@@ -5,11 +5,12 @@ import nl.conspect.drivedok.model.ReservationDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper(uses = {BasicLocalDateTimeMapper.class, UserMapper.class, VehicleMapper.class},
+@Mapper(uses = {BasicLocalDateTimeMapper.class},
         componentModel = "spring")
 public interface ReservationMapper {
 
@@ -21,5 +22,5 @@ public interface ReservationMapper {
     Reservation dtoToReservation(ReservationDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Reservation patchDtoToReservation(ReservationDto dto, Reservation e);
+    Reservation patchDtoToReservation(ReservationDto dto, @MappingTarget Reservation reservation);
 }
