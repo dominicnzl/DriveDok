@@ -9,12 +9,15 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper(uses = {BasicLocalDateTimeMapper.class, UserMapper.class, VehicleMapper.class}, componentModel = "spring")
+@Mapper(uses = {BasicLocalDateTimeMapper.class, UserMapper.class, VehicleMapper.class},
+        componentModel = "spring")
 public interface ReservationMapper {
 
     @Mapping(target = "user.vehicles", ignore = true)
     ReservationDto reservationToDto(Reservation reservation);
+
     List<ReservationDto> reservationsToDtos(List<Reservation> reservations);
+
     Reservation dtoToReservation(ReservationDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class ReservationRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationDto> create(@RequestBody ReservationDto dto, UriComponentsBuilder builder) {
+    public ResponseEntity<ReservationDto> create(@RequestBody ReservationDto dto) {
         var entity = service.save(mapper.dtoToReservation(dto));
         return status(CREATED).body(mapper.reservationToDto(entity));
     }
