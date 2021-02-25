@@ -31,6 +31,8 @@ public class VehicleService {
     }
 
     public void deleteById(Long id) {
+        var entity = findById(id);
+        entity.map(Vehicle::getUser).ifPresent(user -> user.removeVehicle(entity.get()));
         vehicleRepository.deleteById(id);
     }
 

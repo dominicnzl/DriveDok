@@ -1,10 +1,8 @@
 package nl.conspect.drivedok.controllers;
 
-import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.model.VehicleDto;
 import nl.conspect.drivedok.services.VehicleService;
 import nl.conspect.drivedok.utilities.VehicleMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.of;
@@ -54,7 +53,7 @@ public class VehicleRestController {
     @PostMapping
     public ResponseEntity<VehicleDto> create(@RequestBody VehicleDto dto) {
         var entity = service.save(mapper.dtoToVehicle(dto));
-        return status(HttpStatus.CREATED).body(mapper.vehicleToDto(entity));
+        return status(CREATED).body(mapper.vehicleToDto(entity));
     }
 
     @PutMapping("/{id}")
@@ -83,17 +82,5 @@ public class VehicleRestController {
             return noContent().build();
         }
         return notFound().build();
-    }
-
-    static class VehicleList {
-        private final List<Vehicle> vehicles;
-
-        public VehicleList(List<Vehicle> vehicles) {
-            this.vehicles = vehicles;
-        }
-
-        public final List<Vehicle> getVehicles() {
-            return vehicles;
-        }
     }
 }
