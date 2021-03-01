@@ -78,7 +78,6 @@ class ReservationRestControllerTest {
     @Test
     void update() throws Exception {
         var reservation = new Reservation();
-        when(service.findById(1L)).thenReturn(Optional.of(reservation));
         when(mapper.dtoToReservation(any())).thenReturn(reservation);
         when(service.save(any())).thenReturn(reservation);
         mockMvc.perform(put(URL.concat("/20"))
