@@ -42,8 +42,7 @@ class VehicleRestControllerTest {
     @Test
     void findAll() throws Exception {
         mockMvc.perform(get(BASE_URL))
-                .andExpect(status().isOk())
-                .andDo(print());
+                .andExpect(status().isOk());
         verify(service, times(1)).findAll();
     }
 
@@ -54,7 +53,6 @@ class VehicleRestControllerTest {
         when(service.findById(999L)).thenReturn(Optional.of(vehicle));
         when(mapper.vehicleToDto(vehicle)).thenReturn(dto);
         mockMvc.perform(get(BASE_URL.concat("/999")))
-                .andDo(print())
                 .andExpect(status().isOk());
         verify(service, times(1)).findById(999L);
     }
@@ -67,13 +65,12 @@ class VehicleRestControllerTest {
         mockMvc.perform(post(BASE_URL)
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andDo(print())
                 .andExpect(status().isCreated());
         verify(service, times(1)).save(vehicle);
     }
 
     @Test
-    void update() throws Exception {
+    void updateWhenVehicleFound() throws Exception {
         var vehicle = new Vehicle();
         when(service.findById(1L)).thenReturn(Optional.of(vehicle));
         when(mapper.dtoToVehicle(any())).thenReturn(vehicle);
@@ -81,9 +78,17 @@ class VehicleRestControllerTest {
         mockMvc.perform(put(BASE_URL.concat("/1"))
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andDo(print())
                 .andExpect(status().isOk());
         verify(service, times(1)).save(vehicle);
+    }
+
+    @Test
+    void updateWhenVehicleNotFound() throws Exception {
+        when(service.findById(2L)).thenReturn(Optional.empty());
+        mockMvc.perform(put(BASE_URL.concat("/2"))
+                .contentType(APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

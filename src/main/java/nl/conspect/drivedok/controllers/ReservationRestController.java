@@ -42,7 +42,7 @@ public class ReservationRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationDto> findById(Long id) {
+    public ResponseEntity<ReservationDto> findById(@PathVariable Long id) {
         return of(service.findById(id).map(mapper::reservationToDto));
     }
 
