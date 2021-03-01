@@ -8,16 +8,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,38 +62,51 @@ class VehicleRestControllerTest {
     @Test
     void create() throws Exception {
         var vehicle = new Vehicle();
-        var dto = new VehicleDto();
-        when(mapper.dtoToVehicle(dto)).thenReturn(vehicle);
-        when(mapper.vehicleToDto(vehicle)).thenReturn(dto);
-        when(service.save(vehicle)).thenReturn(vehicle);
+        when(mapper.dtoToVehicle(any())).thenReturn(vehicle);
+        when(service.save(any())).thenReturn(vehicle);
         mockMvc.perform(post(BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content("{}"))
                 .andDo(print())
                 .andExpect(status().isCreated());
-//        verify(service, times(1)).save(vehicle); -- deze verify lukt niet?
-
-        /* Argument(s) are different! Wanted:
-        nl.conspect.drivedok.services.VehicleService#0 bean.save(
-            Entity of type nl.conspect.drivedok.model.Vehicle with id: null
-        );
-        -> at nl.conspect.drivedok.controllers.VehicleRestControllerTest.create(VehicleRestControllerTest.java:73)
-        Actual invocations have different arguments:
-        nl.conspect.drivedok.services.VehicleService#0 bean.save(
-            null
-        );
-        -> at nl.conspect.drivedok.controllers.VehicleRestController.create(VehicleRestController.java:57) */
+        verify(service, times(1)).save(vehicle);
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        var vehicle = new Vehicle();
+        when(service.findById(1L)).thenReturn(Optional.of(vehicle));
+        when(mapper.dtoToVehicle(any())).thenReturn(vehicle);
+        when(service.save(any())).thenReturn(vehicle);
+        mockMvc.perform(put(BASE_URL.concat("/1"))
+                .contentType(APPLICATION_JSON)
+                .content("{}"))
+                .andDo(print())
+                .andExpect(status().isOk());
+        verify(service, times(1)).save(vehicle);
     }
 
     @Test
-    void updatePartially() {
+    void updatePartially() throws Exception {
+        var vehicle = new Vehicle();
+        when(service.findById(5L)).thenReturn(Optional.of(vehicle));
+        when(mapper.patchDtoToVehicle(any(), any())).thenReturn(vehicle);
+        when(service.save(any())).thenReturn(vehicle);
+        mockMvc.perform(patch(BASE_URL.concat("/5"))
+                .contentType(APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isOk());
+        verify(mapper, times(1)).patchDtoToVehicle(any(), any());
+        verify(service, times(1)).save(vehicle);
     }
 
     @Test
-    void delete() {
+    void deleteMapping() throws Exception {
+        var vehicle = new Vehicle();
+        when(service.findById(10L)).thenReturn(Optional.of(vehicle));
+        mockMvc.perform(delete(BASE_URL.concat("/10")))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        verify(service, times(1)).deleteById(10L);
     }
 }
