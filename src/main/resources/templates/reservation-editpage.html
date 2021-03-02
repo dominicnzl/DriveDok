@@ -10,8 +10,44 @@
     <title>Reservation</title>
 </head>
 <body>
-<div class="container">
-    hello
+<div class="container" th:object="${reservation}">
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
+        </a>
+    </nav>
+    <div class="container-sm">
+        <h1>Reservation</h1>
+        <form action="#" th:action="@{/reservations}" method="post" id="save-reservation-form">
+            <div th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
+            </div>
+            <div class="form-group row mb-3">
+                <label for="user-name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="user-name" th:field="${reservation.user}">
+            </div>
+            <fieldset class="form-group mb-3">
+                <legend class="col-form-label">Start</legend>
+                <div class="row">
+                    <input type="date" class="form-control" id="start-date" th:placeholder="*{#temporals.day(start)}">
+                </div>
+            </fieldset>
+            <fieldset class="form-group mb-3">
+                <legend class="col-form-label">End</legend>
+                <div class="row">
+                    <input type="date" class="form-control" id="end" th:field="${reservation.end}">
+                </div>
+            </fieldset>
+            <div class="form-group row mb-3">
+                <label for="licence-plate" class="form-label">Vehicle (licenceplate)</label>
+                <input type="text" class="form-control" id="licence-plate" th:field="${reservation.vehicle}">
+            </div>
+            <input type="hidden" th:field="${reservation.parkingSpot}">
+            <input type="hidden" th:field="${reservation.id}">
+        </form>
+        <button form="save-reservation-form" type="submit" class="btn btn-primary">Save</button>
+        <button form="save-reservation-form" type="reset" class="btn btn-warning">Reset</button>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
