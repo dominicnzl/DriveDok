@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <title>Vehicles</title>
+    <title>Users</title>
 </head>
 <body>
 <div class="container">
@@ -14,25 +14,22 @@
             <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
         </a>
     </nav>
-    <h1>Vehicles</h1>
+    <h1>Users</h1>
     <table class="table">
         <tr>
-            <th>Name</th>
-            <th>Licence Plate</th>
-            <th>Parking Type</th>
-            <th>User</th>
+            <th scope="col">Name</th>
+            <th scope="col">E-mail</th>
         </tr>
-        <tr th:each="vehicle : ${vehicles}">
+        <tr th:each="user : ${users}">
             <td>
-                <a href="#" th:text="*{vehicle.name}" th:href="@{|/vehicles/*{vehicle.id}|}"></a>
+                <a href="#" th:text="*{user.name}" th:href="@{|/users/*{user.id}|}"></a>
             </td>
-            <td th:text="*{vehicle.licencePlate}"></td>
-            <td th:text="*{vehicle.parkingType}"></td>
-            <td>
-                <a href="#"  th:text="*{vehicle.user.name}" th:href="@{|/users/*{vehicle.user.id}|}"></a>
-            </td>
+            <td th:text="*{user.email}"></td>
         </tr>
     </table>
+    <div>
+        <a href="#" th:href="@{/users/new}" class="btn btn-primary">Add User</a>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"

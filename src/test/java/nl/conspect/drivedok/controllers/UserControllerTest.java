@@ -37,7 +37,7 @@ class UserControllerTest {
         Mockito.when(userService.findAll()).thenReturn(users);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("userlistpage"))
+                .andExpect(view().name("user-listpage"))
                 .andExpect(model().attribute("users", users))
                 .andDo(print());
     }
@@ -49,7 +49,7 @@ class UserControllerTest {
         Mockito.when(userService.getById(1L)).thenReturn(barry);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("usereditpage"))
+                .andExpect(view().name("user-editpage"))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", barry))
                 .andDo(print());

@@ -28,41 +28,46 @@ public class UserController {
         this.userService = userService;
     }
 
+    private static final String LISTPAGE = "user-listpage";
+    private static final String EDITPAGE = "user-editpage";
+    private static final String USERS = "users";
+    private static final String USER = "user";
+
     @GetMapping
     public String listPage(Model model) {
         final List<User> users = userService.findAll();
-        model.addAttribute("users", users);
-        return "userlistpage";
+        model.addAttribute(USERS, users);
+        return LISTPAGE;
     }
 
     @PostMapping
     public String save(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "usereditpage";
+            return EDITPAGE;
         }
         userService.save(user);
-        model.addAttribute("users", userService.findAll());
-        return "userlistpage";
+        model.addAttribute(USERS, userService.findAll());
+        return LISTPAGE;
     }
 
     @GetMapping("/new")
     public String addNewUserPage(Model model) {
-        model.addAttribute("user", new User());
-        return "usereditpage";
+        model.addAttribute(USER, new User());
+        return EDITPAGE;
     }
 
     @GetMapping("/{id}")
     public String editPage(Model model, @PathVariable Long id) {
         final var user = userService.getById(id);
-        model.addAttribute("user", user);
-        return "usereditpage";
+        model.addAttribute(USER, user);
+        return EDITPAGE;
     }
 
     @DeleteMapping("/{id}")
     public String delete(Model model, @PathVariable Long id) {
         userService.findById(id).ifPresent(userService::delete);
-        model.addAttribute("users", userService.findAll());
-        return "userlistpage";
+        model.addAttribute(USERS, userService.findAll());
+        return LISTPAGE;
     }
 
     @GetMapping("/{userId}/vehicles/new")

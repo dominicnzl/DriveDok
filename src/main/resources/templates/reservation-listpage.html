@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>Reservations</title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
+        </a>
+    </nav>
+    <h1>Reservations</h1>
+    <table class="table">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">User</th>
+            <th scope="col">Start</th>
+            <th scope="col">End</th>
+            <th scope="col">Vehicle (licenceplate)</th>
+            <th scope="col">ParkingSpot</th>
+        </tr>
+        <tr th:each="r : ${reservations}">
+            <td>
+                <a href="#" th:href="@{|/reservations/*{r.id}|}" th:text="*{r.id}"></a>
+            </td>
+            <td>
+                <a href="#" th:href="@{|/users/*{r.user.id}|}" th:text="*{r.user.name}"></a>
+            </td>
+            <td th:text="*{#temporals.format(r.start, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="*{#temporals.format(r.end, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="*{r.vehicle.licencePlate}"></td>
+            <td th:text="*{r.parkingSpot}"></td>
+        </tr>
+    </table>
+    <input type="datetime-local">
+    <input type="date">
+    <input type="time">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+</body>
+</html>
