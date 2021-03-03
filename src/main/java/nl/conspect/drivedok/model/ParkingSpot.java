@@ -7,7 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Objects;
+import javax.persistence.Version;
 
 @Entity
 public class ParkingSpot extends AbstractPersistable<Long> {
@@ -15,6 +15,9 @@ public class ParkingSpot extends AbstractPersistable<Long> {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Version
+    private int version;
 
     @Enumerated(EnumType.STRING)
     private ParkingType parkingType;
