@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,14 +69,7 @@ public class ParkingSpotController {
         return "parkingspotlistpage";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteAndReturnToListPage(@PathVariable Long id, Model model) {
-        var spot = parkingSpotService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("ParkingSpot with id %s does not exist", id)));
-        parkingSpotService.deleteById(id);
-        model.addAttribute("parkingSpots", parkingSpotService.findAll());
-        return "parkingspotlistpage";
-    }
+
 
     /* JSON controllers */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -100,15 +92,5 @@ public class ParkingSpotController {
         return parkingSpotService.findById(id)
                 .map(spot -> ResponseEntity.ok(parkingSpotService.update(newParkingSpot)))
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
-            parkingSpotService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }
