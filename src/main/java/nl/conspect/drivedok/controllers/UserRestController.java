@@ -1,10 +1,9 @@
 package nl.conspect.drivedok.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.conspect.drivedok.model.User;
+import nl.conspect.drivedok.model.UserDto;
 import nl.conspect.drivedok.services.UserService;
+import nl.conspect.drivedok.utilities.UserMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
@@ -32,21 +30,16 @@ public class UserRestController {
 
     private final UserService userService;
 
-    private final ObjectMapper objectMapper;
+    private final UserMapper mapper;
 
-    public UserRestController(UserService userService, ObjectMapper objectMapper) {
+    public UserRestController(UserService userService, UserMapper mapper) {
         this.userService = userService;
-        this.objectMapper = objectMapper;
-    }
-
-    private boolean isUserFound(Long id) {
-        return userService.findById(id).isPresent();
+        this.mapper = mapper;
     }
 
     @GetMapping
-    public ResponseEntity<UserList> findAllUsers() {
-        var userList = new UserList(userService.findAll());
-        return ok(userList);
+    public ResponseEntity<List<User>> findAll() {
+        return ok(userService.findAll());
     }
 
     @GetMapping("/{id}")
@@ -55,55 +48,38 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user, UriComponentsBuilder builder) {
-        var createdUser = userService.save(user);
-        var uri = builder.path("/api/users/{id}").buildAndExpand(createdUser.getId()).toUri();
-        return created(uri).body(createdUser);
+    public ResponseEntity<User> create(@RequestBody UserDto dto) {
+        var entity = userService.save(mapper.dtoToUser(dto));
+        var location = URI.create("/api/users/" + entity.getId());
+        return created(location).body(entity);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
-        return isUserFound(id) ? ok(userService.update(id, user)) : notFound().build();
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserDto dto) {
+        if (userService.findById(id).isEmpty()) {
+            return notFound().build();
+        }
+        var user = mapper.dtoToUser(dto);
+        user.setId(id);
+        return ok(userService.save(user));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody String properties)
-            throws JsonProcessingException {
-        if (!isUserFound(id)) {
-            return notFound().build();
-        }
-        User entity = userService.getById(id);
-        JsonNode json = objectMapper.readTree(properties);
-        Optional.ofNullable(json.get("name"))
-                .map(JsonNode::asText)
-                .ifPresent(entity::setName);
-        Optional.ofNullable(json.get("email"))
-                .map(JsonNode::asText)
-                .ifPresent(entity::setEmail);
-        Optional.ofNullable(json.get("password"))
-                .map(JsonNode::asText)
-                .ifPresent(entity::setPassword);
-        return ok(userService.save(entity));
+    public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody UserDto dto) {
+        return userService.findById(id)
+                .map(e -> mapper.patchDtoToUser(dto, e))
+                .map(userService::save)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!isUserFound(id)) {
-            return notFound().build();
-        }
-        userService.deleteById(id);
-        return noContent().build();
-    }
-
-    static class UserList {
-        private final List<User> users;
-
-        public UserList(List<User> users) {
-            this.users = users;
-        }
-
-        public final List<User> getUsers() {
-            return users;
-        }
+        return userService.findById(id)
+                .map(entity -> {
+                    userService.delete(entity);
+                    return noContent().<Void>build();
+                })
+                .orElseGet(() -> notFound().build());
     }
 }

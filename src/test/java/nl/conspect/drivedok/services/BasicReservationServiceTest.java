@@ -53,7 +53,7 @@ class BasicReservationServiceTest {
     void create() {
         var reservation = new Reservation();
         when(repository.save(reservation)).thenReturn(reservation);
-        var entity = service.create(reservation);
+        var entity = service.save(reservation);
         assertThat(entity).isEqualTo(reservation);
         verify(repository, times(1)).save(reservation);
     }
@@ -62,9 +62,9 @@ class BasicReservationServiceTest {
     @DisplayName("Expect service.update to call repository.save")
     void update() {
         var reservation = new Reservation();
-        when(service.findById(1L)).thenReturn(Optional.of(reservation));
+//        when(service.findById(1L)).thenReturn(Optional.of(reservation));
         when(repository.save(reservation)).thenReturn(reservation);
-        var entity = service.update(1L, reservation);
+        var entity = service.save(reservation);
         assertThat(entity).isEqualTo(reservation);
         verify(repository, times(1)).save(reservation);
     }

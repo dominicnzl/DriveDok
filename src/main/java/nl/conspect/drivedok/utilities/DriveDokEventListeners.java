@@ -2,35 +2,42 @@ package nl.conspect.drivedok.utilities;
 
 
 import nl.conspect.drivedok.model.ParkingType;
+import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.model.Zone;
-import nl.conspect.drivedok.services.ParkingSpotService;
+import nl.conspect.drivedok.services.BasicReservationService;
 import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.services.ZoneServiceImpl;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Set;
 
 @Component
 public class DriveDokEventListeners implements ApplicationListener<ContextRefreshedEvent> {
 
     private final ZoneServiceImpl zoneService;
-    private final ParkingSpotService parkingSpotService;
     private final UserService userService;
+    private final BasicReservationService reservationService;
 
-    public DriveDokEventListeners(ZoneServiceImpl zoneService, ParkingSpotService parkingSpotService, UserService userService) {
+    private User sjaak;
+    private Vehicle autoVanDeSjaak;
+
+    public DriveDokEventListeners(ZoneServiceImpl zoneService, UserService userService, BasicReservationService reservationService) {
         this.zoneService = zoneService;
-        this.parkingSpotService = parkingSpotService;
         this.userService = userService;
+        this.reservationService = reservationService;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         createDummyZones();
         createDummyUsersAndVehicles();
+        createDummyReservations();
     }
 
     private void createDummyZones() {
@@ -44,7 +51,7 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
 
     private void createDummyUsersAndVehicles() {
         var sjaaksVehicles = Set.of(
-                new Vehicle("Auto van de Sjaak", "H-000-B", ParkingType.NORMAL),
+                autoVanDeSjaak(),
                 new Vehicle("Electrische auto", "H-001-C", ParkingType.ELECTRIC),
                 new Vehicle("Zonnepaneel fiets", "H-002-D", ParkingType.DISABLED)
         );
@@ -52,11 +59,34 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
                 new Vehicle("Volkswagen Pino", "H-000-E", ParkingType.ELECTRIC),
                 new Vehicle("Motor", "H-001-F", ParkingType.NORMAL)
         );
-        var sjaak = new User("Sjaak", "sjaak@email.nl", "password123");
-        sjaaksVehicles.forEach(sjaak::addVehicle);
-        userService.save(sjaak);
+        sjaaksVehicles.forEach(sjaak()::addVehicle);
+        userService.save(sjaak());
         var pien = new User("Pien", "pien@email.nl", "zomer2020");
         piensVehicles.forEach(pien::addVehicle);
         userService.save(pien);
+    }
+
+    private User sjaak() {
+        if (null == sjaak) {
+            sjaak = new User("Sjaak", "sjaak@email.nl", "password123");
+        }
+        return sjaak;
+    }
+
+    private Vehicle autoVanDeSjaak() {
+        if (null == autoVanDeSjaak) {
+            autoVanDeSjaak = new Vehicle("Auto van de Sjaak", "H-000-B", ParkingType.NORMAL);
+        }
+        return autoVanDeSjaak;
+    }
+
+    private void createDummyReservations() {
+        var reservation = new Reservation(
+                LocalDateTime.of(2021, Month.JANUARY, 1, 8,0),
+                LocalDateTime.of(2021, Month.DECEMBER, 31, 17, 0),
+                sjaak(),
+                autoVanDeSjaak(),
+                null);
+        reservationService.save(reservation);
     }
 }

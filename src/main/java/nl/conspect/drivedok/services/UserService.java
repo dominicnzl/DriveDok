@@ -40,14 +40,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User update(Long id, User newUser) {
-        var user = getById(id);
-        user.setName(newUser.getName());
-        user.setEmail(newUser.getEmail());
-        user.setPassword(newUser.getPassword());
-        return save(user);
-    }
-
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }

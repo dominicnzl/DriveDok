@@ -29,19 +29,8 @@ public class BasicReservationService implements ReservationService {
     }
 
     @Override
-    public Reservation create(Reservation reservation) {
+    public Reservation save(Reservation reservation) {
         return repository.save(reservation);
-    }
-
-    @Override
-    public Reservation update(Long id, Reservation reservation) {
-        var entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Reservation not found"));
-        entity.setStart(reservation.getStart());
-        entity.setEnd(reservation.getEnd());
-        entity.setUser(reservation.getUser());
-        entity.setVehicle(reservation.getVehicle());
-        entity.setParkingSpot(reservation.getParkingSpot());
-        return repository.save(entity);
     }
 
     @Override
