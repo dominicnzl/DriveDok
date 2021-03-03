@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.model.ReservationDto;
 import nl.conspect.drivedok.services.ReservationService;
 import nl.conspect.drivedok.utilities.ReservationMapper;
@@ -37,35 +38,34 @@ public class ReservationRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationDto>> findAll() {
-        return ok(mapper.reservationsToDtos(service.findAll()));
+    public ResponseEntity<List<Reservation>> findAll() {
+        return ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationDto> findById(@PathVariable Long id) {
-        return of(service.findById(id).map(mapper::reservationToDto));
+    public ResponseEntity<Reservation> findById(@PathVariable Long id) {
+        return of(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ReservationDto> create(@RequestBody ReservationDto dto) {
-        var entity = service.save(mapper.dtoToReservation(dto));
-        return status(CREATED).body(mapper.reservationToDto(entity));
+    public ResponseEntity<Reservation> create(@RequestBody ReservationDto dto) {
+        return status(CREATED).body(service.save(mapper.dtoToReservation(dto)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationDto> update(@PathVariable Long id, @RequestBody ReservationDto dto) {
+    public ResponseEntity<Reservation> update(@PathVariable Long id, @RequestBody ReservationDto dto) {
         var reservation = mapper.dtoToReservation(dto);
         reservation.setId(id);
-        var entity = service.save(reservation);
-        return ok(mapper.reservationToDto(entity));
+        return ok(service.save(reservation));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ReservationDto> updatePartially(@PathVariable Long id, @RequestBody ReservationDto dto) {
-        var entity = service.findById(id)
+    public ResponseEntity<Reservation> updatePartially(@PathVariable Long id, @RequestBody ReservationDto dto) {
+        return service.findById(id)
                 .map(e -> mapper.patchDtoToReservation(dto, e))
-                .map(service::save);
-        return entity.isEmpty() ? notFound().build() : ok(mapper.reservationToDto(entity.get()));
+                .map(service::save)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> notFound().build());
     }
 
     @DeleteMapping("/{id}")

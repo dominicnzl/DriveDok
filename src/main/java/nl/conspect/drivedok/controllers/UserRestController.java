@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.UserDto;
 import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.utilities.UserMapper;
@@ -37,38 +38,37 @@ public class UserRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll() {
-        return ok(mapper.usersToDtos(service.findAll()));
+    public ResponseEntity<List<User>> findAll() {
+        return ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable Long id) {
-        return of(service.findById(id).map(mapper::userToDto));
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        return of(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody UserDto dto) {
-        var entity = service.save(mapper.dtoToUser(dto));
-        return status(CREATED).body(mapper.userToDto(entity));
+    public ResponseEntity<User> create(@RequestBody UserDto dto) {
+        return status(CREATED).body(service.save(mapper.dtoToUser(dto)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserDto dto) {
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserDto dto) {
         if (service.findById(id).isEmpty()) {
             return notFound().build();
         }
         var user = mapper.dtoToUser(dto);
         user.setId(id);
-        var entity = service.save(user);
-        return ok(mapper.userToDto(entity));
+        return ok(service.save(user));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updatePartially(@PathVariable Long id, @RequestBody UserDto dto) {
-        var entity = service.findById(id)
+    public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody UserDto dto) {
+        return service.findById(id)
                 .map(e -> mapper.patchDtoToUser(dto, e))
-                .map(service::save);
-        return entity.isEmpty() ? notFound().build() : ok(mapper.userToDto(entity.get()));
+                .map(service::save)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> notFound().build());
     }
 
     @DeleteMapping("/{id}")

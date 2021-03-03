@@ -41,8 +41,7 @@ class VehicleRestControllerTest {
 
     @Test
     void findAll() throws Exception {
-        mockMvc.perform(get(BASE_URL))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(BASE_URL)).andExpect(status().isOk());
         verify(service, times(1)).findAll();
     }
 
@@ -51,9 +50,7 @@ class VehicleRestControllerTest {
         var vehicle = new Vehicle();
         var dto = new VehicleDto();
         when(service.findById(999L)).thenReturn(Optional.of(vehicle));
-        when(mapper.vehicleToDto(vehicle)).thenReturn(dto);
-        mockMvc.perform(get(BASE_URL.concat("/999")))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(BASE_URL.concat("/999"))).andExpect(status().isOk());
         verify(service, times(1)).findById(999L);
     }
 

@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.model.VehicleDto;
 import nl.conspect.drivedok.services.VehicleService;
 import nl.conspect.drivedok.utilities.VehicleMapper;
@@ -41,38 +42,37 @@ public class VehicleRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VehicleDto>> findAll() {
-        return ok(mapper.vehiclesToDtos(service.findAll()));
+    public ResponseEntity<List<Vehicle>> findAll() {
+        return ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VehicleDto> findById(@PathVariable Long id) {
-        return of(service.findById(id).map(mapper::vehicleToDto));
+    public ResponseEntity<Vehicle> findById(@PathVariable Long id) {
+        return of(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<VehicleDto> create(@RequestBody VehicleDto dto) {
-        var entity = service.save(mapper.dtoToVehicle(dto));
-        return status(CREATED).body(mapper.vehicleToDto(entity));
+    public ResponseEntity<Vehicle> create(@RequestBody VehicleDto dto) {
+        return status(CREATED).body(service.save(mapper.dtoToVehicle(dto)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VehicleDto> update(@PathVariable Long id, @RequestBody VehicleDto dto) {
+    public ResponseEntity<Vehicle> update(@PathVariable Long id, @RequestBody VehicleDto dto) {
         if (!isVehicleFound(id)) {
             return notFound().build();
         }
         var vehicle = mapper.dtoToVehicle(dto);
         vehicle.setId(id);
-        var entity = service.save(vehicle);
-        return ok(mapper.vehicleToDto(entity));
+        return ok(service.save(vehicle));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<VehicleDto> updatePartially(@PathVariable Long id, @RequestBody VehicleDto dto) {
-        var entity = service.findById(id)
+    public ResponseEntity<Vehicle> updatePartially(@PathVariable Long id, @RequestBody VehicleDto dto) {
+        return service.findById(id)
                 .map(e -> mapper.patchDtoToVehicle(dto, e))
-                .map(service::save);
-        return entity.isEmpty() ? notFound().build() : ok(mapper.vehicleToDto(entity.get()));
+                .map(service::save)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> noContent().build());
     }
 
     @DeleteMapping("/{id}")

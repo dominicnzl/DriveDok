@@ -40,8 +40,7 @@ class UserRestControllerTest {
 
     @Test
     void getMapping() throws Exception {
-        mockMvc.perform(get(URL))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(URL)).andExpect(status().isOk());
         verify(service, times(1)).findAll();
     }
 
@@ -50,9 +49,7 @@ class UserRestControllerTest {
         var user = new User();
         var dto = new UserDto();
         when(service.findById(78L)).thenReturn(Optional.of(user));
-        when(mapper.userToDto(any())).thenReturn(dto);
-        mockMvc.perform(get(URL.concat("/78")))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(URL.concat("/78"))).andExpect(status().isOk());
         verify(service, times(1)).findById(78L);
     }
 
