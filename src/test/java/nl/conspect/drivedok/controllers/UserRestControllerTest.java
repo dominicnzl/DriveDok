@@ -3,7 +3,7 @@ package nl.conspect.drivedok.controllers;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.UserDto;
 import nl.conspect.drivedok.services.UserService;
-import nl.conspect.drivedok.utilities.UserMapperImpl;
+import nl.conspect.drivedok.utilities.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,7 @@ class UserRestControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    UserMapperImpl mapper;
+    UserMapper mapper;
 
     @MockBean
     UserService service;
@@ -93,11 +94,18 @@ class UserRestControllerTest {
     }
 
     @Test
-    void deleteMapping() throws Exception {
+    void deleteMappingHappy() throws Exception {
         var user = new User();
         when(service.findById(64L)).thenReturn(Optional.of(user));
         mockMvc.perform(delete(URL.concat("/64")))
                 .andExpect(status().isNoContent());
-        verify(service, times(1)).deleteById(64L);
+        verify(service, times(1)).delete(user);
+    }
+
+    @Test
+    void deleteMappingUserNotFound() throws Exception {
+        when(service.findById(11L)).thenReturn(Optional.empty());
+        mockMvc.perform(delete(URL.concat("/11"))).andExpect(status().isNotFound());
+        verify(service, never()).delete(any());
     }
 }

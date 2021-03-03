@@ -7,8 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(uses = {BasicLocalDateTimeMapper.class},
-        componentModel = "spring")
+@Mapper(componentModel = "spring")
 public interface ReservationMapper {
 
     Reservation dtoToReservation(ReservationDto dto);

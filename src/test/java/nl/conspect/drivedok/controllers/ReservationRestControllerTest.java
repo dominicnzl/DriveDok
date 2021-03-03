@@ -2,8 +2,8 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.model.ReservationDto;
-import nl.conspect.drivedok.services.BasicReservationService;
-import nl.conspect.drivedok.utilities.ReservationMapperImpl;
+import nl.conspect.drivedok.services.ReservationService;
+import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,10 +32,10 @@ class ReservationRestControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    ReservationMapperImpl mapper;
+    ReservationMapper mapper;
 
     @MockBean
-    BasicReservationService service;
+    ReservationService service;
 
     private static final String URL = "/api/reservations";
 
@@ -99,10 +100,17 @@ class ReservationRestControllerTest {
     }
 
     @Test
-    void deleteMapping() throws Exception {
+    void deleteMappingHappy() throws Exception {
         var reservation = new Reservation();
         when(service.findById(45L)).thenReturn(Optional.of(reservation));
         mockMvc.perform(delete(URL.concat("/45"))).andExpect(status().isNoContent());
-        verify(service, times(1)).deleteById(45L);
+        verify(service, times(1)).delete(reservation);
+    }
+
+    @Test
+    void deleteMappingEntityNotFound() throws Exception {
+        when(service.findById(22L)).thenReturn(Optional.empty());
+        mockMvc.perform(delete(URL.concat("/22"))).andExpect(status().isNotFound());
+        verify(service, never()).delete(any());
     }
 }

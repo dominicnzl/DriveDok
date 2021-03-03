@@ -3,7 +3,7 @@ package nl.conspect.drivedok.controllers;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.model.VehicleDto;
 import nl.conspect.drivedok.services.VehicleService;
-import nl.conspect.drivedok.utilities.VehicleMapperImpl;
+import nl.conspect.drivedok.utilities.VehicleMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,7 +33,7 @@ class VehicleRestControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    VehicleMapperImpl mapper;
+    VehicleMapper mapper;
 
     @MockBean
     VehicleService service;
@@ -103,12 +104,19 @@ class VehicleRestControllerTest {
     }
 
     @Test
-    void deleteMapping() throws Exception {
+    void deleteMappingHappy() throws Exception {
         var vehicle = new Vehicle();
         when(service.findById(10L)).thenReturn(Optional.of(vehicle));
         mockMvc.perform(delete(BASE_URL.concat("/10")))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        verify(service, times(1)).deleteById(10L);
+        verify(service, times(1)).delete(vehicle);
+    }
+
+    @Test
+    void deleteMappingVehicleNotFound() throws Exception {
+        when(service.findById(1L)).thenReturn(Optional.empty());
+        mockMvc.perform(delete(BASE_URL.concat("/1"))).andExpect(status().isNotFound());
+        verify(service, never()).delete(any());
     }
 }

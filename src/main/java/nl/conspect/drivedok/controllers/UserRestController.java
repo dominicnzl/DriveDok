@@ -15,68 +15,71 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.of;
 import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserRestController {
 
-    private final UserService service;
+    private final UserService userService;
 
     private final UserMapper mapper;
 
-    public UserRestController(UserService service, UserMapper mapper) {
-        this.service = service;
+    public UserRestController(UserService userService, UserMapper mapper) {
+        this.userService = userService;
         this.mapper = mapper;
     }
 
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
-        return ok(service.findAll());
+        return ok(userService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
-        return of(service.findById(id));
+        return of(userService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody UserDto dto) {
-        return status(CREATED).body(service.save(mapper.dtoToUser(dto)));
+        var entity = userService.save(mapper.dtoToUser(dto));
+        var location = URI.create("/api/users/" + entity.getId());
+        return created(location).body(entity);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserDto dto) {
-        if (service.findById(id).isEmpty()) {
+        if (userService.findById(id).isEmpty()) {
             return notFound().build();
         }
         var user = mapper.dtoToUser(dto);
         user.setId(id);
-        return ok(service.save(user));
+        return ok(userService.save(user));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody UserDto dto) {
-        return service.findById(id)
+        return userService.findById(id)
                 .map(e -> mapper.patchDtoToUser(dto, e))
-                .map(service::save)
+                .map(userService::save)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (service.findById(id).isEmpty()) {
-            return notFound().build();
-        }
-        service.deleteById(id);
-        return noContent().build();
+        return userService.findById(id)
+                .map(entity -> {
+                    userService.delete(entity);
+                    return noContent().<Void>build();
+                })
+                .orElseGet(() -> notFound().build());
     }
 }
