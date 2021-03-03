@@ -37,10 +37,6 @@ public class VehicleRestController {
         this.mapper = mapper;
     }
 
-    private boolean isVehicleFound(Long id) {
-        return vehicleService.findById(id).isPresent();
-    }
-
     @GetMapping
     public ResponseEntity<List<Vehicle>> findAll() {
         return ok(vehicleService.findAll());
@@ -60,9 +56,6 @@ public class VehicleRestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Vehicle> update(@PathVariable Long id, @RequestBody VehicleDto dto) {
-        if (!isVehicleFound(id)) {
-            return notFound().build();
-        }
         var vehicle = mapper.dtoToVehicle(dto);
         vehicle.setId(id);
         return ok(vehicleService.save(vehicle));

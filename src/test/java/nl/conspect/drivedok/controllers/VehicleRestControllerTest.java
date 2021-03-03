@@ -84,15 +84,6 @@ class VehicleRestControllerTest {
     }
 
     @Test
-    void updateWhenVehicleNotFound() throws Exception {
-        when(service.findById(2L)).thenReturn(Optional.empty());
-        mockMvc.perform(put(BASE_URL.concat("/2"))
-                .contentType(APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void updatePartially() throws Exception {
         var vehicle = new Vehicle();
         when(service.findById(5L)).thenReturn(Optional.of(vehicle));
