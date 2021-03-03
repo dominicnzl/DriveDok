@@ -33,8 +33,4 @@ public class ParkingSpotService {
     public ParkingSpot update(ParkingSpot parkingSpot) {
         return parkingSpotRepository.save(parkingSpot);
     }
-
-    public void deleteById(Long id) {
-        parkingSpotRepository.deleteById(id);
-    }
 }

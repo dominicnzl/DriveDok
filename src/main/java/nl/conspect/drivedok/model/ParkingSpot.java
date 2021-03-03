@@ -72,6 +72,7 @@ public class ParkingSpot extends AbstractPersistable<Long> {
     public String toString() {
         return "ParkingSpot{" +
                 "id=" + id +
+                ", version=" + version +
                 ", parkingType=" + parkingType +
                 ", quantity=" + quantity +
                 ", availability=" + availability +

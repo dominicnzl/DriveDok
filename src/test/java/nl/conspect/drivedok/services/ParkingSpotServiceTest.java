@@ -6,94 +6,88 @@ import nl.conspect.drivedok.repositories.ParkingSpotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.as;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
-@DataJpaTest
+@ExtendWith(MockitoExtension.class)
 class ParkingSpotServiceTest {
 
-    @Autowired
-    TestEntityManager testEntityManager;
-
-    @Autowired
-    ParkingSpotRepository parkingSpotRepository;
-
+    @InjectMocks
     ParkingSpotService parkingSpotService;
 
-    @BeforeEach
-    public void init() {
-        parkingSpotService = new ParkingSpotService(parkingSpotRepository);
-    }
+    @Mock
+    ParkingSpotRepository parkingSpotRepository;
 
     @Test
-    @DisplayName("Create 3 ParkingSpots and persist. Expect findAll() to return a list with size 3")
-    void findAll() {
+    @DisplayName("Expect findAll() to return all ParkingSpots")
+    void shouldFindAllParkingSpots() {
         ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 10);
         ParkingSpot spot2 = new ParkingSpot(ParkingType.ELECTRIC, 10);
         ParkingSpot spot3 = new ParkingSpot(ParkingType.NORMAL, 5);
-        testEntityManager.persist(spot1);
-        testEntityManager.persist(spot2);
-        testEntityManager.persist(spot3);
-        assertEquals(3, parkingSpotService.findAll().size());
+        List<ParkingSpot> expected = new ArrayList<>();
+        expected.add(spot1);
+        expected.add(spot2);
+        expected.add(spot3);
+
+        when(parkingSpotRepository.findAll()).thenReturn(expected);
+
+        assertEquals(expected, parkingSpotService.findAll());
     }
 
     @Test
-    @DisplayName("Persist two ParkingSpots. Expect findById to retrieve the correct ParkingSpot. Verify by checking the ParkingType")
-    void findById() {
-        ParkingSpot spot1 = new ParkingSpot(ParkingType.ELECTRIC, 5);
-        testEntityManager.persist(spot1);
-        ParkingSpot spot2 = new ParkingSpot(ParkingType.NORMAL, 55);
-        testEntityManager.persist(spot2);
+    @DisplayName("Expect findById() to return the right ParkingSpot")
+    void shouldFindParkingSpotById() {
+        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 10);
 
-        ParkingType parkingType = parkingSpotService.findById(spot1.getId())
-                .map(ParkingSpot::getParkingType)
-                .orElse(null);
-        assertEquals(ParkingType.ELECTRIC, parkingType);
-        assertNotEquals(ParkingType.NORMAL, parkingType);
+        when(parkingSpotRepository.findById(1L)).thenReturn(Optional.of(spot1));
+
+        assertEquals(spot1, parkingSpotService.findById(1L).get());
     }
 
     @Test
-    @DisplayName("Assert initial findAll() to return empty list. Expect subsequent findAll() to be > 0 after create()")
+    @DisplayName("Assert that create() saves and returns the right ParkingSpot")
     void create() {
-        assertTrue(parkingSpotService.findAll().isEmpty());
+        Long expectedId = 1L;
+        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 10);
 
-        ParkingSpot spot = new ParkingSpot(ParkingType.DISABLED, 2);
-        parkingSpotService.create(spot);
-        assertEquals(1, parkingSpotService.findAll().size());
+        doAnswer( inv -> {
+            ReflectionTestUtils.setField((ParkingSpot) inv.getArgument(0), "id", expectedId);
+            return spot1;
+        }).when(parkingSpotRepository).save(spot1);
+
+        assertThat(parkingSpotService.create(spot1)).isEqualTo(spot1);
     }
 
     @Test
-    @DisplayName("Persist a ParkingSpot with ParkingType Disabled. Retrieve this and set the type to Electric and call update(). Expect the ParkingType to be Electric after subsequent retrieval")
-    void update() {
-        ParkingSpot spot = new ParkingSpot(ParkingType.DISABLED,5);
-        testEntityManager.persist(spot);
+    @DisplayName("Expect the quantity field of the same ParkingSpot to be correctly updated")
+    void shouldUpdateQuantityOfTheParkingSpot() {
+        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 10);
+        when(parkingSpotRepository.findById(1L)).thenReturn(Optional.of(spot1));
 
-        ParkingSpot beforeUpdateSpot = parkingSpotService.findById(spot.getId()).orElse(null);
-        assertNotNull(beforeUpdateSpot);
-        assertEquals(ParkingType.DISABLED, beforeUpdateSpot.getParkingType());
+        ParkingSpot parkingSpot = parkingSpotService.findById(1L).get();
+        parkingSpot.setQuantity(20);
 
-        beforeUpdateSpot.setParkingType(ParkingType.ELECTRIC);
-        parkingSpotService.update(beforeUpdateSpot);
-        ParkingSpot afterUpdateSpot = parkingSpotService.findById(spot.getId()).orElse(null);
-        assertNotNull(afterUpdateSpot);
-        assertEquals(ParkingType.ELECTRIC, afterUpdateSpot.getParkingType());
-    }
+        when(parkingSpotRepository.save(parkingSpot)).thenReturn(parkingSpot);
+        ParkingSpot updatedSpot = parkingSpotService.update(parkingSpot);
 
-    @Test
-    @DisplayName("Persist 3 ParkingSpots. Delete the second. Expect findAll() to have size 2")
-    void deleteById() {
-        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 5);
-        ParkingSpot spot2 = new ParkingSpot(ParkingType.ELECTRIC, 5);
-        ParkingSpot spot3 = new ParkingSpot(ParkingType.NORMAL, 55);
-        testEntityManager.persist(spot1);
-        testEntityManager.persist(spot2);
-        testEntityManager.persist(spot3);
-        assertEquals(3, parkingSpotService.findAll().size());
-
-        parkingSpotService.deleteById(spot2.getId());
-        assertEquals(2, parkingSpotService.findAll().size());
+        //first check if it is the same object
+        assertEquals(parkingSpot,updatedSpot);
+        assertEquals(20, updatedSpot.getQuantity());
     }
 }
