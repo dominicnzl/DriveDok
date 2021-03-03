@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReservationRestController.class)
@@ -63,12 +64,14 @@ class ReservationRestControllerTest {
     @Test
     void create() throws Exception {
         var reservation = new Reservation();
+        reservation.setId(1L);
         when(mapper.dtoToReservation(any())).thenReturn(reservation);
         when(service.save(any())).thenReturn(reservation);
         mockMvc.perform(post(URL)
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(redirectedUrl(URL.concat("/1")));
         verify(service, times(1)).save(reservation);
     }
 

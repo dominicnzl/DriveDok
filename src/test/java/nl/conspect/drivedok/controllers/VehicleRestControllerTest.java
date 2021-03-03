@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(VehicleRestController.class)
@@ -58,12 +59,14 @@ class VehicleRestControllerTest {
     @Test
     void create() throws Exception {
         var vehicle = new Vehicle();
+        vehicle.setId(20L);
         when(mapper.dtoToVehicle(any())).thenReturn(vehicle);
         when(service.save(any())).thenReturn(vehicle);
         mockMvc.perform(post(BASE_URL)
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(redirectedUrl(BASE_URL.concat("/20")));
         verify(service, times(1)).save(vehicle);
     }
 

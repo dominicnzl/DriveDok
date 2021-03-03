@@ -1,7 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.User;
-import nl.conspect.drivedok.model.UserDto;
 import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.utilities.UserMapper;
 import org.junit.jupiter.api.Test;
@@ -23,6 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserRestController.class)
@@ -48,7 +48,6 @@ class UserRestControllerTest {
     @Test
     void getMappingWithId() throws Exception {
         var user = new User();
-        var dto = new UserDto();
         when(service.findById(78L)).thenReturn(Optional.of(user));
         mockMvc.perform(get(URL.concat("/78"))).andExpect(status().isOk());
         verify(service, times(1)).findById(78L);
@@ -57,12 +56,14 @@ class UserRestControllerTest {
     @Test
     void postMapping() throws Exception {
         var user = new User();
+        user.setId(3L);
         when(mapper.dtoToUser(any())).thenReturn(user);
         when(service.save(any())).thenReturn(user);
         mockMvc.perform(post(URL)
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(redirectedUrl(URL.concat("/3")));
         verify(service, times(1)).save(user);
     }
 
