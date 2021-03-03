@@ -3,7 +3,7 @@ package nl.conspect.drivedok.controllers;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.model.VehicleDto;
 import nl.conspect.drivedok.services.VehicleService;
-import nl.conspect.drivedok.utilities.VehicleMapperImpl;
+import nl.conspect.drivedok.utilities.VehicleMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(VehicleRestController.class)
@@ -32,7 +34,7 @@ class VehicleRestControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    VehicleMapperImpl mapper;
+    VehicleMapper mapper;
 
     @MockBean
     VehicleService service;
@@ -41,8 +43,7 @@ class VehicleRestControllerTest {
 
     @Test
     void findAll() throws Exception {
-        mockMvc.perform(get(BASE_URL))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(BASE_URL)).andExpect(status().isOk());
         verify(service, times(1)).findAll();
     }
 
@@ -51,21 +52,21 @@ class VehicleRestControllerTest {
         var vehicle = new Vehicle();
         var dto = new VehicleDto();
         when(service.findById(999L)).thenReturn(Optional.of(vehicle));
-        when(mapper.vehicleToDto(vehicle)).thenReturn(dto);
-        mockMvc.perform(get(BASE_URL.concat("/999")))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(BASE_URL.concat("/999"))).andExpect(status().isOk());
         verify(service, times(1)).findById(999L);
     }
 
     @Test
     void create() throws Exception {
         var vehicle = new Vehicle();
+        vehicle.setId(20L);
         when(mapper.dtoToVehicle(any())).thenReturn(vehicle);
         when(service.save(any())).thenReturn(vehicle);
         mockMvc.perform(post(BASE_URL)
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(redirectedUrl(BASE_URL.concat("/20")));
         verify(service, times(1)).save(vehicle);
     }
 
@@ -83,15 +84,6 @@ class VehicleRestControllerTest {
     }
 
     @Test
-    void updateWhenVehicleNotFound() throws Exception {
-        when(service.findById(2L)).thenReturn(Optional.empty());
-        mockMvc.perform(put(BASE_URL.concat("/2"))
-                .contentType(APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void updatePartially() throws Exception {
         var vehicle = new Vehicle();
         when(service.findById(5L)).thenReturn(Optional.of(vehicle));
@@ -106,12 +98,19 @@ class VehicleRestControllerTest {
     }
 
     @Test
-    void deleteMapping() throws Exception {
+    void deleteMappingHappy() throws Exception {
         var vehicle = new Vehicle();
         when(service.findById(10L)).thenReturn(Optional.of(vehicle));
         mockMvc.perform(delete(BASE_URL.concat("/10")))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        verify(service, times(1)).deleteById(10L);
+        verify(service, times(1)).delete(vehicle);
+    }
+
+    @Test
+    void deleteMappingVehicleNotFound() throws Exception {
+        when(service.findById(1L)).thenReturn(Optional.empty());
+        mockMvc.perform(delete(BASE_URL.concat("/1"))).andExpect(status().isNotFound());
+        verify(service, never()).delete(any());
     }
 }

@@ -1,9 +1,8 @@
 package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.User;
-import nl.conspect.drivedok.model.UserDto;
 import nl.conspect.drivedok.services.UserService;
-import nl.conspect.drivedok.utilities.UserMapperImpl;
+import nl.conspect.drivedok.utilities.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserRestController.class)
@@ -31,7 +32,7 @@ class UserRestControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    UserMapperImpl mapper;
+    UserMapper mapper;
 
     @MockBean
     UserService service;
@@ -40,31 +41,29 @@ class UserRestControllerTest {
 
     @Test
     void getMapping() throws Exception {
-        mockMvc.perform(get(URL))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(URL)).andExpect(status().isOk());
         verify(service, times(1)).findAll();
     }
 
     @Test
     void getMappingWithId() throws Exception {
         var user = new User();
-        var dto = new UserDto();
         when(service.findById(78L)).thenReturn(Optional.of(user));
-        when(mapper.userToDto(any())).thenReturn(dto);
-        mockMvc.perform(get(URL.concat("/78")))
-                .andExpect(status().isOk());
+        mockMvc.perform(get(URL.concat("/78"))).andExpect(status().isOk());
         verify(service, times(1)).findById(78L);
     }
 
     @Test
     void postMapping() throws Exception {
         var user = new User();
+        user.setId(3L);
         when(mapper.dtoToUser(any())).thenReturn(user);
         when(service.save(any())).thenReturn(user);
         mockMvc.perform(post(URL)
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(redirectedUrl(URL.concat("/3")));
         verify(service, times(1)).save(user);
     }
 
@@ -96,11 +95,18 @@ class UserRestControllerTest {
     }
 
     @Test
-    void deleteMapping() throws Exception {
+    void deleteMappingHappy() throws Exception {
         var user = new User();
         when(service.findById(64L)).thenReturn(Optional.of(user));
         mockMvc.perform(delete(URL.concat("/64")))
                 .andExpect(status().isNoContent());
-        verify(service, times(1)).deleteById(64L);
+        verify(service, times(1)).delete(user);
+    }
+
+    @Test
+    void deleteMappingUserNotFound() throws Exception {
+        when(service.findById(11L)).thenReturn(Optional.empty());
+        mockMvc.perform(delete(URL.concat("/11"))).andExpect(status().isNotFound());
+        verify(service, never()).delete(any());
     }
 }

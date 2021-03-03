@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.UserDto;
 import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.utilities.UserMapper;
@@ -14,69 +15,71 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.of;
 import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserRestController {
 
-    private final UserService service;
+    private final UserService userService;
 
     private final UserMapper mapper;
 
-    public UserRestController(UserService service, UserMapper mapper) {
-        this.service = service;
+    public UserRestController(UserService userService, UserMapper mapper) {
+        this.userService = userService;
         this.mapper = mapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll() {
-        return ok(mapper.usersToDtos(service.findAll()));
+    public ResponseEntity<List<User>> findAll() {
+        return ok(userService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable Long id) {
-        return of(service.findById(id).map(mapper::userToDto));
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        return of(userService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody UserDto dto) {
-        var entity = service.save(mapper.dtoToUser(dto));
-        return status(CREATED).body(mapper.userToDto(entity));
+    public ResponseEntity<User> create(@RequestBody UserDto dto) {
+        var entity = userService.save(mapper.dtoToUser(dto));
+        var location = URI.create("/api/users/" + entity.getId());
+        return created(location).body(entity);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserDto dto) {
-        if (service.findById(id).isEmpty()) {
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserDto dto) {
+        if (userService.findById(id).isEmpty()) {
             return notFound().build();
         }
         var user = mapper.dtoToUser(dto);
         user.setId(id);
-        var entity = service.save(user);
-        return ok(mapper.userToDto(entity));
+        return ok(userService.save(user));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updatePartially(@PathVariable Long id, @RequestBody UserDto dto) {
-        var entity = service.findById(id)
+    public ResponseEntity<User> updatePartially(@PathVariable Long id, @RequestBody UserDto dto) {
+        return userService.findById(id)
                 .map(e -> mapper.patchDtoToUser(dto, e))
-                .map(service::save);
-        return entity.isEmpty() ? notFound().build() : ok(mapper.userToDto(entity.get()));
+                .map(userService::save)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (service.findById(id).isEmpty()) {
-            return notFound().build();
-        }
-        service.deleteById(id);
-        return noContent().build();
+        return userService.findById(id)
+                .map(entity -> {
+                    userService.delete(entity);
+                    return noContent().<Void>build();
+                })
+                .orElseGet(() -> notFound().build());
     }
 }
