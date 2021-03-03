@@ -2,6 +2,7 @@ package nl.conspect.drivedok.services;
 
 import nl.conspect.drivedok.model.ParkingSpot;
 import nl.conspect.drivedok.model.ParkingType;
+import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.repositories.ParkingSpotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,32 +63,20 @@ class ParkingSpotServiceTest {
 
     @Test
     @DisplayName("Assert that create() saves and returns the right ParkingSpot")
-    void create() {
-        Long expectedId = 1L;
-        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 10);
+    void shouldReturnParkingSpot_When_ParkingSpotCreated() {
 
-        doAnswer( inv -> {
-            ReflectionTestUtils.setField((ParkingSpot) inv.getArgument(0), "id", expectedId);
-            return spot1;
-        }).when(parkingSpotRepository).save(spot1);
-
-        assertThat(parkingSpotService.create(spot1)).isEqualTo(spot1);
+        ParkingSpot parkingSpot = new ParkingSpot();
+        when(parkingSpotRepository.save(parkingSpot)).thenReturn(parkingSpot);
+        ParkingSpot createdSpot = parkingSpotService.create(parkingSpot);
+        assertSame(parkingSpot, createdSpot);
     }
 
     @Test
-    @DisplayName("Expect the quantity field of the same ParkingSpot to be correctly updated")
-    void shouldUpdateQuantityOfTheParkingSpot() {
-        ParkingSpot spot1 = new ParkingSpot(ParkingType.DISABLED, 10);
-        when(parkingSpotRepository.findById(1L)).thenReturn(Optional.of(spot1));
-
-        ParkingSpot parkingSpot = parkingSpotService.findById(1L).get();
-        parkingSpot.setQuantity(20);
-
+    @DisplayName("Expect the same ParkingSpot to be returned when updated")
+    void shouldReturnSameParkingSpot_When_ParkingSpotUpdated(){
+        ParkingSpot parkingSpot = new ParkingSpot();
         when(parkingSpotRepository.save(parkingSpot)).thenReturn(parkingSpot);
         ParkingSpot updatedSpot = parkingSpotService.update(parkingSpot);
-
-        //first check if it is the same object
-        assertEquals(parkingSpot,updatedSpot);
-        assertEquals(20, updatedSpot.getQuantity());
+        assertSame(parkingSpot, updatedSpot);
     }
 }
