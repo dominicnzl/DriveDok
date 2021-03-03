@@ -43,6 +43,10 @@ public class Zone extends AbstractPersistable<Long> {
     public Zone(String name, int totalParkingSpots){
         this.name = name;
         this.totalParkingSpots = totalParkingSpots;
+        this.parkingSpots.add(new ParkingSpot(ParkingType.MOTOR, 0));
+        this.parkingSpots.add(new ParkingSpot(ParkingType.DISABLED, 0));
+        this.parkingSpots.add(new ParkingSpot(ParkingType.ELECTRIC, 0));
+        this.parkingSpots.add(new ParkingSpot(ParkingType.NORMAL, totalParkingSpots));
     }
 
     @Override
