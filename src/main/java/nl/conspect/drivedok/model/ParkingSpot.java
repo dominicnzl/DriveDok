@@ -39,6 +39,8 @@ public class ParkingSpot extends AbstractPersistable<Long> {
         return id;
     }
 
+    public int getVersion(){return version; };
+
     @Override
     public void setId(Long id) {
         this.id = id;
