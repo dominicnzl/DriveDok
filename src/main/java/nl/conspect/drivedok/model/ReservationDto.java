@@ -1,13 +1,19 @@
 package nl.conspect.drivedok.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ReservationDto {
 
     private Long id;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     private LocalTime startTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private LocalTime endTime;
     private User user;
