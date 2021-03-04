@@ -17,9 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/reservations")
 public class ReservationController {
 
-    private static final String LISTPAGE = "reservation-listpage";
+    public static final String LISTPAGE = "reservation-listpage";
 
-    private static final String EDITPAGE = "reservation-editpage";
+    public static final String EDITPAGE = "reservation-editpage";
 
     private final ReservationService service;
 
@@ -31,21 +31,21 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ModelAndView listpage() {
+    public ModelAndView handleGet() {
         final var mav = new ModelAndView(LISTPAGE);
         mav.addObject("reservations", service.findAll());
         return mav;
     }
 
     @GetMapping("/new")
-    public ModelAndView newpage() {
+    public ModelAndView handleCreate() {
         final var mav = new ModelAndView(EDITPAGE);
         mav.addObject("reservation", new Reservation());
         return mav;
     }
 
     @GetMapping("/{id}")
-    public ModelAndView editpage(@PathVariable Long id) {
+    public ModelAndView handleGetId(@PathVariable Long id) {
         final var mav = new ModelAndView(EDITPAGE);
         final var reservation = service.findById(id).orElseGet(Reservation::new);
         mav.addObject("reservation", reservation);
@@ -53,12 +53,12 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ModelAndView save(@ModelAttribute ReservationDto dto, BindingResult bindingResult) {
+    public ModelAndView handlePost(@ModelAttribute ReservationDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return editpage(dto.getId());
+            return handleGetId(dto.getId());
         }
         var entity = mapper.dtoToReservation(dto);
         service.save(entity);
-        return listpage();
+        return handleGet();
     }
 }
