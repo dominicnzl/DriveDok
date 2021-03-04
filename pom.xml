@@ -19,6 +19,7 @@
         <sonar.projectKey>dominicnzl_DriveDok</sonar.projectKey>
         <sonar.organization>dominicnzl</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.sources>src/main/java,src/main/resources/templates</sonar.sources>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     </properties>
 
