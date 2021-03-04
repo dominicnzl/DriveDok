@@ -17,6 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/reservations")
 public class ReservationController {
 
+    private static final String LISTPAGE = "reservation-listpage";
+
+    private static final String EDITPAGE = "reservation-editpage";
+
     private final ReservationService service;
 
     private final ReservationMapper mapper;
@@ -28,14 +32,21 @@ public class ReservationController {
 
     @GetMapping
     public ModelAndView listpage() {
-        final var mav = new ModelAndView("reservation-listpage");
+        final var mav = new ModelAndView(LISTPAGE);
         mav.addObject("reservations", service.findAll());
+        return mav;
+    }
+
+    @GetMapping("/new")
+    public ModelAndView newpage() {
+        final var mav = new ModelAndView(EDITPAGE);
+        mav.addObject("reservation", new Reservation());
         return mav;
     }
 
     @GetMapping("/{id}")
     public ModelAndView editpage(@PathVariable Long id) {
-        final var mav = new ModelAndView("reservation-editpage");
+        final var mav = new ModelAndView(EDITPAGE);
         final var reservation = service.findById(id).orElseGet(Reservation::new);
         mav.addObject("reservation", reservation);
         return mav;

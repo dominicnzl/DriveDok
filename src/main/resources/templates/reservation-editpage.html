@@ -33,14 +33,14 @@
                         <input type="date"
                                class="form-control"
                                id="start-date"
-                               th:value="*{start.toLocalDate()}"
+                               th:value="*{start?.toLocalDate()}"
                                name="startDate">
                     </div>
                     <div class="col">
                         <input type="time"
                                class="form-control"
                                id="start-time"
-                               th:value="*{start.toLocalTime()}"
+                               th:value="*{start?.toLocalTime()}"
                                name="startTime">
                     </div>
                 </div>
@@ -52,14 +52,14 @@
                         <input type="date"
                                class="form-control"
                                id="end-date"
-                               th:value="*{end.toLocalDate()}"
+                               th:value="*{end?.toLocalDate()}"
                                name="endDate">
                     </div>
                     <div class="col">
                         <input type="time"
                                class="form-control"
                                id="end-time"
-                               th:value="*{end.toLocalTime()}"
+                               th:value="*{end?.toLocalTime()}"
                                name="endTime">
                     </div>
                 </div>
@@ -71,8 +71,11 @@
             <input type="hidden" th:field="${reservation.parkingSpot}">
             <input type="hidden" th:field="${reservation.id}">
         </form>
-        <button form="save-reservation-form" type="submit" class="btn btn-primary">Save</button>
-        <button form="save-reservation-form" type="reset" class="btn btn-warning">Reset</button>
+        <div class="container-sm">
+            <button form="save-reservation-form" type="submit" class="btn btn-primary">Save</button>
+            <button form="save-reservation-form" type="reset" class="btn btn-warning">Reset</button>
+            <a href="#" th:href="@{/reservations}">Back to Reservations</a>
+        </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
