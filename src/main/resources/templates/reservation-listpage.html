@@ -35,7 +35,7 @@
             </td>
             <td th:text="*{#temporals.format(r.start, 'dd-MM-yyyy HH:mm')}"></td>
             <td th:text="*{#temporals.format(r.end, 'dd-MM-yyyy HH:mm')}"></td>
-            <td th:text="*{r.vehicle.licencePlate}"></td>
+            <td th:text="*{r.vehicle?.licencePlate}"></td>
             <td th:text="*{r.parkingSpot}"></td>
         </tr>
     </table>

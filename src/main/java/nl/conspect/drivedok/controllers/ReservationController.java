@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.exceptions.ReservationNotFoundException;
 import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.model.ReservationDto;
 import nl.conspect.drivedok.services.ReservationService;
@@ -46,8 +47,10 @@ public class ReservationController {
 
     @GetMapping("/{id}")
     public ModelAndView handleGetId(@PathVariable Long id) {
+        final var reservation = id == null
+                ? new Reservation()
+                : service.findById(id).orElseThrow(() -> new ReservationNotFoundException(id));
         final var mav = new ModelAndView(EDITPAGE);
-        final var reservation = service.findById(id).orElseGet(Reservation::new);
         mav.addObject("reservation", reservation);
         return mav;
     }

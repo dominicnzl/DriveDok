@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +28,8 @@ class UserControllerTest {
     @MockBean
     UserService userService;
 
+    private static final String URL = "/users";
+
     @Test
     @DisplayName("Calling /users should return userlistpage and the model should contain a collection of users")
     void listPage() throws Exception {
@@ -37,7 +40,7 @@ class UserControllerTest {
         Mockito.when(userService.findAll()).thenReturn(users);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("user-listpage"))
+                .andExpect(view().name(UserController.USER_LISTPAGE))
                 .andExpect(model().attribute("users", users))
                 .andDo(print());
     }
@@ -49,9 +52,17 @@ class UserControllerTest {
         Mockito.when(userService.getById(1L)).thenReturn(barry);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("user-editpage"))
+                .andExpect(view().name(UserController.USER_EDITPAGE))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", barry))
                 .andDo(print());
+    }
+
+    @Test
+    void handleSave() throws Exception {
+        mockMvc.perform(post(URL).content("{}"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(UserController.USER_EDITPAGE))
+                .andExpect(model().attributeExists("user"));
     }
 }
