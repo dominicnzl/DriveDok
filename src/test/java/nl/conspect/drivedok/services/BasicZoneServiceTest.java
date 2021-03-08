@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -118,6 +119,7 @@ class BasicZoneServiceTest {
 
         zoneService.deleteById(1L);
         assertThat(zoneService.findAll().isEmpty());
+        verify(zoneRepository, times(1)).deleteById(1L);
     }
 
 }
