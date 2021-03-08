@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -105,6 +106,18 @@ class BasicZoneServiceTest {
         Executable executable = () -> zoneService.update(zone);
 
         assertThrows(ParkingSpotUpdateException.class, executable);
+    }
+
+    @Test
+    void should_ReturnEmptyList_When_DeleteZone(){
+
+        Zone zone1 = new Zone("Noord", 100);
+        ReflectionTestUtils.setField(zone1, "id", 1L);
+
+        doNothing().when(zoneRepository).deleteById(1L);
+
+        zoneService.deleteById(1L);
+        assertThat(zoneService.findAll().isEmpty());
     }
 
 }
