@@ -118,7 +118,6 @@ class BasicZoneServiceTest {
         doNothing().when(zoneRepository).deleteById(1L);
 
         zoneService.deleteById(1L);
-        assertThat(zoneService.findAll().isEmpty());
         verify(zoneRepository, times(1)).deleteById(1L);
     }
 
