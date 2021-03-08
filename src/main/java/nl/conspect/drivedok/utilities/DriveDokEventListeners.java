@@ -26,6 +26,7 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
 
     private User sjaak;
     private Vehicle autoVanDeSjaak;
+    private Vehicle electrischeAuto;
 
     public DriveDokEventListeners(ZoneServiceImpl zoneService, UserService userService, BasicReservationService reservationService) {
         this.zoneService = zoneService;
@@ -41,7 +42,7 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
     }
 
     private void createDummyZones() {
-        var noord = new Zone("Noord",  10);
+        var noord = new Zone("Noord", 10);
         var zuid = new Zone("Zuid", 20);
         var west = new Zone("West", 30);
         zoneService.create(noord);
@@ -52,7 +53,7 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
     private void createDummyUsersAndVehicles() {
         var sjaaksVehicles = Set.of(
                 autoVanDeSjaak(),
-                new Vehicle("Electrische auto", "H-001-C", ParkingType.ELECTRIC),
+                electrischeAuto(),
                 new Vehicle("Zonnepaneel fiets", "H-002-D", ParkingType.DISABLED)
         );
         var piensVehicles = Set.of(
@@ -80,13 +81,27 @@ public class DriveDokEventListeners implements ApplicationListener<ContextRefres
         return autoVanDeSjaak;
     }
 
+    private Vehicle electrischeAuto() {
+        if (null == electrischeAuto) {
+            electrischeAuto = new Vehicle("Electrische auto", "H-001-C", ParkingType.ELECTRIC);
+        }
+        return electrischeAuto;
+    }
+
     private void createDummyReservations() {
         var reservation = new Reservation(
-                LocalDateTime.of(2021, Month.JANUARY, 1, 8,0),
+                LocalDateTime.of(2021, Month.JANUARY, 1, 8, 0),
                 LocalDateTime.of(2021, Month.DECEMBER, 31, 17, 0),
                 sjaak(),
                 autoVanDeSjaak(),
                 null);
+        var otherReservation = new Reservation(
+                LocalDateTime.of(2021, Month.APRIL, 1, 8, 0),
+                LocalDateTime.of(2021, Month.APRIL, 1, 18, 0),
+                sjaak(),
+                electrischeAuto(),
+                null);
         reservationService.save(reservation);
+        reservationService.save(otherReservation);
     }
 }
