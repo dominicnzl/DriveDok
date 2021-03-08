@@ -2,6 +2,8 @@ package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.services.ReservationService;
+import nl.conspect.drivedok.services.UserService;
+import nl.conspect.drivedok.services.VehicleService;
 import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,6 +36,12 @@ class ReservationControllerTest {
 
     @MockBean
     ReservationMapper mapper;
+
+    @MockBean
+    UserService userService;
+
+    @MockBean
+    VehicleService vehicleService;
 
     private static final String URL = "/reservations";
 
