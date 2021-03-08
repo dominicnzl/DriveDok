@@ -8,7 +8,7 @@ import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.services.BasicReservationService;
 import nl.conspect.drivedok.services.UserService;
-import nl.conspect.drivedok.services.ZoneServiceImpl;
+import nl.conspect.drivedok.services.ZoneService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -20,14 +20,14 @@ import java.util.Set;
 @Component
 public class DriveDokEventListeners implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final ZoneServiceImpl zoneService;
+    private final ZoneService zoneService;
     private final UserService userService;
     private final BasicReservationService reservationService;
 
     private User sjaak;
     private Vehicle autoVanDeSjaak;
 
-    public DriveDokEventListeners(ZoneServiceImpl zoneService, UserService userService, BasicReservationService reservationService) {
+    public DriveDokEventListeners(ZoneService zoneService, UserService userService, BasicReservationService reservationService) {
         this.zoneService = zoneService;
         this.userService = userService;
         this.reservationService = reservationService;

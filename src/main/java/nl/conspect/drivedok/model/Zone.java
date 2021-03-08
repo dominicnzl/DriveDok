@@ -24,7 +24,7 @@ public class Zone extends AbstractPersistable<Long> {
     private Long id;
 
     @NotNull
-    @Size(min=3, message = "Your name should at least have 3 letters")
+    @Size(min = 3, message = "Your name should at least have 3 letters")
     @Size(max = 20, message = "Your name can not have more than 20 letters")
     private String name;
 
@@ -39,15 +39,21 @@ public class Zone extends AbstractPersistable<Long> {
     public Zone() {
     }
 
-    public Zone(String name, int totalParkingSpots){
+    public Zone(String name, int totalParkingSpots) {
         this.name = name;
         this.totalParkingSpots = totalParkingSpots;
+        this.parkingSpots.add(new ParkingSpot(ParkingType.MOTOR, 0));
+        this.parkingSpots.add(new ParkingSpot(ParkingType.DISABLED, 0));
+        this.parkingSpots.add(new ParkingSpot(ParkingType.ELECTRIC, 0));
+        this.parkingSpots.add(new ParkingSpot(ParkingType.NORMAL, totalParkingSpots));
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -66,11 +72,13 @@ public class Zone extends AbstractPersistable<Long> {
 
     public void setParkingSpots(Set<ParkingSpot> parkingSpots) {
         Set<ParkingSpot> parkingSpots1 = new TreeSet<>(new ParkingTypeComparator());
-        parkingSpots.forEach(parkingSpot -> parkingSpots1.add(parkingSpot));
+        for (ParkingSpot parkingSpot : parkingSpots) {
+            parkingSpots1.add(parkingSpot);
+        }
         this.parkingSpots = parkingSpots1;
     }
 
-    public void addParkingSpot(ParkingSpot parkingSpot){
+    public void addParkingSpot(ParkingSpot parkingSpot) {
         parkingSpots.add(parkingSpot);
     }
 
