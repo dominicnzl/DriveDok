@@ -40,7 +40,7 @@ class ZoneControllerTest {
         Zone zone1 = new Zone("Noord", 100);
         Zone zone2 = new Zone("Oost", 200);
         Zone zone3 = new Zone("Zuid", 300);
-        List<Zone> expected = new ArrayList<Zone>(Arrays.asList(zone1, zone2, zone3));
+        var expected = List.of(zone1, zone2, zone3);
         when(zoneService.findAll()).thenReturn(expected);
 
         mockMvc.perform(get("/zones"))
