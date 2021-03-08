@@ -17,19 +17,15 @@
         </a>
     </nav>
     <h1>Reservations</h1>
-    <table class="table" aria-label="Reservations">
+    <table class="table table-hover" aria-label="Reservations">
         <tr>
-            <th scope="col">#</th>
             <th scope="col">User</th>
             <th scope="col">Start</th>
             <th scope="col">End</th>
             <th scope="col">Vehicle (licenceplate)</th>
             <th scope="col">ParkingSpot</th>
         </tr>
-        <tr th:each="r : ${reservations}">
-            <td>
-                <a href="#" th:href="@{|/reservations/*{r.id}|}" th:text="*{r.id}"></a>
-            </td>
+        <tr th:each="r : ${reservations}" th:id="|row_${r.id}|" th:class="tr-reservations" style="cursor:pointer">
             <td>
                 <a href="#" th:href="@{|/users/*{r.user.id}|}" th:text="*{r.user.name}"></a>
             </td>
@@ -46,5 +42,21 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
+<script>
+    const addRedirect = elementId => {
+        // extract [id] from [row_id] with slice
+        let reservationId = elementId.slice(4);
+        let uri = `/reservations/${reservationId}`;
+        const row = document.getElementById(elementId);
+        row.addEventListener('click', () => goto(uri));
+    }
+
+    function goto(uri) {
+        location.href=uri;
+    }
+
+    const reservationRows = document.querySelectorAll(".tr-reservations");
+    reservationRows.forEach(element => addRedirect(element.id));
+</script>
 </body>
 </html>
