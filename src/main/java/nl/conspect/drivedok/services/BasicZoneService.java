@@ -1,9 +1,7 @@
 package nl.conspect.drivedok.services;
 
-
 import nl.conspect.drivedok.exceptions.ParkingSpotUpdateException;
 import nl.conspect.drivedok.model.ParkingSpot;
-import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.Zone;
 import nl.conspect.drivedok.repositories.ZoneRepository;
 import org.springframework.stereotype.Service;
@@ -23,15 +21,15 @@ public class BasicZoneService implements ZoneService {
         this.zoneRepository = zoneRepository;
     }
 
-    public List<Zone> findAll(){
-        return  zoneRepository.findAll();
+    public List<Zone> findAll() {
+        return zoneRepository.findAll();
     }
 
-    public Optional<Zone> findById(Long id){
+    public Optional<Zone> findById(Long id) {
         return zoneRepository.findById(id);
     }
 
-    public Zone create(Zone zone){
+    public Zone create(Zone zone) {
         return zoneRepository.save(zone);
     }
 
@@ -46,9 +44,8 @@ public class BasicZoneService implements ZoneService {
         return zoneRepository.save(zone);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         zoneRepository.deleteById(id);
     }
-
 
 }

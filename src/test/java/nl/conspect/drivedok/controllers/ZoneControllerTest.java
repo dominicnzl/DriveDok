@@ -17,7 +17,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -52,7 +51,7 @@ class ZoneControllerTest {
     }
 
     @Test
-    public void homeShouldShowThereAreNoZonesYet() throws Exception {
+    void homeShouldShowThereAreNoZonesYet() throws Exception {
         mockMvc.perform(get("/zones"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -61,10 +60,10 @@ class ZoneControllerTest {
     }
 
     @Test
-    public void shouldContainListOfZones() throws Exception {
+    void shouldContainListOfZones() throws Exception {
         List<Zone> listPZ = new ArrayList<>();
         Zone pz1 = new Zone("Zone 1", 100);
-        Zone pz2 = new Zone("Zone 2",200);
+        Zone pz2 = new Zone("Zone 2", 200);
         listPZ.add(pz1);
         listPZ.add(pz2);
 
@@ -78,7 +77,7 @@ class ZoneControllerTest {
     }
 
     @Test
-    public void shouldShowZoneForm() throws Exception {
+    void shouldShowZoneForm() throws Exception {
 
         mockMvc.perform(get("/zones/create"))
                 .andDo(print())
@@ -86,7 +85,7 @@ class ZoneControllerTest {
     }
 
     @Test
-    public void shouldCreateZone() throws Exception {
+    void shouldCreateZone() throws Exception {
 
         mockMvc.perform(post("/zones/create", Zone.class)
                 .param("name", "Zone 1")
@@ -97,8 +96,8 @@ class ZoneControllerTest {
     }
 
     @Test
-    public void shouldReturnZoneById() throws Exception {
-        Zone pz1 = new Zone("Zone 1",  100);
+    void shouldReturnZoneById() throws Exception {
+        Zone pz1 = new Zone("Zone 1", 100);
 
         when(zoneService.findById(1L))
                 .thenReturn(Optional.of(pz1));
@@ -110,9 +109,8 @@ class ZoneControllerTest {
                 .andExpect(content().string(containsString("Your Zone Zone 1 has")));
     }
 
-
     @Test
-    public void shouldGoToZoneListPageAfterDeletingZone() throws Exception {
+    void shouldGoToZoneListPageAfterDeletingZone() throws Exception {
 
         Zone pz1 = new Zone("Zone 1", 100);
         when(zoneService.findById(1L))
@@ -126,7 +124,7 @@ class ZoneControllerTest {
 
     @Test
     @DisplayName("When an id is used to findById but no Zone is found throw an IllegalArgumentException")
-    public void whenFailToFindByIdThrowIllegalArgument() {
+    void whenFailToFindByIdThrowIllegalArgument() {
         assertThatThrownBy(() -> mockMvc.perform(get("/zones/-1"))
                 .andExpect(status().isOk()))
                 .hasCause(new IllegalArgumentException("Zone with id -1 not found"));

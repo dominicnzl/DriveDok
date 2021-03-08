@@ -13,7 +13,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -25,7 +24,7 @@ public class Zone extends AbstractPersistable<Long> {
     private Long id;
 
     @NotNull
-    @Size(min=3, message = "Your name should at least have 3 letters")
+    @Size(min = 3, message = "Your name should at least have 3 letters")
     @Size(max = 20, message = "Your name can not have more than 20 letters")
     private String name;
 
@@ -40,7 +39,7 @@ public class Zone extends AbstractPersistable<Long> {
     public Zone() {
     }
 
-    public Zone(String name, int totalParkingSpots){
+    public Zone(String name, int totalParkingSpots) {
         this.name = name;
         this.totalParkingSpots = totalParkingSpots;
         this.parkingSpots.add(new ParkingSpot(ParkingType.MOTOR, 0));
@@ -79,7 +78,7 @@ public class Zone extends AbstractPersistable<Long> {
         this.parkingSpots = parkingSpots1;
     }
 
-    public void addParkingSpot(ParkingSpot parkingSpot){
+    public void addParkingSpot(ParkingSpot parkingSpot) {
         parkingSpots.add(parkingSpot);
     }
 

@@ -26,7 +26,8 @@ public class ParkingSpot extends AbstractPersistable<Long> {
 
     private int availability;
 
-    public ParkingSpot(){}
+    public ParkingSpot() {
+    }
 
     public ParkingSpot(ParkingType parkingType, int quantity) {
         this.parkingType = parkingType;
@@ -39,7 +40,9 @@ public class ParkingSpot extends AbstractPersistable<Long> {
         return id;
     }
 
-    public int getVersion(){return version; };
+    public int getVersion() {
+        return version;
+    }
 
     @Override
     public void setId(Long id) {
