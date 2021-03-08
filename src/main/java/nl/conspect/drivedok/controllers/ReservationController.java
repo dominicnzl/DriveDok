@@ -53,6 +53,8 @@ public class ReservationController {
     public ModelAndView handleCreate() {
         final var mav = new ModelAndView(EDITPAGE);
         mav.addObject("reservation", new Reservation());
+        mav.addObject("users", userService.findAll());
+        mav.addObject("vehicles", vehicleService.findAll());
         return mav;
     }
 
