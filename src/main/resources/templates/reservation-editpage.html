@@ -24,7 +24,9 @@
             </div>
             <div class="form-row">
                 <label for="user-name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="user-name" th:field="${reservation.user}">
+                <select name="user" id="user-name" class="form-control" th:field="${reservation.user}">
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+                </select>
             </div>
             <fieldset class="form-group">
                 <legend class="col-form-label">Start</legend>
@@ -65,8 +67,12 @@
                 </div>
             </fieldset>
             <div class="form-row">
-                <label for="licence-plate" class="form-label">Vehicle (licenceplate)</label>
-                <input type="text" class="form-control" id="licence-plate" th:field="${reservation.vehicle}">
+                <label for="selected-vehicle" class="form-label">Vehicle (licenceplate)</label>
+                <select name="vehicle" id="selected-vehicle" class="form-control" th:field="${reservation.vehicle}">
+                    <option th:each="vehicle : ${vehicles}"
+                            th:value="${vehicle.id}"
+                            th:text="${vehicle.licencePlate}"></option>
+                </select>
             </div>
             <input type="hidden" th:field="${reservation.parkingSpot}">
             <input type="hidden" th:field="${reservation.id}">
