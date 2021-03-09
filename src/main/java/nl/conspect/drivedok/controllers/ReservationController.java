@@ -7,6 +7,7 @@ import nl.conspect.drivedok.services.ReservationService;
 import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.services.VehicleService;
 import nl.conspect.drivedok.utilities.ReservationMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/reservations")
 public class ReservationController {
 
-    public static final String LISTPAGE = "reservation-listpage";
+    @Value("${reservation.list.page}")
+    private String listpage;
 
-    public static final String EDITPAGE = "reservation-editpage";
+    @Value("${reservation.edit.page}")
+    private String editpage;
 
     private final ReservationService reservationService;
 
@@ -44,14 +47,14 @@ public class ReservationController {
 
     @GetMapping
     public ModelAndView handleGet() {
-        final var mav = new ModelAndView(LISTPAGE);
+        final var mav = new ModelAndView(listpage);
         mav.addObject("reservations", reservationService.findAll());
         return mav;
     }
 
     @GetMapping("/new")
     public ModelAndView handleCreate() {
-        final var mav = new ModelAndView(EDITPAGE);
+        final var mav = new ModelAndView(editpage);
         mav.addObject("reservation", new Reservation());
         mav.addObject("users", userService.findAll());
         mav.addObject("vehicles", vehicleService.findAll());
@@ -63,7 +66,7 @@ public class ReservationController {
         final var reservation = id == null
                 ? new Reservation()
                 : reservationService.findById(id).orElseThrow(() -> new ReservationNotFoundException(id));
-        final var mav = new ModelAndView(EDITPAGE);
+        final var mav = new ModelAndView(editpage);
         mav.addObject("reservation", reservation);
         mav.addObject("users", userService.findAll());
         mav.addObject("vehicles", vehicleService.findAll());

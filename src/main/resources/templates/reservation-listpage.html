@@ -18,22 +18,26 @@
     </nav>
     <h1>Reservations</h1>
     <table class="table table-hover" aria-label="Reservations">
-        <tr>
-            <th scope="col">User</th>
-            <th scope="col">Start</th>
-            <th scope="col">End</th>
-            <th scope="col">Vehicle (licenceplate)</th>
-            <th scope="col">ParkingSpot</th>
-        </tr>
-        <tr th:each="r : ${reservations}" th:id="|row_${r.id}|" th:class="tr-reservations" style="cursor:pointer">
-            <td>
-                <a href="#" th:href="@{|/users/*{r.user.id}|}" th:text="*{r.user.name}"></a>
-            </td>
-            <td th:text="*{#temporals.format(r.start, 'dd-MM-yyyy HH:mm')}"></td>
-            <td th:text="*{#temporals.format(r.end, 'dd-MM-yyyy HH:mm')}"></td>
-            <td th:text="*{r.vehicle?.licencePlate}"></td>
-            <td th:text="*{r.parkingSpot}"></td>
-        </tr>
+        <thead>
+            <tr>
+                <th scope="col">User</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Vehicle (licenceplate)</th>
+                <th scope="col">ParkingSpot</th>
+            </tr>
+        </thead>
+        <tbody style="cursor:pointer">
+            <tr th:each="r : ${reservations}" th:id="|row_${r.id}|" th:class="tr-reservations">
+                <td>
+                    <a href="#" th:href="@{|/users/*{r.user?.id}|}" th:text="*{r.user?.name}"></a>
+                </td>
+                <td th:text="*{#temporals.format(r.start, 'dd-MM-yyyy HH:mm')}"></td>
+                <td th:text="*{#temporals.format(r.end, 'dd-MM-yyyy HH:mm')}"></td>
+                <td th:text="*{r.vehicle?.licencePlate}"></td>
+                <td th:text="*{r.parkingSpot}"></td>
+            </tr>
+        </tbody>
     </table>
     <div>
         <a href="#" th:href="@{/reservations/new}" class="btn btn-primary">Add Reservation</a>
@@ -43,20 +47,17 @@
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
 <script>
-    const addRedirect = elementId => {
+    const addRedirect = rowId => {
         // extract [id] from [row_id] with slice
-        let reservationId = elementId.slice(4);
-        let uri = `/reservations/${reservationId}`;
-        const row = document.getElementById(elementId);
+        const reservationId = rowId.slice(4);
+        const uri = `/reservations/${reservationId}`;
+        const row = document.getElementById(rowId);
+        const goto = uri => location.href = uri;
         row.addEventListener('click', () => goto(uri));
     }
 
-    function goto(uri) {
-        location.href=uri;
-    }
-
     const reservationRows = document.querySelectorAll(".tr-reservations");
-    reservationRows.forEach(element => addRedirect(element.id));
+    reservationRows.forEach(row => addRedirect(row.id));
 </script>
 </body>
 </html>

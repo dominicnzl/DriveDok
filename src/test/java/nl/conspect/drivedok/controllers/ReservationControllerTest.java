@@ -8,14 +8,13 @@ import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
-import static nl.conspect.drivedok.controllers.ReservationController.EDITPAGE;
-import static nl.conspect.drivedok.controllers.ReservationController.LISTPAGE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,6 +42,12 @@ class ReservationControllerTest {
     @MockBean
     VehicleService vehicleService;
 
+    @Value("${reservation.list.page}")
+    private String listpage;
+
+    @Value("${reservation.edit.page}")
+    private String editpage;
+
     private static final String URL = "/reservations";
 
     @Test
@@ -50,7 +55,7 @@ class ReservationControllerTest {
         mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations"))
-                .andExpect(view().name(LISTPAGE));
+                .andExpect(view().name(listpage));
     }
 
     @Test
@@ -58,7 +63,7 @@ class ReservationControllerTest {
         mockMvc.perform(get(URL.concat("/new")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservation"))
-                .andExpect(view().name(EDITPAGE));
+                .andExpect(view().name(editpage));
     }
 
     @Test
@@ -68,7 +73,7 @@ class ReservationControllerTest {
         mockMvc.perform(get(URL.concat("/1")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservation"))
-                .andExpect(view().name(EDITPAGE));
+                .andExpect(view().name(editpage));
     }
 
     @Test
@@ -76,7 +81,7 @@ class ReservationControllerTest {
         mockMvc.perform(post(URL).content("{}"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations", "reservationDto"))
-                .andExpect(view().name(LISTPAGE));
+                .andExpect(view().name(listpage));
         verify(service, times(1)).save(any());
     }
 }

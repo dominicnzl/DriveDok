@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +31,12 @@ class UserControllerTest {
 
     private static final String URL = "/users";
 
+    @Value("${user.list.page}")
+    private String userListpage;
+
+    @Value("${user.edit.page}")
+    private String userEditpage;
+
     @Test
     @DisplayName("Calling /users should return userlistpage and the model should contain a collection of users")
     void listPage() throws Exception {
@@ -40,7 +47,7 @@ class UserControllerTest {
         Mockito.when(userService.findAll()).thenReturn(users);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(UserController.USER_LISTPAGE))
+                .andExpect(view().name(userListpage))
                 .andExpect(model().attribute("users", users))
                 .andDo(print());
     }
@@ -52,7 +59,7 @@ class UserControllerTest {
         Mockito.when(userService.getById(1L)).thenReturn(barry);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(UserController.USER_EDITPAGE))
+                .andExpect(view().name(userEditpage))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", barry))
                 .andDo(print());
@@ -62,7 +69,7 @@ class UserControllerTest {
     void handleSave() throws Exception {
         mockMvc.perform(post(URL).content("{}"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(UserController.USER_EDITPAGE))
+                .andExpect(view().name(userEditpage))
                 .andExpect(model().attributeExists("user"));
     }
 }

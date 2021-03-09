@@ -3,6 +3,7 @@ package nl.conspect.drivedok.controllers;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,9 +29,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    public static final String USER_LISTPAGE = "user-listpage";
-    public static final String USER_EDITPAGE = "user-editpage";
-    public static final String VEHICLE_EDITPAGE = "vehicle-editpage";
+    @Value("${user.list.page}")
+    private String userListpage;
+
+    @Value("${user.edit.page}")
+    private String userEditpage;
+
+    @Value("${vehicle.edit.page}")
+    private String vehicleEditpage;
+
     private static final String USERS = "users";
     private static final String USER = "user";
 
@@ -38,37 +45,37 @@ public class UserController {
     public String listPage(Model model) {
         final List<User> users = userService.findAll();
         model.addAttribute(USERS, users);
-        return USER_LISTPAGE;
+        return userListpage;
     }
 
     @PostMapping
     public String save(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return USER_EDITPAGE;
+            return userEditpage;
         }
         userService.save(user);
         model.addAttribute(USERS, userService.findAll());
-        return USER_LISTPAGE;
+        return userListpage;
     }
 
     @GetMapping("/new")
     public String addNewUserPage(Model model) {
         model.addAttribute(USER, new User());
-        return USER_EDITPAGE;
+        return userEditpage;
     }
 
     @GetMapping("/{id}")
     public String editPage(Model model, @PathVariable Long id) {
         final var user = userService.getById(id);
         model.addAttribute(USER, user);
-        return USER_EDITPAGE;
+        return userEditpage;
     }
 
     @DeleteMapping("/{id}")
     public String delete(Model model, @PathVariable Long id) {
         userService.findById(id).ifPresent(userService::delete);
         model.addAttribute(USERS, userService.findAll());
-        return USER_LISTPAGE;
+        return userListpage;
     }
 
     @GetMapping("/{userId}/vehicles/new")
@@ -76,7 +83,7 @@ public class UserController {
         model.addAttribute(USER, userService.getById(userId));
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("parkingTypes", possibleTypes());
-        return VEHICLE_EDITPAGE;
+        return vehicleEditpage;
     }
 
     @PostMapping("/{userId}/vehicles")
@@ -88,10 +95,10 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             model.addAttribute(USER, user);
             model.addAttribute("parkingTypes", possibleTypes());
-            return VEHICLE_EDITPAGE;
+            return vehicleEditpage;
         }
         user = userService.addVehicleByUserId(userId, vehicle);
         model.addAttribute("user", user);
-        return USER_EDITPAGE;
+        return userEditpage;
     }
 }

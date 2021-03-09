@@ -4,6 +4,7 @@ import nl.conspect.drivedok.exceptions.VehicleNotFoundException;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.VehicleService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,13 +27,16 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
-    private static final String LISTPAGE = "vehicle-listpage";
-    private static final String EDITPAGE = "vehicle-editpage";
+    @Value("${vehicle.list.page")
+    private String listpage;
+
+    @Value("${vehicle.edit.page}")
+    private String editpage;
 
     @GetMapping
     public String listpage(Model model) {
         model.addAttribute("vehicles", vehicleService.findAll());
-        return LISTPAGE;
+        return listpage;
     }
 
     @GetMapping("/{id}")
@@ -43,7 +47,7 @@ public class VehicleController {
         }
         model.addAttribute("parkingTypes", possibleTypes());
         model.addAttribute("vehicle", vehicle);
-        return EDITPAGE;
+        return editpage;
     }
 
     /**
