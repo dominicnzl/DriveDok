@@ -5,7 +5,6 @@ import nl.conspect.drivedok.services.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -13,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Optional;
 
+import static nl.conspect.drivedok.controllers.UserController.USER_EDITPAGE;
+import static nl.conspect.drivedok.controllers.UserController.USER_LISTPAGE;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,12 +33,6 @@ class UserControllerTest {
 
     private static final String URL = "/users";
 
-    @Value("${user.list.page}")
-    private String userListpage;
-
-    @Value("${user.edit.page}")
-    private String userEditpage;
-
     @Test
     @DisplayName("Calling /users should return userlistpage and the model should contain a collection of users")
     void listPage() throws Exception {
@@ -48,7 +43,7 @@ class UserControllerTest {
         when(userService.findAll()).thenReturn(users);
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(userListpage))
+                .andExpect(view().name(USER_LISTPAGE))
                 .andExpect(model().attribute("users", users));
     }
 
@@ -59,7 +54,7 @@ class UserControllerTest {
         when(userService.getById(1L)).thenReturn(barry);
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(userEditpage))
+                .andExpect(view().name(USER_EDITPAGE))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", barry));
     }
@@ -69,7 +64,7 @@ class UserControllerTest {
     void handleNew() throws Exception {
         mockMvc.perform(get("/users/new"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(userEditpage))
+                .andExpect(view().name(USER_EDITPAGE))
                 .andExpect(model().attributeExists("user"));
     }
 
@@ -79,7 +74,7 @@ class UserControllerTest {
         when(userService.findById(12L)).thenReturn(Optional.of(new User()));
         mockMvc.perform(delete("/users/12"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(userListpage))
+                .andExpect(view().name(USER_LISTPAGE))
                 .andExpect(model().attributeExists("users"));
     }
 
@@ -87,7 +82,7 @@ class UserControllerTest {
     void handleSave() throws Exception {
         mockMvc.perform(post(URL).content("{}"))
                 .andExpect(status().isOk())
-                .andExpect(view().name(userEditpage))
+                .andExpect(view().name(USER_EDITPAGE))
                 .andExpect(model().attributeExists("user"));
     }
 }

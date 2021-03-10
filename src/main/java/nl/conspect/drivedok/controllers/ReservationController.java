@@ -7,7 +7,6 @@ import nl.conspect.drivedok.services.ReservationService;
 import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.services.VehicleService;
 import nl.conspect.drivedok.utilities.ReservationMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,11 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/reservations")
 public class ReservationController {
 
-    @Value("${reservation.list.page}")
-    private String listpage;
+    public static final String RESERVATION_LISTPAGE = "reservation-listpage";
 
-    @Value("${reservation.edit.page}")
-    private String editpage;
+    public static final String RESERVATION_EDITPAGE = "reservation-editpage";
 
     private final ReservationService reservationService;
 
@@ -48,14 +45,14 @@ public class ReservationController {
 
     @GetMapping
     public ModelAndView handleGet() {
-        final var mav = new ModelAndView(listpage);
+        final var mav = new ModelAndView(RESERVATION_LISTPAGE);
         mav.addObject("reservations", reservationService.findAll());
         return mav;
     }
 
     @GetMapping("/new")
     public ModelAndView handleCreate() {
-        final var mav = new ModelAndView(editpage);
+        final var mav = new ModelAndView(RESERVATION_EDITPAGE);
         mav.addObject("reservation", new Reservation());
         mav.addObject("users", userService.findAll());
         mav.addObject("vehicles", vehicleService.findAll());
@@ -67,7 +64,7 @@ public class ReservationController {
         final var reservation = id == null
                 ? new Reservation()
                 : reservationService.findById(id).orElseThrow(() -> new ReservationNotFoundException(id));
-        final var mav = new ModelAndView(editpage);
+        final var mav = new ModelAndView(RESERVATION_EDITPAGE);
         mav.addObject("reservation", reservation);
         mav.addObject("users", userService.findAll());
         mav.addObject("vehicles", vehicleService.findAll());
@@ -77,7 +74,7 @@ public class ReservationController {
     @DeleteMapping("/{id}")
     public ModelAndView handleDelete(@PathVariable Long id) {
         reservationService.deleteById(id);
-        final var mav = new ModelAndView(listpage);
+        final var mav = new ModelAndView(RESERVATION_LISTPAGE);
         mav.addObject("reservations", reservationService.findAll());
         return mav;
     }

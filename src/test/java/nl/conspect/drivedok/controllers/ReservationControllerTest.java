@@ -7,13 +7,14 @@ import nl.conspect.drivedok.services.VehicleService;
 import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
+import static nl.conspect.drivedok.controllers.ReservationController.RESERVATION_EDITPAGE;
+import static nl.conspect.drivedok.controllers.ReservationController.RESERVATION_LISTPAGE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -44,12 +45,6 @@ class ReservationControllerTest {
     @MockBean
     VehicleService vehicleService;
 
-    @Value("${reservation.list.page}")
-    private String listpage;
-
-    @Value("${reservation.edit.page}")
-    private String editpage;
-
     private static final String URL = "/reservations";
 
     @Test
@@ -57,7 +52,7 @@ class ReservationControllerTest {
         mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations"))
-                .andExpect(view().name(listpage));
+                .andExpect(view().name(RESERVATION_LISTPAGE));
         verify(reservationService, times(1)).findAll();
     }
 
@@ -66,7 +61,7 @@ class ReservationControllerTest {
         mockMvc.perform(get(URL.concat("/new")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservation"))
-                .andExpect(view().name(editpage));
+                .andExpect(view().name(RESERVATION_EDITPAGE));
         verify(userService, times(1)).findAll();
         verify(vehicleService, times(1)).findAll();
     }
@@ -78,7 +73,7 @@ class ReservationControllerTest {
         mockMvc.perform(get(URL.concat("/1")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservation"))
-                .andExpect(view().name(editpage));
+                .andExpect(view().name(RESERVATION_EDITPAGE));
         verify(reservationService, times(1)).findById(1L);
     }
 
@@ -88,7 +83,7 @@ class ReservationControllerTest {
         mockMvc.perform(delete(URL.concat("/1")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations"))
-                .andExpect(view().name(listpage));
+                .andExpect(view().name(RESERVATION_LISTPAGE));
         verify(reservationService, times(1)).deleteById(1L);
     }
 
@@ -97,7 +92,7 @@ class ReservationControllerTest {
         mockMvc.perform(post(URL).content("{}"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations", "reservationDto"))
-                .andExpect(view().name(listpage));
+                .andExpect(view().name(RESERVATION_LISTPAGE));
         verify(reservationService, times(1)).save(any());
     }
 }
