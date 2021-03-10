@@ -18,7 +18,7 @@
     </nav>
     <div class="container-sm">
         <h1>Reservation</h1>
-        <form action="#" th:action="@{/reservations}" method="post" id="save-reservation-form">
+        <form action="#" th:action="@{/reservations}" method="post" id="save-reservation-form" class="mb-3">
             <div th:if="${#fields.hasAnyErrors()}">
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
             </div>
@@ -77,9 +77,22 @@
             <input type="hidden" th:field="${reservation.parkingSpot}">
             <input type="hidden" th:field="${reservation.id}">
         </form>
-        <div class="container-sm">
+        <form action="#"
+              th:unless="${null == reservation.id}"
+              th:action="@{/reservations/{id} (id = ${reservation.id})}"
+              th:object="${reservation}"
+              method="post"
+              th:method="delete"
+              id="delete-reservation-form">
+        </form>
+        <div class="container-sm mb-3">
             <button form="save-reservation-form" type="submit" class="btn btn-primary">Save</button>
             <button form="save-reservation-form" type="reset" class="btn btn-warning">Reset</button>
+            <button form="delete-reservation-form"
+                    type="submit"
+                    class="btn btn-danger"
+                    th:disabled="${null == reservation.id ?: false}">Delete
+            </button>
             <a href="#" th:href="@{/reservations}">Back to Reservations</a>
         </div>
     </div>

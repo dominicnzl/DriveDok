@@ -6,7 +6,6 @@ import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.services.VehicleService;
 import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,8 +15,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -31,7 +33,7 @@ class ReservationControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    ReservationService service;
+    ReservationService reservationService;
 
     @MockBean
     ReservationMapper mapper;
@@ -56,6 +58,7 @@ class ReservationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations"))
                 .andExpect(view().name(listpage));
+        verify(reservationService, times(1)).findAll();
     }
 
     @Test
@@ -64,16 +67,29 @@ class ReservationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservation"))
                 .andExpect(view().name(editpage));
+        verify(userService, times(1)).findAll();
+        verify(vehicleService, times(1)).findAll();
     }
 
     @Test
     void editpage() throws Exception {
         var entity = new Reservation();
-        Mockito.when(service.findById(1L)).thenReturn(Optional.of(entity));
+        when(reservationService.findById(1L)).thenReturn(Optional.of(entity));
         mockMvc.perform(get(URL.concat("/1")))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservation"))
                 .andExpect(view().name(editpage));
+        verify(reservationService, times(1)).findById(1L);
+    }
+
+    @Test
+    void handleDelete() throws Exception {
+        doNothing().when(reservationService).deleteById(1L);
+        mockMvc.perform(delete(URL.concat("/1")))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name(listpage));
+        verify(reservationService, times(1)).deleteById(1L);
     }
 
     @Test
@@ -82,6 +98,6 @@ class ReservationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations", "reservationDto"))
                 .andExpect(view().name(listpage));
-        verify(service, times(1)).save(any());
+        verify(reservationService, times(1)).save(any());
     }
 }

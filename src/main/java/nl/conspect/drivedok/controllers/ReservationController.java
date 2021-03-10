@@ -10,6 +10,7 @@ import nl.conspect.drivedok.utilities.ReservationMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +71,14 @@ public class ReservationController {
         mav.addObject("reservation", reservation);
         mav.addObject("users", userService.findAll());
         mav.addObject("vehicles", vehicleService.findAll());
+        return mav;
+    }
+
+    @DeleteMapping("/{id}")
+    public ModelAndView handleDelete(@PathVariable Long id) {
+        reservationService.deleteById(id);
+        final var mav = new ModelAndView(listpage);
+        mav.addObject("reservations", reservationService.findAll());
         return mav;
     }
 
