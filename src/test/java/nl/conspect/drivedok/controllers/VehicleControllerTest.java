@@ -3,40 +3,39 @@ package nl.conspect.drivedok.controllers;
 import nl.conspect.drivedok.model.User;
 import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.VehicleService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.mock;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class VehicleControllerTest {
 
+    @InjectMocks
     private VehicleController vehicleController;
 
+    @Mock
     private VehicleService vehicleService;
-
-    @BeforeEach
-    void init() {
-        vehicleService = mock(VehicleService.class);
-        this.vehicleController = new VehicleController(vehicleService);
-    }
 
     @Test
     @DisplayName("When delete is called with id null, redirect to /vehicles")
     void idNullThenReturnVehiclesListPage() {
-        Mockito.when(vehicleService.findById(null)).thenReturn(Optional.of(new Vehicle()));
-        Assertions.assertEquals("redirect:/vehicles", vehicleController.deleteAndReturnToPage(null));
+        when(vehicleService.findById(null)).thenReturn(Optional.of(new Vehicle()));
+        assertThat(vehicleController.deleteAndReturnToPage(null)).isEqualTo("redirect:/vehicles");
     }
 
     @Test
     @DisplayName("When delete is called on a vehicle without an associated user, redirect to /vehicles")
     void vehicleWithoutUser() {
-        Mockito.when(vehicleService.findById(1L)).thenReturn(Optional.of(new Vehicle()));
-        Assertions.assertEquals("redirect:/vehicles", vehicleController.deleteAndReturnToPage(1L));
+        when(vehicleService.findById(1L)).thenReturn(Optional.of(new Vehicle()));
+        assertThat(vehicleController.deleteAndReturnToPage(1L)).isEqualTo("redirect:/vehicles");
     }
 
     @Test
@@ -46,7 +45,7 @@ class VehicleControllerTest {
         user.setId(123L);
         var vehicle = new Vehicle();
         vehicle.setUser(user);
-        Mockito.when(vehicleService.findById(1L)).thenReturn(Optional.of(vehicle));
-        Assertions.assertEquals("redirect:/users/123", vehicleController.deleteAndReturnToPage(1L));
+        when(vehicleService.findById(1L)).thenReturn(Optional.of(vehicle));
+        assertThat(vehicleController.deleteAndReturnToPage(1L)).isEqualTo("redirect:/users/123");
     }
 }
