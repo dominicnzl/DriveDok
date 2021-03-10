@@ -11,10 +11,14 @@ public class ReservationDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+
+    @DateTimeFormat(pattern = "HH:mm")
     private LocalTime startTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+
+    @DateTimeFormat(pattern = "HH:mm")
     private LocalTime endTime;
     private User user;
     private Vehicle vehicle;
