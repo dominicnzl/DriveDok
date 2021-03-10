@@ -14,6 +14,10 @@ import java.util.Optional;
 
 import static nl.conspect.drivedok.controllers.UserController.USER_EDITPAGE;
 import static nl.conspect.drivedok.controllers.UserController.USER_LISTPAGE;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,6 +49,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(USER_LISTPAGE))
                 .andExpect(model().attribute("users", users));
+        verify(userService, times(1)).findAll();
     }
 
     @Test
@@ -57,6 +62,7 @@ class UserControllerTest {
                 .andExpect(view().name(USER_EDITPAGE))
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attribute("user", barry));
+        verify(userService, times(1)).getById(1L);
     }
 
     @Test
@@ -76,13 +82,30 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(USER_LISTPAGE))
                 .andExpect(model().attributeExists("users"));
+        verify(userService, times(1)).findById(12L);
+        verify(userService, times(1)).delete(any());
     }
 
     @Test
-    void handleSave() throws Exception {
-        mockMvc.perform(post(URL).content("{}"))
+    @DisplayName("Posting a user, expect save to be called once and then return to user-listpage")
+    void handleSaveHappy() throws Exception {
+        mockMvc.perform(post(URL, User.class)
+                .param("name", "Pim")
+                .param("password", "123456"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(USER_LISTPAGE))
+                .andExpect(model().attributeExists("users"));
+        verify(userService, times(1)).save(any());
+        verify(userService, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Posting a user but omitting fields. Save should not be called")
+    void handleSaveWithBindingErrors() throws Exception {
+        mockMvc.perform(post(URL, User.class))
                 .andExpect(status().isOk())
                 .andExpect(view().name(USER_EDITPAGE))
                 .andExpect(model().attributeExists("user"));
+        verify(userService, never()).save(any());
     }
 }
