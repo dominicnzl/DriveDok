@@ -27,7 +27,7 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
-    @Value("${vehicle.list.page")
+    @Value("${vehicle.list.page}")
     private String listpage;
 
     @Value("${vehicle.edit.page}")

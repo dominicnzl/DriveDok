@@ -5,24 +5,57 @@ import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.VehicleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(VehicleController.class)
 class VehicleControllerTest {
 
-    @InjectMocks
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
     private VehicleController vehicleController;
 
-    @Mock
+    @MockBean
     private VehicleService vehicleService;
+
+    @Value("${vehicle.list.page}")
+    private String listpage;
+
+    @Value("${vehicle.edit.page}")
+    private String editpage;
+
+    @Test
+    @DisplayName("Calling '/vehicles' should result in the listpage being returned")
+    void handleGet() throws Exception {
+        mockMvc.perform(get("/vehicles"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("vehicles"))
+                .andExpect(view().name(listpage));
+    }
+
+    @Test
+    @DisplayName("Calling '/vehicles/1' should result in the editpage being returned")
+    void handleGetId() throws Exception {
+        when(vehicleService.findById(1L)).thenReturn(Optional.of(new Vehicle()));
+        mockMvc.perform(get("/vehicles/1"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("vehicle"))
+                .andExpect(view().name(editpage));
+    }
 
     @Test
     @DisplayName("When delete is called with id null, redirect to /vehicles")
