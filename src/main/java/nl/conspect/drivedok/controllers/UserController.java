@@ -38,13 +38,10 @@ public class UserController {
     @Value("${vehicle.edit.page}")
     private String vehicleEditpage;
 
-    private static final String USERS = "users";
-    private static final String USER = "user";
-
     @GetMapping
     public String listPage(Model model) {
         final List<User> users = userService.findAll();
-        model.addAttribute(USERS, users);
+        model.addAttribute("users", users);
         return userListpage;
     }
 
@@ -54,33 +51,33 @@ public class UserController {
             return userEditpage;
         }
         userService.save(user);
-        model.addAttribute(USERS, userService.findAll());
+        model.addAttribute("users", userService.findAll());
         return userListpage;
     }
 
     @GetMapping("/new")
     public String addNewUserPage(Model model) {
-        model.addAttribute(USER, new User());
+        model.addAttribute("user", new User());
         return userEditpage;
     }
 
     @GetMapping("/{id}")
     public String editPage(Model model, @PathVariable Long id) {
         final var user = userService.getById(id);
-        model.addAttribute(USER, user);
+        model.addAttribute("user", user);
         return userEditpage;
     }
 
     @DeleteMapping("/{id}")
     public String delete(Model model, @PathVariable Long id) {
         userService.findById(id).ifPresent(userService::delete);
-        model.addAttribute(USERS, userService.findAll());
+        model.addAttribute("users", userService.findAll());
         return userListpage;
     }
 
     @GetMapping("/{userId}/vehicles/new")
     public String addNewVehicleToUserPage(Model model, @PathVariable Long userId) {
-        model.addAttribute(USER, userService.getById(userId));
+        model.addAttribute("user", userService.getById(userId));
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("parkingTypes", possibleTypes());
         return vehicleEditpage;
@@ -93,7 +90,7 @@ public class UserController {
                                    BindingResult bindingResult) {
         var user = userService.getById(userId);
         if (bindingResult.hasErrors()) {
-            model.addAttribute(USER, user);
+            model.addAttribute("user", user);
             model.addAttribute("parkingTypes", possibleTypes());
             return vehicleEditpage;
         }
