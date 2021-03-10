@@ -1,6 +1,8 @@
 package nl.conspect.drivedok.controllers;
 
+import nl.conspect.drivedok.model.ParkingType;
 import nl.conspect.drivedok.model.User;
+import nl.conspect.drivedok.model.Vehicle;
 import nl.conspect.drivedok.services.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 import static nl.conspect.drivedok.controllers.UserController.USER_EDITPAGE;
 import static nl.conspect.drivedok.controllers.UserController.USER_LISTPAGE;
+import static nl.conspect.drivedok.controllers.UserController.VEHICLE_EDITPAGE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -107,5 +110,44 @@ class UserControllerTest {
                 .andExpect(view().name(USER_EDITPAGE))
                 .andExpect(model().attributeExists("user"));
         verify(userService, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Adding a vehicle via the user should redirect you to the vehicle-editpage")
+    void handleAddingNewVehicleToUser() throws Exception {
+        when(userService.getById(50L)).thenReturn(new User());
+        mockMvc.perform(get(URL.concat("/50/vehicles/new")))
+                .andExpect(status().isOk())
+                .andExpect(view().name(VEHICLE_EDITPAGE))
+                .andExpect(model().attributeExists("user", "vehicle", "parkingTypes"));
+        verify(userService, times(1)).getById(50L);
+    }
+
+    @Test
+    @DisplayName("Saving a vehicle to a user should redirect you back to the user-editpage")
+    void handleSavingVehicleToUserHappy() throws Exception {
+        var user = new User();
+        when(userService.getById(7L)).thenReturn(user);
+        when(userService.addVehicleByUserId(any(), any())).thenReturn(user);
+        mockMvc.perform(post(URL.concat("/7/vehicles"), Vehicle.class)
+                .param("name", "vliegtuig")
+                .param("licencePlate", "123-456")
+                .param("parkingType", ParkingType.MOTOR.toString()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(USER_EDITPAGE))
+                .andExpect(model().attributeExists("user"));
+        verify(userService, times(1)).getById(7L);
+        verify(userService, times(1)).addVehicleByUserId(any(), any());
+    }
+
+    @Test
+    @DisplayName("Failing to save a vehicle to the user should throw you back to the vehicle-editpage")
+    void handleSavingVehicleToUserWithBindingErrors() throws Exception {
+        when(userService.getById(8L)).thenReturn(new User());
+        mockMvc.perform(post(URL.concat("/8/vehicles"), Vehicle.class))
+                .andExpect(status().isOk())
+                .andExpect(view().name(VEHICLE_EDITPAGE))
+                .andExpect(model().attributeExists("parkingTypes", "user"));
+        verify(userService, never()).addVehicleByUserId(any(), any());
     }
 }
