@@ -1,6 +1,5 @@
 package nl.conspect.drivedok.controllers;
 
-import nl.conspect.drivedok.exceptions.ReservationNotFoundException;
 import nl.conspect.drivedok.model.Reservation;
 import nl.conspect.drivedok.model.ReservationDto;
 import nl.conspect.drivedok.services.ReservationService;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/reservations")
@@ -60,10 +61,8 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView handleGetId(@PathVariable Long id) {
-        final var reservation = id == null
-                ? new Reservation()
-                : reservationService.findById(id).orElseThrow(() -> new ReservationNotFoundException(id));
+    public ModelAndView handleGetId(@PathVariable Optional<Long> id) {
+        var reservation = id.flatMap(reservationService::findById).orElseGet(Reservation::new);
         final var mav = new ModelAndView(RESERVATION_EDITPAGE);
         mav.addObject("reservation", reservation);
         mav.addObject("users", userService.findAll());
