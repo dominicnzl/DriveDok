@@ -82,7 +82,9 @@ public class ReservationController {
     @PostMapping
     public ModelAndView handlePost(@ModelAttribute ReservationDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return handleGetId(dto.getId());
+            var mav = handleCreate();
+            mav.addObject(bindingResult);
+            return mav;
         }
         var entity = mapper.dtoToReservation(dto);
         reservationService.save(entity);

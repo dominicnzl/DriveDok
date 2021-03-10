@@ -1,6 +1,7 @@
 package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.Reservation;
+import nl.conspect.drivedok.model.ReservationDto;
 import nl.conspect.drivedok.services.ReservationService;
 import nl.conspect.drivedok.services.UserService;
 import nl.conspect.drivedok.services.VehicleService;
@@ -17,12 +18,14 @@ import static nl.conspect.drivedok.controllers.ReservationController.RESERVATION
 import static nl.conspect.drivedok.controllers.ReservationController.RESERVATION_LISTPAGE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -88,11 +91,21 @@ class ReservationControllerTest {
     }
 
     @Test
-    void save() throws Exception {
+    void saveHappy() throws Exception {
         mockMvc.perform(post(URL).content("{}"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reservations", "reservationDto"))
                 .andExpect(view().name(RESERVATION_LISTPAGE));
         verify(reservationService, times(1)).save(any());
+    }
+
+    @Test
+    void saveWithBindingErrors() throws Exception {
+        mockMvc.perform(post(URL, ReservationDto.class)
+                .param("startDate", "geen echte datum"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(RESERVATION_EDITPAGE))
+                .andDo(print());
+        verify(reservationService, never()).save(any());
     }
 }
