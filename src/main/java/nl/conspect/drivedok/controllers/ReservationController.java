@@ -54,7 +54,7 @@ public class ReservationController {
     @GetMapping("/new")
     public ModelAndView handleCreate() {
         final var mav = new ModelAndView(RESERVATION_EDITPAGE);
-        mav.addObject("reservation", new Reservation());
+        mav.addObject("reservationDto", new ReservationDto());
         mav.addObject("users", userService.findAll());
         mav.addObject("vehicles", vehicleService.findAll());
         return mav;
@@ -63,8 +63,9 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ModelAndView handleGetId(@PathVariable Optional<Long> id) {
         var reservation = id.flatMap(reservationService::findById).orElseGet(Reservation::new);
+        var dto = mapper.reservationToDto(reservation);
         final var mav = new ModelAndView(RESERVATION_EDITPAGE);
-        mav.addObject("reservation", reservation);
+        mav.addObject("reservationDto", dto);
         mav.addObject("users", userService.findAll());
         mav.addObject("vehicles", vehicleService.findAll());
         return mav;
@@ -81,9 +82,7 @@ public class ReservationController {
     @PostMapping
     public ModelAndView handlePost(@ModelAttribute ReservationDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            var mav = handleCreate();
-            mav.addObject(bindingResult);
-            return mav;
+            return new ModelAndView(RESERVATION_EDITPAGE, bindingResult.getModel());
         }
         var entity = mapper.dtoToReservation(dto);
         reservationService.save(entity);

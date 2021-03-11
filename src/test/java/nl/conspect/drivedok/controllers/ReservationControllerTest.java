@@ -63,7 +63,7 @@ class ReservationControllerTest {
     void newpage() throws Exception {
         mockMvc.perform(get(URL.concat("/new")))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("reservation"))
+                .andExpect(model().attributeExists("reservationDto"))
                 .andExpect(view().name(RESERVATION_EDITPAGE));
         verify(userService, times(1)).findAll();
         verify(vehicleService, times(1)).findAll();
@@ -73,9 +73,10 @@ class ReservationControllerTest {
     void editpage() throws Exception {
         var entity = new Reservation();
         when(reservationService.findById(1L)).thenReturn(Optional.of(entity));
+        when(mapper.reservationToDto(any())).thenReturn(new ReservationDto());
         mockMvc.perform(get(URL.concat("/1")))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("reservation"))
+                .andExpect(model().attributeExists("reservationDto"))
                 .andExpect(view().name(RESERVATION_EDITPAGE));
         verify(reservationService, times(1)).findById(1L);
     }
