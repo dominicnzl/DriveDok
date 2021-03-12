@@ -94,9 +94,10 @@ class ReservationControllerTest {
     @Test
     void saveHappy() throws Exception {
         mockMvc.perform(post(URL).content("{}"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("reservations", "reservationDto"))
-                .andExpect(view().name(RESERVATION_LISTPAGE));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(model().attributeExists("reservations"))
+                .andExpect(view().name("redirect:/reservations"))
+                .andDo(print());
         verify(reservationService, times(1)).save(any());
     }
 

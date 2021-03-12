@@ -86,6 +86,8 @@ public class ReservationController {
         }
         var entity = mapper.dtoToReservation(dto);
         reservationService.save(entity);
-        return handleGet();
+        var mav = new ModelAndView("redirect:/reservations");
+        mav.addObject("reservations", reservationService.findAll());
+        return mav;
     }
 }
