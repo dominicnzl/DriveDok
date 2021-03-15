@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>Reservation</title>
+</head>
+<body>
+<div class="container" th:object="${reservationDto}">
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
+        </a>
+    </nav>
+    <div class="container-sm">
+        <h1>Reservation</h1>
+        <form action="#" th:action="@{/reservations}" method="post" id="save-reservation-form" class="mb-3">
+            <div th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
+            </div>
+            <div class="form-row">
+                <label for="user-name" class="form-label">Name</label>
+                <select name="user" id="user-name" class="form-control" th:field="${reservationDto.user}">
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+                </select>
+            </div>
+            <fieldset class="form-group">
+                <legend class="col-form-label">Start</legend>
+                <div class="row">
+                    <div class="col">
+                        <input type="date"
+                               class="form-control"
+                               id="start-date"
+                               name="startDate"
+                               th:field="*{startDate}">
+                    </div>
+                    <div class="col">
+                        <input type="time"
+                               class="form-control"
+                               id="start-time"
+                               name="startTime"
+                               th:field="*{startTime}">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <legend class="col-form-label">End</legend>
+                <div class="row">
+                    <div class="col">
+                        <input type="date"
+                               class="form-control"
+                               id="end-date"
+                               name="endDate"
+                               th:field="*{endDate}">
+                    </div>
+                    <div class="col">
+                        <input type="time"
+                               class="form-control"
+                               id="end-time"
+                               name="endTime"
+                               th:field="*{endTime}">
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-row">
+                <label for="selected-vehicle" class="form-label">Vehicle (licenceplate)</label>
+                <select name="vehicle" id="selected-vehicle" class="form-control" th:field="${reservationDto.vehicle}">
+                    <option th:each="vehicle : ${vehicles}"
+                            th:value="${vehicle.id}"
+                            th:text="${vehicle.licencePlate}"></option>
+                </select>
+            </div>
+            <input type="hidden" th:field="${reservationDto.parkingSpot}">
+            <input type="hidden" th:field="${reservationDto.id}">
+        </form>
+        <form action="#"
+              th:unless="${null == reservationDto.id}"
+              th:action="@{/reservations/{id} (id = ${reservationDto.id})}"
+              th:object="${reservation}"
+              method="post"
+              th:method="delete"
+              id="delete-reservation-form">
+        </form>
+        <div class="container-sm mb-3">
+            <button form="save-reservation-form" type="submit" class="btn btn-primary">Save</button>
+            <button form="save-reservation-form" type="reset" class="btn btn-warning">Reset</button>
+            <button form="delete-reservation-form"
+                    type="submit"
+                    class="btn btn-danger"
+                    th:disabled="${null == reservationDto.id ?: false}">Delete
+            </button>
+            <a href="#" th:href="@{/reservations}">Back to Reservations</a>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+</body>
+</html>

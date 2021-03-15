@@ -26,10 +26,14 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
+    public static final String VEHICLE_LISTPAGE = "vehicle-listpage";
+
+    public static final String VEHICLE_EDITPAGE = "vehicle-editpage";
+
     @GetMapping
     public String listpage(Model model) {
         model.addAttribute("vehicles", vehicleService.findAll());
-        return "vehiclelistpage";
+        return VEHICLE_LISTPAGE;
     }
 
     @GetMapping("/{id}")
@@ -40,7 +44,7 @@ public class VehicleController {
         }
         model.addAttribute("parkingTypes", possibleTypes());
         model.addAttribute("vehicle", vehicle);
-        return "vehicleeditpage";
+        return VEHICLE_EDITPAGE;
     }
 
     /**

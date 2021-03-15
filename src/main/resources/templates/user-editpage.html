@@ -45,13 +45,13 @@
     </div>
     <div class="container" th:object="${user}">
         <h1 th:text="*{null == name} ? |Vehicles| : |*{name}'s Vehicles|">Vehicles</h1>
-        <table class="table">
+        <table class="table" aria-label="Vehicles for User">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Licence plate</th>
-                <th>Parking type</th>
-                <th></th>
+                <th scope="col">Name</th>
+                <th scope="col">Licence plate</th>
+                <th scope="col">Parking type</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>

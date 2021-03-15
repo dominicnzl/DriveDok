@@ -28,41 +28,47 @@ public class UserController {
         this.userService = userService;
     }
 
+    public static final String USER_LISTPAGE = "user-listpage";
+
+    public static final String USER_EDITPAGE = "user-editpage";
+
+    public static final String VEHICLE_EDITPAGE = "vehicle-editpage";
+
     @GetMapping
     public String listPage(Model model) {
         final List<User> users = userService.findAll();
         model.addAttribute("users", users);
-        return "userlistpage";
+        return USER_LISTPAGE;
     }
 
     @PostMapping
     public String save(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "usereditpage";
+            return USER_EDITPAGE;
         }
         userService.save(user);
         model.addAttribute("users", userService.findAll());
-        return "userlistpage";
+        return USER_LISTPAGE;
     }
 
     @GetMapping("/new")
     public String addNewUserPage(Model model) {
         model.addAttribute("user", new User());
-        return "usereditpage";
+        return USER_EDITPAGE;
     }
 
     @GetMapping("/{id}")
     public String editPage(Model model, @PathVariable Long id) {
         final var user = userService.getById(id);
         model.addAttribute("user", user);
-        return "usereditpage";
+        return USER_EDITPAGE;
     }
 
     @DeleteMapping("/{id}")
     public String delete(Model model, @PathVariable Long id) {
         userService.findById(id).ifPresent(userService::delete);
         model.addAttribute("users", userService.findAll());
-        return "userlistpage";
+        return USER_LISTPAGE;
     }
 
     @GetMapping("/{userId}/vehicles/new")
@@ -70,7 +76,7 @@ public class UserController {
         model.addAttribute("user", userService.getById(userId));
         model.addAttribute("vehicle", new Vehicle());
         model.addAttribute("parkingTypes", possibleTypes());
-        return "vehicleeditpage";
+        return VEHICLE_EDITPAGE;
     }
 
     @PostMapping("/{userId}/vehicles")
@@ -82,10 +88,10 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);
             model.addAttribute("parkingTypes", possibleTypes());
-            return "vehicleeditpage";
+            return VEHICLE_EDITPAGE;
         }
         user = userService.addVehicleByUserId(userId, vehicle);
         model.addAttribute("user", user);
-        return "usereditpage";
+        return USER_EDITPAGE;
     }
 }

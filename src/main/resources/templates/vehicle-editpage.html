@@ -10,7 +10,6 @@
 <body>
 <div class="container">
     <h1>Add Vehicle</h1>
-    <div th:if="${null == user}" th:text="to be implemented..."></div>
     <div th:unless="${null == user}">
         <form action="#"
               th:action="@{/users/{id}/vehicles (id = ${user.id})}"

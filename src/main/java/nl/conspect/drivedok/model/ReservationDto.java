@@ -1,12 +1,25 @@
 package nl.conspect.drivedok.model;
 
-import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ReservationDto {
 
     private Long id;
-    private LocalDateTime start;
-    private LocalDateTime end;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime startTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime endTime;
     private User user;
     private Vehicle vehicle;
     private ParkingSpot parkingSpot;
@@ -19,20 +32,36 @@ public class ReservationDto {
         this.id = id;
     }
 
-    public LocalDateTime getStart() {
-        return start;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public User getUser() {
