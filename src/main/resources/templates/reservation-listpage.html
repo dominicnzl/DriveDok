@@ -16,31 +16,32 @@
             <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
         </a>
     </nav>
-    <h1>Reservations</h1>
+    <h1 th:text="#{reservation.listpage.title}">Reservations</h1>
     <table class="table table-hover" aria-label="Reservations">
         <thead>
-            <tr>
-                <th scope="col">User</th>
-                <th scope="col">Start</th>
-                <th scope="col">End</th>
-                <th scope="col">Vehicle (licenceplate)</th>
-                <th scope="col">ParkingSpot</th>
-            </tr>
+        <tr>
+            <th scope="col" th:text="#{reservation.listpage.user}">User</th>
+            <th scope="col" th:text="#{reservation.listpage.start}">Start</th>
+            <th scope="col" th:text="#{reservation.listpage.end}">End</th>
+            <th scope="col" th:text="#{reservation.listpage.vehicle}">Vehicle (licenceplate)</th>
+            <th scope="col" th:text="#{reservation.listpage.parkingspot}">ParkingSpot</th>
+        </tr>
         </thead>
         <tbody style="cursor:pointer">
-            <tr th:each="r : ${reservations}" th:id="|row_${r.id}|" th:class="tr-reservations">
-                <td>
-                    <a href="#" th:href="@{|/users/*{r.user?.id}|}" th:text="*{r.user?.name}"></a>
-                </td>
-                <td th:text="*{#temporals.format(r.start, 'dd-MM-yyyy HH:mm')}"></td>
-                <td th:text="*{#temporals.format(r.end, 'dd-MM-yyyy HH:mm')}"></td>
-                <td th:text="*{r.vehicle?.licencePlate}"></td>
-                <td th:text="*{r.parkingSpot}"></td>
-            </tr>
+        <tr th:each="r : ${reservations}" th:id="|row_${r.id}|" th:class="tr-reservations">
+            <td>
+                <a href="#" th:href="@{|/users/*{r.user?.id}|}" th:text="*{r.user?.name}"></a>
+            </td>
+            <td th:text="*{#temporals.format(r.start, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="*{#temporals.format(r.end, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="*{r.vehicle?.licencePlate}"></td>
+            <td th:text="*{r.parkingSpot}"></td>
+        </tr>
         </tbody>
     </table>
     <div>
-        <a href="#" th:href="@{/reservations/new}" class="btn btn-primary">Add Reservation</a>
+        <a href="#" th:href="@{/reservations/new}" class="btn btn-primary"
+           th:text="#{reservation.listpage.add.reservation}">Add Reservation</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
