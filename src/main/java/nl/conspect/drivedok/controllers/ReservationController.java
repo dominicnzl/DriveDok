@@ -22,9 +22,9 @@ import java.util.Optional;
 @RequestMapping("/reservations")
 public class ReservationController {
 
-    public static final String RESERVATION_LISTPAGE = "reservation-listpage";
+    public static final String RESERVATION_LISTPAGE = "reservation/reservation-listpage";
 
-    public static final String RESERVATION_EDITPAGE = "reservation-editpage";
+    public static final String RESERVATION_EDITPAGE = "reservation/reservation-editpage";
 
     private final ReservationService reservationService;
 
