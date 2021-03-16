@@ -37,7 +37,7 @@ public class Il8nConfig {
     @Bean
     public MessageSource messageSource() {
         var messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("il8n/messages");
+        messageSource.setBasenames("il8n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <title>Add Vehicle</title>
-</head>
+<head th:replace="~{fragments/layout :: basicHeader('Vehicle')}"><title>Vehicle</title></head>
 <body>
 <div class="container">
+    <nav th:replace="~{fragments/layout :: basicNav}" class="navbar"></nav>
     <h1>Add Vehicle</h1>
     <div th:unless="${null == user}">
         <form action="#"

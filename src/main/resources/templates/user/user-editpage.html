@@ -1,19 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <title th:text="${user.name}">User</title>
+<head th:replace="~{fragments/layout :: basicHeader(${{user.name}})}"><title>Placeholder</title>
 </head>
 <body>
 <div class="container">
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
-        </a>
-    </nav>
+    <nav th:replace="~{fragments/layout :: basicNav}" class="navbar"></nav>
     <div class="container-sm">
         <h1 th:text="${user.name}">User</h1>
         <form action="#" th:action="@{/users}" th:object="${user}" method="post" id="saveuserform">

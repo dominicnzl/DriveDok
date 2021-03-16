@@ -5,11 +5,7 @@
 </head>
 <body>
 <div class="container" th:object="${reservationDto}">
-    <nav class="navbar">
-        <a class="navbar-brand" href="#">
-            <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
-        </a>
-    </nav>
+    <nav th:replace="~{fragments/layout :: basicNav}" class="navbar"></nav>
     <div class="container-sm">
         <h1 th:text="#{reservation.editpage.title}">Reservation</h1>
         <form action="#" th:action="@{/reservations}" method="post" id="save-reservation-form" class="mb-3">

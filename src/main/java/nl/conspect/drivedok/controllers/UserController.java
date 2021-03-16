@@ -28,11 +28,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    public static final String USER_LISTPAGE = "user-listpage";
+    public static final String USER_LISTPAGE = "user/user-listpage";
 
-    public static final String USER_EDITPAGE = "user-editpage";
+    public static final String USER_EDITPAGE = "user/user-editpage";
 
-    public static final String VEHICLE_EDITPAGE = "vehicle-editpage";
+    public static final String VEHICLE_EDITPAGE = "vehicle/vehicle-editpage";
 
     @GetMapping
     public String listPage(Model model) {
