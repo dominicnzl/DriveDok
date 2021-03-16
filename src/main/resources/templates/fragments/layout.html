@@ -22,16 +22,16 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/reservations}">Reservations</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/reservations}">Reservations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/zones}">Zones</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/zones}">Zones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/users}">Users</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/users}">Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/vehicles}">Vehicles</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/vehicles}">Vehicles</a>
                 </li>
             </ul>
         </div>
@@ -39,5 +39,9 @@
 </nav>
 
 
+<script th:fragment="bootstrapJS"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
 </body>
 </html>
