@@ -15,6 +15,29 @@
         <a class="navbar-brand" href="#">
             <img th:src="@{/img/quickLogo.png}" width="30" height="30" alt="" loading="lazy">
         </a>
+        <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle"
+               href="#"
+               role="button"
+               id="dropdownMenuLink"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Choose language
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li>
+                    <a class="dropdown-item" href="?locale=nl">
+                        <img src="#" th:src="@{/img/nl.png}" alt="Dutch">
+                        <span th:text="#{main.language.nl}">NL</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="?locale=en">
+                        <img src="#" th:src="@{/img/gb.png}" alt="English">
+                        <span th:text="#{main.language.en}">EN</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
