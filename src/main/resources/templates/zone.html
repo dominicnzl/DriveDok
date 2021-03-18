@@ -33,7 +33,7 @@
                        th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"/>
             </th:block><br>
 
-            <input type="submit" value="update" th:text="#{btn.update}"/>
+            <input type="submit" value="update" th:value="#{btn.update}"/>
         </form>
         <div class="album py-3 bg-light">
             <button class="btn btn-warning" onclick="location.href='/zones'" th:text="#{btn.return}">Go to overview</button>
