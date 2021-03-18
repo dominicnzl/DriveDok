@@ -14,7 +14,7 @@
         <h2 th:text="#{landing.msg.welcome(#{administrator.name})}">Welcome Administrator Bert,</h2>
         <h3 th:text="#{landing.msg.welcome.cont}">Your DriveDok Zones</h3>
     </section>
-    <script th:replace="fragments/layout :: bootstrapJS"></script>
+    <script th:replace="~{fragments/layout :: bootstrapJS}"></script>
 </div>
 </body>
 </html>

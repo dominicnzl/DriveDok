@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>DriveDok error</title>
-</head>
+<head th:replace="~{fragments/layout :: basicHeader('Ooops...')}"></head>
 <body>
-<div>
-    <h1>Oops...</h1>
+<div class="container">
+    <nav th:replace="~{fragments/layout :: basicNav(${error})}"></nav>
     <h2 th:text="|${status} ${error} ${message}|"></h2>
     <div th:if="${exception !=null}">
         <p th:text="${exception}">filler</p>

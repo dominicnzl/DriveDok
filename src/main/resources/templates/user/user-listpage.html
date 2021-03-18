@@ -24,7 +24,7 @@
         <a href="#" th:href="@{/users/new}" class="btn btn-primary" th:text="#{btn.add}">Add User</a>
     </div>
 </div>
-<script th:replace="fragments/layout :: addRedirect('.tr-users', 'users')"></script>
-<script th:replace="fragments/layout :: bootstrapJS"></script>
+<script th:replace="~{fragments/layout :: addRedirect('.tr-users', 'users')}"></script>
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
 </body>
 </html>

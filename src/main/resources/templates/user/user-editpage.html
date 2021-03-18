@@ -75,7 +75,7 @@
         <a href="#" th:href="@{/users}" th:text="#{btn.return}">Back to Users</a>
     </div>
 </div>
-<script th:replace="fragments/layout :: addRedirect('.tr-vehicles', 'vehicles')"></script>
-<script th:replace="fragments/layout :: bootstrapJS"></script>
+<script th:replace="~{fragments/layout :: addRedirect('.tr-vehicles', 'vehicles')}"></script>
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
 </body>
 </html>

@@ -33,7 +33,7 @@
            th:text="#{btn.add}">Add Reservation</a>
     </div>
 </div>
-<script th:replace="fragments/layout :: addRedirect('.tr-reservations', 'reservations')"></script>
-<script th:replace="fragments/layout :: bootstrapJS"></script>
+<script th:replace="~{fragments/layout :: addRedirect('.tr-reservations', 'reservations')}"></script>
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
 </body>
 </html>
