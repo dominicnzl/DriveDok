@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: basicHeader('Create new zone')}"><title>Create new zone</title></head>
+<head th:replace="~{fragments/layout :: basicHeader(#{zone.new.page.msg})}"><title>Create new zone</title></head>
 <body class="d-flex h-100 text-center">
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav('New DriveDok Zone')}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(#{zone.new.page.msg})}" class="navbar"></nav>
     <div class="starter-template text-center py-3 px-3">
         <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy">
     </div>
     <section class="album py-3 bg-light">
-        <h2>Create a new DriveDok Zone</h2>
-        <h3>for your Parking Spots</h3>
+        <h2 th:text="#{zone.new.page.msg}">Create a new DriveDok Zone</h2>
+        <h3 th:text="#{zone.new.page.msg.cont}">for your Parking Spots</h3>
     </section>
     <section>
         <form class="album py-5 bg-white" action="#" th:action="@{/zones/create}" th:object="${zone}" method="post">
@@ -18,13 +18,13 @@
             <div th:if="${#fields.hasAnyErrors()}">
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
             </div>
-            Name:
+            <label th:for="*{name}" th:text="#{name} + ':'"></label>
             <input type="text" th:field="*{name} " placeholder="Name"/>
 
-            Total parkingspots:
-            <input type="number" th:field="*{totalParkingSpots}"/></p>
+            <label th:for="*{totalParkingSpots}" th:text="#{zone.total.spots} + ':'"></label>
+            <input type="number" th:field="*{totalParkingSpots}"/>
             <div class="album py-5 bg-white">
-                <input type="submit" class="btn btn-primary" value="Create the zone"/>
+                <input type="submit" class="btn btn-primary" value="Create the zone" th:value="#{btn.add}"/>
             </div>
         </form>
     </section>

@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: basicHeader('Zones')}"><title>Welcome</title></head>
+<head th:replace="~{fragments/layout :: basicHeader(#{zone.plural})}"><title>Welcome</title></head>
 <body class="d-flex h-100 text-center">
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav('Zones')}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(#{zone.plural})}" class="navbar"></nav>
     <table class="table">
         <tr>
-            <th>Name</th>
-            <th>Total Parkingspots</th>
+            <th th:text="#{name}">Name</th>
+            <th th:text="#{zone.total.spots}">Total Parkingspots</th>
             <th></th>
         </tr>
         <div th:if="${zones != null and !zones.empty}">
@@ -36,11 +36,11 @@
             </section>
         </div>
         <div th:if="${zones == null or zones.empty}">
-            <p>You have no DriveDok Zones yet</p>
+            <p th:text="#{zone.list.page.msg.absence}">You have no DriveDok Zones yet</p>
         </div>
     </table>
     <div class="album py-5 bg-white">
-        <button class="btn btn-warning" onclick="location.href='/zones/create'">Create a new DriveDok Zone</button>
+        <button class="btn btn-warning" onclick="location.href='/zones/create'" th:text="#{btn.add}">Create a new DriveDok Zone</button>
     </div>
 </div>
 <script th:replace="fragments/layout :: bootstrapJS"></script>

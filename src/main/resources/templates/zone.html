@@ -11,14 +11,9 @@
 <body class="d-flex h-100 text-center">
 <div class="container">
     <nav th:replace="~{fragments/layout :: basicNav(|PZ ${zone.name}|)}" class="navbar"></nav>
-    <div class="starter-template text-center py-3 px-3">
-        <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy" onclick="location.href='/zones'">
-    </div>
     <section class="album py-3 bg-light" th:object="${zone}">
         <div>
-            <p th:text="|Your Zone *{name} has |">
-            <p th:text="|*{totalParkingSpots}|" id="totalSpots"></p>
-            <p th:text="|parking spots:|"></p>
+            <p th:text="#{zone.edit.page.msg(*{name}, *{totalParkingSpots})}"></p>
         </div>
         <form action="#" th:action="@{/zones/update}" th:object="${zone}" method="post">
             <input type="hidden" th:field="*{id}">
@@ -38,10 +33,10 @@
                        th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"/>
             </th:block><br>
 
-            <input type="submit"  value="update"></input>
+            <input type="submit" value="update" th:text="#{btn.update}"/>
         </form>
         <div class="album py-3 bg-light">
-            <button class="btn btn-warning" onclick="location.href='/zones'">Go to overview</button>
+            <button class="btn btn-warning" onclick="location.href='/zones'" th:text="#{btn.return}">Go to overview</button>
         </div>
 
         <script th:inline="javascript">

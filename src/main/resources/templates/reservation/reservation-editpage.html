@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: basicHeader('Reservation')}">
+<head th:replace="~{fragments/layout :: basicHeader(#{reservation.singular})}">
     <title>placeholder</title>
 </head>
 <body>
 <div class="container" th:object="${reservationDto}">
-    <nav th:replace="~{fragments/layout :: basicNav(#{reservation.editpage.title})}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(#{reservation.singular})}" class="navbar"></nav>
     <div class="container-sm">
         <form action="#" th:action="@{/reservations}" method="post" id="save-reservation-form" class="mb-3">
             <div th:if="${#fields.hasAnyErrors()}">
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
             </div>
             <div class="form-row">
-                <label for="user-name" class="form-label" th:text="#{reservation.editpage.name}">Name</label>
+                <label for="user-name" class="form-label" th:text="#{name}">Name</label>
                 <select name="user" id="user-name" class="form-control" th:field="${reservationDto.user}">
                     <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
                 </select>
             </div>
             <fieldset class="form-group">
-                <legend class="col-form-label" th:text="#{reservation.editpage.start}">Start</legend>
+                <legend class="col-form-label" th:text="#{reservation.start}">Start</legend>
                 <div class="row">
                     <div class="col">
                         <input type="date"
@@ -37,7 +37,7 @@
                 </div>
             </fieldset>
             <fieldset class="form-group">
-                <legend class="col-form-label" th:text="#{reservation.editpage.end}">End</legend>
+                <legend class="col-form-label" th:text="#{reservation.end}">End</legend>
                 <div class="row">
                     <div class="col">
                         <input type="date"
@@ -56,7 +56,7 @@
                 </div>
             </fieldset>
             <div class="form-row">
-                <label for="selected-vehicle" class="form-label" th:text="#{reservation.editpage.vehicle}">
+                <label for="selected-vehicle" class="form-label" th:text="|#{vehicle.singular} (#{vehicle.licence})|">
                     Vehicle (licenceplate)
                 </label>
                 <select name="vehicle" id="selected-vehicle" class="form-control" th:field="${reservationDto.vehicle}">
@@ -88,7 +88,7 @@
                     th:disabled="${null == reservationDto.id ?: false}"
                     th:text="#{btn.delete}">Delete
             </button>
-            <a href="#" th:href="@{/reservations}" th:text="#{reservation.editpage.return.to.listpage}">
+            <a href="#" th:href="@{/reservations}" th:text="#{btn.return}">
                 Back to Reservations
             </a>
         </div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: basicHeader('Vehicle')}"><title>Vehicle</title></head>
+<head th:replace="~{fragments/layout :: basicHeader(#{vehicle.singular})}"><title>Vehicle</title></head>
 <body>
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav('Vehicle')}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(#{vehicle.singular})}" class="navbar"></nav>
     <div th:unless="${null == user}">
         <form action="#"
               th:action="@{/users/{id}/vehicles (id = ${user.id})}"
@@ -14,15 +14,17 @@
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
             </div>
             <div class="mb-3">
-                <label for="vehicleName" class="form-label">Name</label>
+                <label for="vehicleName" class="form-label" th:text="#{name}">Name</label>
                 <input type="text" class="form-control" id="vehicleName" th:field="*{name}">
             </div>
             <div class="mb-3">
-                <label for="vehicleLicencePlate" class="form-label">Licence plate</label>
+                <label for="vehicleLicencePlate" class="form-label" th:text="#{vehicle.licence}">Licence plate</label>
                 <input type="text" class="form-control" id="vehicleLicencePlate" th:field="*{licencePlate}">
             </div>
             <div class="mb-3">
-                <label for="vehicleParkingType" class="form-label">Parking type</label>
+                <label for="vehicleParkingType"
+                       class="form-label"
+                       th:text="#{vehicle.parking.type}">Parking type</label>
                 <select id="vehicleParkingType" class="form-select" th:field="*{parkingType}">
                     <option th:each="type : ${parkingTypes}" th:value="${type}"
                             th:text="${type.toString()}"></option>
@@ -36,17 +38,19 @@
               method="post"
               th:method="delete"
               id="deletevehicleform"></form>
-        <button form="savevehicleform" type="submit" class="btn btn-primary">Save</button>
-        <button form="savevehicleform" type="reset" class="btn btn-warning">Reset</button>
+        <button form="savevehicleform" type="submit" class="btn btn-primary" th:text="#{btn.save}">Save</button>
+        <button form="savevehicleform" type="reset" class="btn btn-warning" th:text="#{btn.reset}">Reset</button>
         <button th:disabled="${null == vehicle.id ?: false}"
                 type="submit"
                 form="deletevehicleform"
-                class="btn btn-danger">
+                class="btn btn-danger"
+                th:text="#{btn.delete}">
             Delete
         </button>
         <div>
-            <a href="#" th:href="@{/users/{id} (id = ${user.id})}">Back to User</a>
-            <a href="#" th:href="@{/vehicles}">Back to Vehicles</a>
+            <a href="#" th:href="@{/users/{id} (id = ${user.id})}"
+               th:text="#{btn.return.with.arg(#{user.plural})}">Back to User</a>
+            <a href="#" th:href="@{/vehicles}" th:text="#{btn.return.with.arg(#{vehicle.plural})}">Back to Vehicles</a>
         </div>
     </div>
 </div>

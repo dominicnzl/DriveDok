@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: basicHeader('Users')}"><title>Placeholder</title></head>
+<head th:replace="~{fragments/layout :: basicHeader(#{user.plural})}"><title>Placeholder</title></head>
 <body>
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav('Users')}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(#{user.plural})}" class="navbar"></nav>
     <table class="table" aria-label="Users">
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">E-mail</th>
+            <th scope="col" th:text="#{name}">Name</th>
+            <th scope="col" th:text="#{user.email}">E-mail</th>
         </tr>
         <tr th:each="user : ${users}">
             <td>
@@ -17,7 +17,7 @@
         </tr>
     </table>
     <div>
-        <a href="#" th:href="@{/users/new}" class="btn btn-primary">Add User</a>
+        <a href="#" th:href="@{/users/new}" class="btn btn-primary" th:text="#{btn.add}">Add User</a>
     </div>
 </div>
 <script th:replace="fragments/layout :: bootstrapJS"></script>

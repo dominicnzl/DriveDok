@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: basicHeader('Reservations')}">
+<head th:replace="~{fragments/layout :: basicHeader(#{reservation.plural})}">
     <title>placeholder</title>
 </head>
 <body>
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav(#{reservation.listpage.title})}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(#{reservation.plural})}" class="navbar"></nav>
     <table class="table table-hover" aria-label="Reservations">
         <thead>
         <tr>
-            <th scope="col" th:text="#{reservation.listpage.user}">User</th>
-            <th scope="col" th:text="#{reservation.listpage.start}">Start</th>
-            <th scope="col" th:text="#{reservation.listpage.end}">End</th>
-            <th scope="col" th:text="#{reservation.listpage.vehicle}">Vehicle (licenceplate)</th>
-            <th scope="col" th:text="#{reservation.listpage.parkingspot}">ParkingSpot</th>
+            <th scope="col" th:text="#{user.singular}">User</th>
+            <th scope="col" th:text="#{reservation.start}">Start</th>
+            <th scope="col" th:text="#{reservation.end}">End</th>
+            <th scope="col" th:text="|#{vehicle.singular} (#{vehicle.licence})|">Vehicle (licenceplate)</th>
+            <th scope="col" th:text="#{spot.singular}">ParkingSpot</th>
         </tr>
         </thead>
         <tbody style="cursor:pointer">
@@ -30,7 +30,7 @@
     </table>
     <div>
         <a href="#" th:href="@{/reservations/new}" class="btn btn-primary"
-           th:text="#{reservation.listpage.add.reservation}">Add Reservation</a>
+           th:text="#{btn.add}">Add Reservation</a>
     </div>
 </div>
 <script th:replace="fragments/layout :: bootstrapJS"></script>

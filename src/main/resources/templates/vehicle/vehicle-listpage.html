@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: basicHeader('Vehicles')}"><title>Vehicles</title></head>
+<head th:replace="~{fragments/layout :: basicHeader(#{vehicle.plural})}"><title>Vehicles</title></head>
 <body>
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav('Vehicles')}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(#{vehicle.plural})}" class="navbar"></nav>
     <table class="table" aria-label="Vehicles">
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Licence Plate</th>
-            <th scope="col">Parking Type</th>
-            <th scope="col">User</th>
+            <th scope="col" th:text="#{name}">Name</th>
+            <th scope="col" th:text="#{vehicle.licence}">Licence Plate</th>
+            <th scope="col" th:text="#{vehicle.parking.type}">Parking Type</th>
+            <th scope="col" th:text="#{user.singular}">User</th>
         </tr>
         <tr th:each="vehicle : ${vehicles}">
             <td>
