@@ -13,7 +13,12 @@
 <nav th:fragment="basicNav" class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand me-auto" href="#">
-            <img src="#" th:src="@{/img/quickLogo.png}" width="36" height="36" alt="Company logo">
+            <img src="#"
+                 th:src="@{/img/quickLogo.png}"
+                 width="36"
+                 height="36"
+                 alt="Company logo"
+                 style="border: 3px solid #ffc107; border-image-outset: 3px; border-radius: 3px">
         </a>
         <div class="dropdown m-1">
             <a class="btn btn-outline-warning dropdown-toggle"
@@ -22,9 +27,12 @@
                id="dropdownMenuLink"
                data-bs-toggle="dropdown"
                aria-expanded="false">
-                <img src="#" th:src="@{/img/nl.png}" alt="Choose language">
+                <img src="#"
+                     th:with="language=(__${#locale}__ == 'en' ? 'gb' : 'nl')"
+                     th:src="@{|/img/${language}.png|}"
+                     alt="Choose language">
             </a>
-            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                 <li>
                     <a class="dropdown-item" href="?locale=nl">
                         <img src="#" th:src="@{/img/nl.png}" alt="Dutch">
