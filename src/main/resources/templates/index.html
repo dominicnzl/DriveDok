@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: basicHeader('Welcome')}"><title>Welcome</title></head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/layout :: basicNav('Welcome')}" class="navbar"></nav>
+    <div class="starter-template text-center py-3 px-3">
+        <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy">
+    </div>
+    <section class="album py-3 bg-light text-center">
+        <h2>Welcome Administrator Bert,</h2>
+        <h3>Your DriveDok Zones</h3>
+    </section>
+    <script th:replace="fragments/layout :: bootstrapJS"></script>
+</div>
+</body>
+</html>
