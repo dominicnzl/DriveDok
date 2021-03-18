@@ -3,8 +3,7 @@
 <head th:replace="~{fragments/layout :: basicHeader('Vehicle')}"><title>Vehicle</title></head>
 <body>
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav}" class="navbar"></nav>
-    <h1>Add Vehicle</h1>
+    <nav th:replace="~{fragments/layout :: basicNav('Vehicle')}" class="navbar"></nav>
     <div th:unless="${null == user}">
         <form action="#"
               th:action="@{/users/{id}/vehicles (id = ${user.id})}"

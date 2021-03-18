@@ -10,9 +10,9 @@
     <title th:text="${title}">Your title here</title>
 </head>
 <body>
-<nav th:fragment="basicNav" class="navbar navbar-dark bg-dark">
+<nav th:fragment="basicNav(title)" class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand me-auto" href="#">
+        <a class="navbar-brand mx-1" href="#">
             <img src="#"
                  th:src="@{/img/quickLogo.png}"
                  width="36"
@@ -20,6 +20,7 @@
                  alt="Company logo"
                  style="border: 3px solid #ffc107; border-image-outset: 3px; border-radius: 3px">
         </a>
+        <p class="h1 me-auto" style="color: white" th:text="${title}"></p>
         <div class="dropdown m-1">
             <a class="btn btn-outline-warning dropdown-toggle"
                href="#"

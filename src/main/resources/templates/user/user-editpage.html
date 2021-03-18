@@ -4,9 +4,8 @@
 </head>
 <body>
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav}" class="navbar"></nav>
+    <nav th:replace="~{fragments/layout :: basicNav(${{user.name}})}" class="navbar"></nav>
     <div class="container-sm">
-        <h1 th:text="${user.name}">User</h1>
         <form action="#" th:action="@{/users}" th:object="${user}" method="post" id="saveuserform">
             <div th:if="${#fields.hasAnyErrors()}">
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>

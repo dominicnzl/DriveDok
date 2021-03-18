@@ -5,8 +5,7 @@
 </head>
 <body>
 <div class="container">
-    <nav th:replace="~{fragments/layout :: basicNav}" class="navbar"></nav>
-    <h1 th:text="#{reservation.listpage.title}">Reservations</h1>
+    <nav th:replace="~{fragments/layout :: basicNav(#{reservation.listpage.title})}" class="navbar"></nav>
     <table class="table table-hover" aria-label="Reservations">
         <thead>
         <tr>
