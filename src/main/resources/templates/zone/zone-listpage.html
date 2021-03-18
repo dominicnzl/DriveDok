@@ -4,12 +4,12 @@
 <body>
 <div class="container">
     <nav th:replace="~{fragments/layout :: basicNav(#{zone.plural})}" class="navbar"></nav>
-    <table class="table table-hover">
+    <table class="table table-hover" aria-label="Zones">
         <thead>
         <tr>
-            <th th:text="#{name}">Name</th>
-            <th th:text="#{zone.total.spots}">Total Parkingspots</th>
-            <th></th>
+            <th scope="col" th:text="#{name}">Name</th>
+            <th scope="col" th:text="#{zone.total.spots}">Total Parkingspots</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody style="cursor: pointer">

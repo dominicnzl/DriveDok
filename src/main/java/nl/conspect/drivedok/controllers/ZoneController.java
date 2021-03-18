@@ -22,45 +22,49 @@ public class ZoneController {
         this.zoneService = zoneService;
     }
 
+    private static final String LIST = "/zone/zone-listpage";
+
+    private static final String EDIT = "/zone/zone-editpage";
+
+    private static final String FORM = "/zone/zone-form";
+
     @GetMapping
-    public String showAllZones(Model model){
+    public String showAllZones(Model model) {
         model.addAttribute("zones", zoneService.findAll());
-        return "zonelistpage";
+        return LIST;
     }
 
     @GetMapping("/create")
     public String showZoneForm(Model model, Zone zone) {
         model.addAttribute("zone", zone);
-        return "zonecreateform";
+        return FORM;
     }
 
     @PostMapping("/create")
     public String saveZone(Model model, @Valid Zone zone,
-                                  BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return "zonecreateform";
+                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return FORM;
         }
         zoneService.create(zone);
         model.addAttribute("zone", zone);
-        return "zone";
+        return EDIT;
     }
 
     @PostMapping("/update")
-    public String updateZone(Model model,@Valid Zone zone,
-                                    BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return "zone";
+    public String updateZone(Model model, @Valid Zone zone, BindingResult bindingResult) {
+        if (!bindingResult.hasErrors()) {
+            zoneService.update(zone);
+            model.addAttribute("zone", zone);
         }
-        zoneService.update(zone);
-        model.addAttribute("zone", zone);
-        return "zone";
+        return EDIT;
     }
 
-    @GetMapping  ("/delete/{id}")
-    public String deleteZone(Model model, @PathVariable Long id){
+    @GetMapping("/delete/{id}")
+    public String deleteZone(Model model, @PathVariable Long id) {
         zoneService.deleteById(id);
         model.addAttribute("zones", zoneService.findAll());
-        return "zonelistpage";
+        return LIST;
     }
 
     @GetMapping("/{id}")
@@ -68,6 +72,6 @@ public class ZoneController {
         var zone = zoneService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Zone with id %s not found", id)));
         model.addAttribute("zone", zone);
-        return "zone";
+        return EDIT;
     }
 }

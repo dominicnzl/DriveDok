@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,7 +117,7 @@ class ZoneControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/zones/delete/{id}", 1))
                 .andExpect(status().isOk())
-                .andExpect(view().name("zonelistpage"))
+                .andExpect(view().name("/zone/zone-listpage"))
         ;
     }
 

@@ -19,7 +19,7 @@
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
             </div>
             <label th:for="*{name}" th:text="#{name} + ':'"></label>
-            <input type="text" th:field="*{name} " placeholder="Name"/>
+            <input type="text" th:field="*{name} " th:placeholder="#{name}"/>
 
             <label th:for="*{totalParkingSpots}" th:text="#{zone.total.spots} + ':'"></label>
             <input type="number" th:field="*{totalParkingSpots}"/>
