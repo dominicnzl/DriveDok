@@ -33,19 +33,7 @@
            th:text="#{btn.add}">Add Reservation</a>
     </div>
 </div>
+<script th:replace="fragments/layout :: addRedirect('.tr-reservations', 'reservations')"></script>
 <script th:replace="fragments/layout :: bootstrapJS"></script>
-<script>
-    const addRedirect = rowId => {
-        // extract [id] from [row_id] with slice
-        const reservationId = rowId.slice(4);
-        const uri = `/reservations/${reservationId}`;
-        const row = document.getElementById(rowId);
-        const goto = uri => location.href = uri;
-        row.addEventListener('click', () => goto(uri));
-    }
-
-    const reservationRows = document.querySelectorAll(".tr-reservations");
-    reservationRows.forEach(row => addRedirect(row.id));
-</script>
 </body>
 </html>

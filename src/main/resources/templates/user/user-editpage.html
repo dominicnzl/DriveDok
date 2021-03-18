@@ -38,7 +38,7 @@
     </div>
     <div class="container" th:object="${user}">
         <h1 th:text="*{null == name} ? #{vehicle.plural} : *{name} + ' \'s ' + #{vehicle.plural}">Vehicles</h1>
-        <table class="table" aria-label="Vehicles for User">
+        <table class="table table-hover" aria-label="Vehicles for User">
             <thead>
             <tr>
                 <th scope="col" th:text="#{name}">Name</th>
@@ -47,16 +47,20 @@
                 <th scope="col"></th>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="vehicle : *{vehicles}">
+            <tbody style="cursor: pointer">
+            <tr th:each="vehicle : *{vehicles}" th:id="|row_${vehicle.id}|" th:class="tr-vehicles">
                 <td><a href="#" th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
                        th:text="${vehicle.name}">Vehicle name</a></td>
                 <td th:text="${vehicle.licencePlate}"></td>
                 <td th:text="${vehicle.parkingType}"></td>
                 <td>
-                    <form action="#" th:action="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}" method="post"
-                          th:method="delete" th:object="${vehicle}">
-                        <input type="submit" th:value="Delete" class="btn btn-danger">
+                    <form action="#"
+                          th:action="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
+                          method="post"
+                          th:method="delete"
+                          th:object="${vehicle}"
+                          id="delete-vehicle-form">
+                        <input type="submit" th:value="#{btn.delete}" class="btn btn-danger">
                     </form>
                 </td>
             </tr>
@@ -71,6 +75,7 @@
         <a href="#" th:href="@{/users}" th:text="#{btn.return}">Back to Users</a>
     </div>
 </div>
+<script th:replace="fragments/layout :: addRedirect('.tr-vehicles', 'vehicles')"></script>
 <script th:replace="fragments/layout :: bootstrapJS"></script>
 </body>
 </html>
