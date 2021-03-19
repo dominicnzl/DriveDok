@@ -24,8 +24,8 @@ public class Zone extends AbstractPersistable<Long> {
     private Long id;
 
     @NotNull
-    @Size(min = 3, message = "Your name should at least have 3 letters")
-    @Size(max = 20, message = "Your name can not have more than 20 letters")
+    @Size(min = 3, message = "{valid.string.minimum}")
+    @Size(max = 20, message = "{valid.string.maximum}")
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -33,7 +33,7 @@ public class Zone extends AbstractPersistable<Long> {
     private Set<ParkingSpot> parkingSpots = new TreeSet<>(new ParkingTypeComparator());
 
     @NotNull
-    @Min(value = 1, message = "Your zone should have at least 1 parking spot")
+    @Min(value = 1, message = "{valid.total.parkingspots}")
     private int totalParkingSpots;
 
     public Zone() {

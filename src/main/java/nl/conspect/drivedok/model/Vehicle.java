@@ -22,12 +22,12 @@ public class Vehicle extends AbstractPersistable<Long> {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 64, message = "Name should be between 1 and 64 characters")
+    @Size(max = 64, min = 1, message = "{valid.string.range}")
     @Column(nullable = false, length = 64)
     private String name;
 
     @NotNull
-    @Size(min = 6, max = 8, message = "Licence plate should be between 6 and 8 characters")
+    @Size(max = 8, min = 6, message = "{valid.string.range")
     @Column(nullable = false, length = 8)
     private String licencePlate;
 
@@ -56,10 +56,12 @@ public class Vehicle extends AbstractPersistable<Long> {
         this.user = user;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

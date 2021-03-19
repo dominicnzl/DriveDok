@@ -13,7 +13,7 @@
             </div>
             <div class="form-row">
                 <label for="user-name" class="form-label" th:text="#{name}">Name</label>
-                <select name="user" id="user-name" class="form-control" th:field="${reservationDto.user}">
+                <select name="user" id="user-name" class="form-control" th:field="${reservationDto.user}" required>
                     <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
                 </select>
             </div>
@@ -25,14 +25,15 @@
                                class="form-control"
                                id="start-date"
                                name="startDate"
-                               th:field="*{startDate}">
+                               th:field="*{startDate}" required>
                     </div>
                     <div class="col">
                         <input type="time"
                                class="form-control"
                                id="start-time"
                                name="startTime"
-                               th:field="*{startTime}">
+                               th:field="*{startTime}"
+                               required>
                     </div>
                 </div>
             </fieldset>
@@ -44,14 +45,16 @@
                                class="form-control"
                                id="end-date"
                                name="endDate"
-                               th:field="*{endDate}">
+                               th:field="*{endDate}"
+                               required>
                     </div>
                     <div class="col">
                         <input type="time"
                                class="form-control"
                                id="end-time"
                                name="endTime"
-                               th:field="*{endTime}">
+                               th:field="*{endTime}"
+                               required>
                     </div>
                 </div>
             </fieldset>
@@ -59,7 +62,11 @@
                 <label for="selected-vehicle" class="form-label" th:text="|#{vehicle.singular} (#{vehicle.licence})|">
                     Vehicle (licenceplate)
                 </label>
-                <select name="vehicle" id="selected-vehicle" class="form-control" th:field="${reservationDto.vehicle}">
+                <select name="vehicle"
+                        id="selected-vehicle"
+                        class="form-control"
+                        th:field="${reservationDto.vehicle}"
+                        required>
                     <option th:each="vehicle : ${vehicles}"
                             th:value="${vehicle.id}"
                             th:text="${vehicle.licencePlate}"></option>
@@ -86,9 +93,10 @@
                     type="submit"
                     class="btn btn-danger"
                     th:disabled="${null == reservationDto.id ?: false}"
-                    th:text="#{btn.delete}">Delete
+                    th:text="#{btn.delete}">
+                Delete
             </button>
-            <a href="#" th:href="@{/reservations}" th:text="#{btn.return}">
+            <a href="#" th:href="@{/reservations}" th:text="#{btn.return}" class="btn btn-dark">
                 Back to Reservations
             </a>
         </div>

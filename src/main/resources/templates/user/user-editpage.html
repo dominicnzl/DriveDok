@@ -35,6 +35,7 @@
                 th:text="#{btn.delete}">
             Delete
         </button>
+        <a href="#" th:href="@{/users}" th:text="#{btn.return}" class="btn btn-dark">Back to Users</a>
     </div>
     <div class="container" th:object="${user}">
         <h1 th:text="*{null == name} ? #{vehicle.plural} : *{name} + ' \'s ' + #{vehicle.plural}">Vehicles</h1>
@@ -70,9 +71,6 @@
             <a href="#" th:href="@{/users/{id}/vehicles/new (id = ${user.id})}" class="btn btn-primary"
                th:text="#{btn.add}">Add Vehicle</a>
         </div>
-    </div>
-    <div class="container-sm">
-        <a href="#" th:href="@{/users}" th:text="#{btn.return}">Back to Users</a>
     </div>
 </div>
 <script th:replace="~{fragments/layout :: addRedirect('.tr-vehicles', 'vehicles')}"></script>

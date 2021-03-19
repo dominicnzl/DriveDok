@@ -15,17 +15,17 @@
             </div>
             <div class="mb-3">
                 <label for="vehicleName" class="form-label" th:text="#{name}">Name</label>
-                <input type="text" class="form-control" id="vehicleName" th:field="*{name}">
+                <input type="text" class="form-control" id="vehicleName" th:field="*{name}" required>
             </div>
             <div class="mb-3">
                 <label for="vehicleLicencePlate" class="form-label" th:text="#{vehicle.licence}">Licence plate</label>
-                <input type="text" class="form-control" id="vehicleLicencePlate" th:field="*{licencePlate}">
+                <input type="text" class="form-control" id="vehicleLicencePlate" th:field="*{licencePlate}" required>
             </div>
             <div class="mb-3">
                 <label for="vehicleParkingType"
                        class="form-label"
                        th:text="#{vehicle.parking.type}">Parking type</label>
-                <select id="vehicleParkingType" class="form-select" th:field="*{parkingType}">
+                <select id="vehicleParkingType" class="form-select" th:field="*{parkingType}" required>
                     <option th:each="type : ${parkingTypes}" th:value="${type}"
                             th:text="${type.toString()}"></option>
                 </select>
@@ -47,11 +47,14 @@
                 th:text="#{btn.delete}">
             Delete
         </button>
-        <div>
-            <a href="#" th:href="@{/users/{id} (id = ${user.id})}"
-               th:text="#{btn.return.with.arg(#{user.plural})}">Back to User</a>
-            <a href="#" th:href="@{/vehicles}" th:text="#{btn.return.with.arg(#{vehicle.plural})}">Back to Vehicles</a>
-        </div>
+        <a href="#"
+           th:href="@{/users/{id} (id = ${user.id})}"
+           th:text="#{btn.return.with.arg(#{user.plural})}"
+           class="btn btn-dark">Back to User</a>
+        <a href="#"
+           th:href="@{/vehicles}"
+           th:text="#{btn.return.with.arg(#{vehicle.plural})}"
+           class="btn btn-dark">Back to Vehicles</a>
     </div>
 </div>
 <script th:replace="~{fragments/layout :: bootstrapJS}"></script>

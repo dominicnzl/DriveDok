@@ -21,22 +21,25 @@
             <input type="hidden" th:field="*{parkingSpots}">
             <input type="hidden" th:field="*{totalParkingSpots}" th:id="myTotalParkingSpots">
 
-            <div type="text" th:id="myMessage" ></div>
+            <div type="text" th:id="myMessage"></div>
 
             <th:block th:each="spot,i : ${zone.parkingSpots}">
-                <input type="hidden" th:field="*{parkingSpots[__${i.index}__].id}" /><br />
-                <input type="text" th:field="*{parkingSpots[__${i.index}__].parkingType}" /><br />
+                <input type="hidden" th:field="*{parkingSpots[__${i.index}__].id}"/><br/>
+                <input type="text" th:field="*{parkingSpots[__${i.index}__].parkingType}"/><br/>
                 <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
-                th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"
-                readonly="readonly"/>
+                       th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"
+                       readonly="readonly"/>
                 <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
                        th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"/>
-            </th:block><br>
+            </th:block>
+            <br>
 
-            <input type="submit" value="update" th:value="#{btn.update}"/>
+            <input type="submit" value="update" th:value="#{btn.update}" class="btn btn-primary"/>
         </form>
         <div class="album py-3 bg-light">
-            <button class="btn btn-warning" onclick="location.href='/zones'" th:text="#{btn.return}">Go to overview</button>
+            <button class="btn btn-dark" onclick="location.href='/zones'" th:text="#{btn.return}">
+                Go to overview
+            </button>
         </div>
 
         <script th:inline="javascript">

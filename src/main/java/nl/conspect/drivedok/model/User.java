@@ -26,7 +26,7 @@ public class User extends AbstractPersistable<Long> {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 64, message = "Name should be between 1 and 64 characters")
+    @Size(max = 64, min = 1, message = "{valid.string.range}")
     @Column(nullable = false, length = 64)
     private String name;
 
@@ -34,7 +34,7 @@ public class User extends AbstractPersistable<Long> {
     private String email;
 
     @NotNull
-    @Size(min = 4, message = "Password should be at least 4 characters")
+    @Size(min = 4, message = "{valid.string.minimum}")
     @Column(nullable = false)
     private String password; // TODO: 02/12/2020 should probably not be a String but a Char[]
 
@@ -61,10 +61,12 @@ public class User extends AbstractPersistable<Long> {
         this.password = password;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

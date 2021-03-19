@@ -11,7 +11,7 @@
         <p class="lead" th:text="${exception}">filler</p>
     </div>
     <div th:if="${trace !=null}">
-        <p th:text="${trace}">filler</p>
+        <p class="font-monospace" th:text="${trace}">filler</p>
     </div>
 </div>
 <script th:replace="~{fragments/layout :: bootstrapJS}"></script>
