@@ -5,7 +5,7 @@
 <body>
 <div class="container">
     <nav th:replace="~{fragments/layout :: basicNav(${{user.name}})}" class="navbar"></nav>
-    <div class="container-sm">
+    <div class="container-sm mb-3">
         <form action="#" th:action="@{/users}" th:object="${user}" method="post" id="saveuserform">
             <div th:if="${#fields.hasAnyErrors()}">
                 <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
@@ -38,7 +38,7 @@
         <a href="#" th:href="@{/users}" th:text="#{btn.return}" class="btn btn-dark">Back to Users</a>
     </div>
     <div class="container" th:object="${user}">
-        <h1 th:text="*{null == name} ? #{vehicle.plural} : *{name} + ' \'s ' + #{vehicle.plural}">Vehicles</h1>
+        <h3 th:text="*{null == name} ? #{vehicle.plural} : *{name} + '\'s ' + #{vehicle.plural}">Vehicles</h3>
         <table class="table table-hover" aria-label="Vehicles for User">
             <thead>
             <tr>
@@ -50,11 +50,13 @@
             </thead>
             <tbody style="cursor: pointer">
             <tr th:each="vehicle : *{vehicles}" th:id="|row_${vehicle.id}|" th:class="tr-vehicles">
-                <td><a href="#" th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
-                       th:text="${vehicle.name}">Vehicle name</a></td>
-                <td th:text="${vehicle.licencePlate}"></td>
-                <td th:text="${vehicle.parkingType}"></td>
-                <td>
+                <td><a href="#"
+                       th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
+                       th:text="${vehicle.name}"
+                       class="align-middle">Vehicle name</a></td>
+                <td th:text="${vehicle.licencePlate}" class="align-middle"></td>
+                <td th:text="${vehicle.parkingType}" class="align-middle"></td>
+                <td class="align-middle">
                     <form action="#"
                           th:action="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
                           method="post"

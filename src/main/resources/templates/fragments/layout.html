@@ -60,16 +60,20 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-end" href="#" th:href="@{/reservations}">Reservations</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/reservations}" th:text="#{reservation.plural}">
+                        Reservations
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-end" href="#" th:href="@{/zones}">Zones</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/zones}" th:text="#{zone.plural}">Zones</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-end" href="#" th:href="@{/users}">Users</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/users}" th:text="#{user.plural}">Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-end" href="#" th:href="@{/vehicles}">Vehicles</a>
+                    <a class="nav-link text-end" href="#" th:href="@{/vehicles}" th:text="#{vehicle.plural}">
+                        Vehicles
+                    </a>
                 </li>
             </ul>
         </div>
