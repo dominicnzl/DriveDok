@@ -12,7 +12,7 @@
         <h3 th:text="#{zone.new.page.msg.cont}">for your Parking Spots</h3>
     </section>
     <section>
-        <form class="album py-5 bg-white" action="#" th:action="@{/zones/create}" th:object="${zone}" method="post">
+        <form class="album py-5 bg-white" action="#" th:action="@{/zones/create}" th:object="${zoneDto}" method="post">
             <input type="hidden" th:field="*{id}">
 
             <div th:if="${#fields.hasAnyErrors()}">
@@ -25,8 +25,8 @@
             <input type="number" th:field="*{totalParkingSpots}"/>
             <div class="album py-5 bg-white">
                 <input type="submit" class="btn btn-primary" value="Create the zone" th:value="#{btn.add}"/>
+                <a href="#" th:href="@{/zones}" class="btn btn-dark" th:text="#{btn.return}">Back to Zones</a>
             </div>
-            <a href="#" th:href="@{/zones}" class="btn btn-dark" th:text="#{btn.return}">Back to Zones</a>
         </form>
     </section>
 </div>

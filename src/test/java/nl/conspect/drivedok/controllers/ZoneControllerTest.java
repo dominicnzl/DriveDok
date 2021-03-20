@@ -1,7 +1,9 @@
 package nl.conspect.drivedok.controllers;
 
 import nl.conspect.drivedok.model.Zone;
+import nl.conspect.drivedok.model.ZoneDto;
 import nl.conspect.drivedok.services.ZoneService;
+import nl.conspect.drivedok.utilities.ZoneMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,6 +33,9 @@ class ZoneControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    ZoneMapper zoneMapper;
 
     @MockBean
     ZoneService zoneService;
@@ -85,27 +91,24 @@ class ZoneControllerTest {
 
     @Test
     void shouldCreateZone() throws Exception {
-
+        when(zoneMapper.dtoToZone(any())).thenReturn(new Zone());
         mockMvc.perform(post("/zones/create", Zone.class)
                 .param("name", "Zone 1")
                 .param("totalParkingSpots", "100"))
                 .andDo(print())
-                .andExpect(content().string(containsString("Zone 1")))
-        ;
+                .andExpect(view().name("redirect:/zones"));
     }
 
     @Test
     void shouldReturnZoneById() throws Exception {
         Zone pz1 = new Zone("Zone 1", 100);
-
-        when(zoneService.findById(1L))
-                .thenReturn(Optional.of(pz1));
-
+        when(zoneService.findById(1L)).thenReturn(Optional.of(pz1));
+        when(zoneMapper.zoneToDto(pz1)).thenReturn(new ZoneDto());
         mockMvc.perform(get("/zones/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(content().string(containsString("Your Zone Zone 1 has")));
+                .andExpect(view().name("/zone/zone-editpage"));
     }
 
     @Test
