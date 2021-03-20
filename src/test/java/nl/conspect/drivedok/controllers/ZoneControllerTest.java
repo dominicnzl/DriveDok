@@ -19,6 +19,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -130,5 +133,54 @@ class ZoneControllerTest {
         assertThatThrownBy(() -> mockMvc.perform(get("/zones/-1"))
                 .andExpect(status().isOk()))
                 .hasCause(new IllegalArgumentException("Zone with id -1 not found"));
+    }
+
+    @Test
+    @DisplayName("Post and force binding errors. Expect zoneService.create never to be called")
+    void handlePostWithBindingErrors() throws Exception {
+        mockMvc.perform(post("/zones/create")
+                .param("name", "")
+                .param("totalParkingSpots", "0"))
+                .andExpect(model().hasErrors())
+                .andDo(print());
+        verify(zoneService, never()).create(any());
+    }
+
+    @Test
+    @DisplayName("Post a valid Zone and expect .create to be called once")
+    void handlePostHappy() throws Exception {
+        var zone = new Zone();
+        zone.setId(3L);
+        when(zoneMapper.dtoToZone(any())).thenReturn(zone);
+        mockMvc.perform(post("/zones/create")
+                .param("name", "Julia")
+                .param("totalParkingSpots", "10"))
+                .andExpect(view().name("redirect:/zones"))
+                .andDo(print());
+        verify(zoneService, times(1)).create(any());
+    }
+
+    @Test
+    @DisplayName("Update and force binding errors. Expect service update method never to be called")
+    void handleUpdateWithBindingErrors() throws Exception {
+        mockMvc.perform(post("/zones/update")
+                .param("name", "")
+                .param("totalParkingSpots", ""))
+                .andExpect(view().name("/zone/zone-editpage"))
+                .andDo(print());
+        verify(zoneService, never()).update(any());
+    }
+
+    @Test
+    void handleUpdateOk() throws Exception {
+        var zone = new Zone();
+        zone.setId(4L);
+        when(zoneMapper.dtoToZone(any())).thenReturn(zone);
+        mockMvc.perform(post("/zones/update")
+                .param("name", "Svetlana")
+                .param("totalParkingSpots", "5"))
+                .andExpect(view().name("/zone/zone-editpage"))
+                .andDo(print());
+        verify(zoneService, times(1)).update(any());
     }
 }
