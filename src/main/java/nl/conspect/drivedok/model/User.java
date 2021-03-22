@@ -26,7 +26,7 @@ public class User extends AbstractPersistable<Long> {
     private Long id;
 
     @NotNull
-    @Size(max = 64, min = 1, message = "{valid.string.range}")
+    @Size(min = 1, max = 64, message = "{valid.string.range}")
     @Column(nullable = false, length = 64)
     private String name;
 
