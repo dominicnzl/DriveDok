@@ -11,9 +11,12 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
@@ -44,6 +47,13 @@ public class User extends AbstractPersistable<Long> {
             fetch = LAZY)
     @JsonManagedReference
     private Set<Vehicle> vehicles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user",
+            cascade = ALL,
+            orphanRemoval = true,
+            fetch = LAZY)
+    @JsonManagedReference
+    private List<Reservation> reservations = new ArrayList<>();
 
     public User() {
     }
@@ -115,5 +125,43 @@ public class User extends AbstractPersistable<Long> {
             vehicle.setUser(null);
         }
         return getVehicles();
+    }
+
+    public List<Reservation> getReservations() {
+        return unmodifiableList(reservations);
+    }
+
+    public List<Reservation> setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+        return getReservations();
+    }
+
+    public List<Reservation> addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
+        reservation.setUser(this);
+        return getReservations();
+    }
+
+    public List<Reservation> removeReservation(Reservation reservation) {
+        this.reservations.remove(reservation);
+        reservation.setUser(null);
+        return getReservations();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (! (o instanceof User)) {
+            return false;
+        }
+        User other = (User) o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

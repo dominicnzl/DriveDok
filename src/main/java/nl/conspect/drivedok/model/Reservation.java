@@ -1,5 +1,6 @@
 package nl.conspect.drivedok.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
@@ -21,10 +22,12 @@ public class Reservation extends AbstractPersistable<Long> {
 
     @ManyToOne
     @JoinColumn(name = "fk_user")
+    @JsonBackReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "fk_vehicle")
+    @JsonBackReference
     private Vehicle vehicle;
 
     @ManyToOne
