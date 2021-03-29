@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: basicHeader(#{user.plural})}"><title>Placeholder</title></head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/layout :: basicNav(#{user.plural})}" class="navbar"></nav>
+    <table class="table table-hover" aria-label="Users">
+        <thead>
+        <tr>
+            <th scope="col" th:text="#{name}">Name</th>
+            <th scope="col" th:text="#{user.email}">E-mail</th>
+        </tr>
+        </thead>
+        <tbody style="cursor: pointer">
+        <tr th:each="user : ${users}" th:id="|row_${user.id}|" th:class="tr-users">
+            <td>
+                <a href="#" th:text="*{user.name}" th:href="@{|/users/*{user.id}|}"></a>
+            </td>
+            <td th:text="*{user.email}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <a href="#" th:href="@{/users/new}" class="btn btn-primary" th:text="#{btn.add}">Add User</a>
+    </div>
+</div>
+<script th:replace="~{fragments/layout :: addRedirect('.tr-users', 'users')}"></script>
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
+</body>
+</html>

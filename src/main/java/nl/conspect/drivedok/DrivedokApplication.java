@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DrivedokApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DrivedokApplication.class, args);
-
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DrivedokApplication.class, args);
+    }
 
 }

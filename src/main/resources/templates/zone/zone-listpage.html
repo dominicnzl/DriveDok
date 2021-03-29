@@ -1,30 +1,21 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <title>Welcome</title>
-</head>
-<body class="d-flex h-100 text-center">
+<head th:replace="~{fragments/layout :: basicHeader(#{zone.plural})}"><title>Welcome</title></head>
+<body>
 <div class="container">
-    <div class="starter-template text-center py-3 px-3">
-        <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy">
-    </div>
-    <section class="album py-3 bg-light">
-        <h2>Welcome Administrator Bert,</h2>
-        <h3>Your DriveDok Zones</h3>
-    </section>
-    <table class="table">
+    <nav th:replace="~{fragments/layout :: basicNav(#{zone.plural})}" class="navbar"></nav>
+    <table class="table table-hover" aria-label="Zones">
+        <thead>
         <tr>
-            <th>Name</th>
-            <th>Total Parkingspots</th>
-            <th></th>
+            <th scope="col" th:text="#{name}">Name</th>
+            <th scope="col" th:text="#{zone.total.spots}">Total Parkingspots</th>
+            <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody style="cursor: pointer">
         <div th:if="${zones != null and !zones.empty}">
             <section class="card mb-4 shadow-sm">
-                <tr th:each="zone : ${zones}">
+                <tr th:each="zone : ${zones}" th:id="|row_${zone.id}|" th:class="tr-zones">
                     <td>
                         <a th:href="@{/zones/{id}(id=${zone.id})}">
                             <span th:text="${zone.name}"></span>
@@ -47,16 +38,18 @@
                 </tr>
             </section>
         </div>
+        </tbody>
         <div th:if="${zones == null or zones.empty}">
-            <p>You have no DriveDok Zones yet</p>
+            <p th:text="#{zone.list.page.msg.absence}">You have no DriveDok Zones yet</p>
         </div>
     </table>
-    <div class="album py-5 bg-white">
-        <button class="btn btn-warning" onclick="location.href='/zones/create'">Create a new DriveDok Zone</button>
+    <div class="container-sm mb-3">
+        <button class="btn btn-warning" onclick="location.href='/zones/create'" th:text="#{btn.add}">Create a new
+            DriveDok Zone
+        </button>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-        crossorigin="anonymous"></script>
+<script th:replace="~{fragments/layout :: addRedirect('.tr-zones', 'zones')}"></script>
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
 </body>
 </html>

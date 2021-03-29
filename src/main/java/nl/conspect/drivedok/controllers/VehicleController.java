@@ -26,9 +26,9 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
-    public static final String VEHICLE_LISTPAGE = "vehicle-listpage";
+    public static final String VEHICLE_LISTPAGE = "vehicle/vehicle-listpage";
 
-    public static final String VEHICLE_EDITPAGE = "vehicle-editpage";
+    public static final String VEHICLE_EDITPAGE = "vehicle/vehicle-editpage";
 
     @GetMapping
     public String listpage(Model model) {

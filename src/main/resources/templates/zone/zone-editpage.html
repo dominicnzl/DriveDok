@@ -6,41 +6,44 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-    <title th:text="|PZ ${zone.name} |">Zone</title>
+    <title th:text="|PZ ${zoneDto.name} |">Zone</title>
 </head>
 <body class="d-flex h-100 text-center">
 <div class="container">
-    <div class="starter-template text-center py-3 px-3">
-        <img th:src="@{/img/quickLogo.png}" width=40% alt="" loading="lazy" onclick="location.href='/zones'">
-    </div>
-    <section class="album py-3 bg-light" th:object="${zone}">
+    <nav th:replace="~{fragments/layout :: basicNav(|PZ ${zoneDto.name}|)}" class="navbar"></nav>
+    <section class="album py-3 bg-light" th:object="${zoneDto}">
         <div>
-            <p th:text="|Your Zone *{name} has |">
-            <p th:text="|*{totalParkingSpots}|" id="totalSpots"></p>
-            <p th:text="|parking spots:|"></p>
+            <p th:text="#{zone.edit.page.msg(*{name}, *{totalParkingSpots})}"></p>
         </div>
-        <form action="#" th:action="@{/zones/update}" th:object="${zone}" method="post">
+        <form action="#"
+              th:action="@{/zones/update}"
+              th:object="${zoneDto}"
+              method="post"
+              id="update-parkingspots-form">
             <input type="hidden" th:field="*{id}">
             <input type="hidden" th:field="*{name}">
             <input type="hidden" th:field="*{parkingSpots}">
             <input type="hidden" th:field="*{totalParkingSpots}" th:id="myTotalParkingSpots">
 
-            <div type="text" th:id="myMessage" ></div>
+            <div type="text" th:id="myMessage"></div>
 
-            <th:block th:each="spot,i : ${zone.parkingSpots}">
-                <input type="hidden" th:field="*{parkingSpots[__${i.index}__].id}" /><br />
-                <input type="text" th:field="*{parkingSpots[__${i.index}__].parkingType}" /><br />
+            <th:block th:each="spot,i : ${zoneDto.parkingSpots}">
+                <input type="hidden" th:field="*{parkingSpots[__${i.index}__].id}"/><br/>
+                <input type="text" th:field="*{parkingSpots[__${i.index}__].parkingType}"/><br/>
                 <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
-                th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"
-                readonly="readonly"/>
+                       th:if="${spot.parkingType == T(nl.conspect.drivedok.model.ParkingType).NORMAL}"
+                       readonly="readonly"/>
                 <input type="text" th:field="*{parkingSpots[__${i.index}__].quantity}" th:id="${spot.parkingType}"
                        th:if="${spot.parkingType != T(nl.conspect.drivedok.model.ParkingType).NORMAL}"/>
-            </th:block><br>
-
-            <input type="submit"  value="update"></input>
+            </th:block>
         </form>
         <div class="album py-3 bg-light">
-            <button class="btn btn-warning" onclick="location.href='/zones'">Go to overview</button>
+            <button class="btn btn-primary" th:text="#{btn.update}" form="update-parkingspots-form" type="submit">
+                Update
+            </button>
+            <button class="btn btn-dark" onclick="location.href='/zones'" th:text="#{btn.return}">
+                Go to overview
+            </button>
         </div>
 
         <script th:inline="javascript">
@@ -80,9 +83,6 @@
         </script>
     </section>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-        crossorigin="anonymous"></script>
-
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
 </body>
 </html>

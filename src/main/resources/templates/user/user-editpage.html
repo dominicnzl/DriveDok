@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: basicHeader(${{user.name}})}"><title>Placeholder</title>
+</head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/layout :: basicNav(${{user.name}})}" class="navbar"></nav>
+    <div class="container-sm mb-3">
+        <form action="#" th:action="@{/users}" th:object="${user}" method="post" id="saveuserform">
+            <div th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}" class="alert alert-danger"></p>
+            </div>
+            <div class="mb-3">
+                <label for="userName" class="form-label" th:text="#{name}">Name</label>
+                <input type="text" class="form-control" id="userName" th:field="${user.name}">
+            </div>
+            <div class="mb-3">
+                <label for="userEmail" class="form-label" th:text="#{user.email}">E-mail</label>
+                <input type="email" class="form-control" id="userEmail" th:field="${user.email}"
+                       placeholder="name@example.nl">
+            </div>
+            <div class="mb-3">
+                <label for="userPassword" class="form-label" th:text="#{user.password}">Password</label>
+                <input type="password" class="form-control" id="userPassword" th:field="${user.password}"
+                       placeholder="Password">
+            </div>
+            <input type="hidden" th:field="${user.id}">
+            <input type="hidden" th:field="${user.vehicles}">
+        </form>
+        <form th:unless="${null == user.id}" action="#" th:action="@{/users/{id} (id=${user.id})}" th:object="${user}"
+              method="post" th:method="delete" id="deleteuserform"></form>
+        <button form="saveuserform" type="submit" class="btn btn-primary" th:text="#{btn.save}">Save</button>
+        <button form="saveuserform" type="reset" class="btn btn-warning" th:text="#{btn.reset}">Reset</button>
+        <button th:disabled="${null == user.id ?: false}" type="submit" form="deleteuserform" class="btn btn-danger"
+                th:text="#{btn.delete}">
+            Delete
+        </button>
+        <a href="#" th:href="@{/users}" th:text="#{btn.return}" class="btn btn-dark">Back to Users</a>
+    </div>
+    <div class="container" th:object="${user}">
+        <h3 th:text="*{null == name} ? #{vehicle.plural} : *{name} + '\'s ' + #{vehicle.plural}">Vehicles</h3>
+        <table class="table table-hover" aria-label="Vehicles for User">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{name}">Name</th>
+                <th scope="col" th:text="#{vehicle.licence}">Licence plate</th>
+                <th scope="col" th:text="#{vehicle.parking.type}">Parking type</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody style="cursor: pointer">
+            <tr th:each="vehicle : *{vehicles}" th:id="|row_${vehicle.id}|" th:class="tr-vehicles">
+                <td><a href="#"
+                       th:href="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
+                       th:text="${vehicle.name}"
+                       class="align-middle">Vehicle name</a></td>
+                <td th:text="${vehicle.licencePlate}" class="align-middle"></td>
+                <td th:text="${vehicle.parkingType}" class="align-middle"></td>
+                <td class="align-middle">
+                    <form action="#"
+                          th:action="@{/vehicles/{vehicleId} (vehicleId = ${vehicle.id})}"
+                          method="post"
+                          th:method="delete"
+                          th:object="${vehicle}"
+                          id="delete-vehicle-form">
+                        <input type="submit" th:value="#{btn.delete}" class="btn btn-danger">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:unless="*{null == id}">
+            <a href="#" th:href="@{/users/{id}/vehicles/new (id = ${user.id})}" class="btn btn-primary"
+               th:text="#{btn.add}">Add Vehicle</a>
+        </div>
+    </div>
+</div>
+<script th:replace="~{fragments/layout :: addRedirect('.tr-vehicles', 'vehicles')}"></script>
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: basicHeader(#{reservation.plural})}">
+    <title>placeholder</title>
+</head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/layout :: basicNav(#{reservation.plural})}" class="navbar"></nav>
+    <table class="table table-hover" aria-label="Reservations">
+        <thead>
+        <tr>
+            <th scope="col" th:text="#{user.singular}">User</th>
+            <th scope="col" th:text="#{reservation.start}">Start</th>
+            <th scope="col" th:text="#{reservation.end}">End</th>
+            <th scope="col" th:text="|#{vehicle.singular} (#{vehicle.licence})|">Vehicle (licenceplate)</th>
+            <th scope="col" th:text="#{spot.singular}">ParkingSpot</th>
+        </tr>
+        </thead>
+        <tbody style="cursor:pointer">
+        <tr th:each="r : ${reservations}" th:id="|row_${r.id}|" th:class="tr-reservations">
+            <td>
+                <a href="#" th:href="@{|/users/*{r.user?.id}|}" th:text="*{r.user?.name}"></a>
+            </td>
+            <td th:text="*{#temporals.format(r.start, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="*{#temporals.format(r.end, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="*{r.vehicle?.licencePlate}"></td>
+            <td th:text="*{r.parkingSpot}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <a href="#" th:href="@{/reservations/new}" class="btn btn-primary"
+           th:text="#{btn.add}">Add Reservation</a>
+    </div>
+</div>
+<script th:replace="~{fragments/layout :: addRedirect('.tr-reservations', 'reservations')}"></script>
+<script th:replace="~{fragments/layout :: bootstrapJS}"></script>
+</body>
+</html>
