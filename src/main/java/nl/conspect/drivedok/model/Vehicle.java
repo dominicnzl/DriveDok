@@ -7,12 +7,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.unmodifiableList;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 public class Vehicle extends AbstractPersistable<Long> {
@@ -36,9 +42,16 @@ public class Vehicle extends AbstractPersistable<Long> {
     @Column(nullable = false)
     private ParkingType parkingType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JsonBackReference
     private User user;
+
+    @OneToMany(mappedBy = "vehicle",
+            cascade = ALL,
+            orphanRemoval = true,
+            fetch = LAZY)
+    @JsonBackReference
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Vehicle() {
     }
@@ -96,5 +109,43 @@ public class Vehicle extends AbstractPersistable<Long> {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Reservation> getReservations() {
+        return unmodifiableList(reservations);
+    }
+
+    public List<Reservation> setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+        return getReservations();
+    }
+
+    public List<Reservation> addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
+        reservation.setVehicle(this);
+        return getReservations();
+    }
+
+    public List<Reservation> removeReservation(Reservation reservation) {
+        this.reservations.remove(reservation);
+        reservation.setVehicle(null);
+        return getReservations();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Vehicle)) {
+            return false;
+        }
+        Vehicle other = (Vehicle) o;
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
