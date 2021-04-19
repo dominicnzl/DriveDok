@@ -1,8 +1,11 @@
 package nl.conspect.drivedok.model;
 
+import nl.conspect.drivedok.utilities.ParkingTypeComparator;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class ZoneDto {
 
@@ -46,6 +49,8 @@ public class ZoneDto {
     }
 
     public void setParkingSpots(Set<ParkingSpot> parkingSpots) {
-        this.parkingSpots = parkingSpots;
+        Set<ParkingSpot> parkingSpots1 = new TreeSet<>(new ParkingTypeComparator());
+        parkingSpots1.addAll(parkingSpots);
+        this.parkingSpots = parkingSpots1;
     }
 }
